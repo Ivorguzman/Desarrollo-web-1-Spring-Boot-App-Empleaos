@@ -1,0 +1,14 @@
+@charset "UTF-8";
+        .btn-success {
+          color: white !important; /* Forza el color del texto a blanco */
+        }
+
+        .btn-danger {
+          color: white !important; /* Forza el color del texto a blanco */
+        }
+
+        /* 1. Regla para centrar el contenido de las celdas de la tabla */
+        .table tbody td {
+            text-align: center;      /* Centrado horizontal */
+            vertical-align: middle;  /* Centrado vertical */
+        }

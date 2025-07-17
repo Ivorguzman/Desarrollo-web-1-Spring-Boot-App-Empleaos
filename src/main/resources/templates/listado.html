@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de ofertas de trabajo </title>
+</head>
+<body>
+<h1>Bienvenidos</h1>
+<h2>Oferta de trabajo en forma dinámica (th:each)</h2>
+<ul>
+    <h3>Lista Desordenada</h3>
+    <li th:each="temp_empleo:${empleo}" th:text="${temp_empleo}"></li>
+</ul>
+<ol>
+    <h3>Lista Ordenada</h3>
+    <li th:each="temp_empleo:${empleo}" th:text="${temp_empleo}"></li>
+</ol>
+</body>
+</html>
