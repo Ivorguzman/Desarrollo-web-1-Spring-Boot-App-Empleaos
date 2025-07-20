@@ -1,6 +1,8 @@
 package net.itinajero.controller;
 
 import net.itinajero.model.Vacante;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,259 +13,140 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-
-
-
-// Esta clase es un controlador de Spring MVC
-// La anotación @Controller indica que esta clase maneja solicitudes web
-// y devuelve vistas a los usuarios.
-// Indica a spring que esta clase es un controlador
+/**
+ * Controlador principal que maneja las peticiones de la página de inicio y los listados. La anotación @Controller indica a Spring que esta clase es un bean de controlador
+ * web.
+ */
 @Controller
 public class HomeController {
-	/*
-	@GetMapping("/listado") // Anotación que indica que este método responderá a solicitudes HTTP GET en la ruta "/listado"
-	public String mostrarListado(Model modelo) {
-		// Crea una lista mutable de cadenas (puede ser modificada después de su creación)
-		// significa que su contenido puede ser modificado después de su creación;
-		List<String> lista = new LinkedList<>();
-		lista.add("Ingeniería de Software"); // Agrega un elemento a la lista
-		lista.add("Auxiliar Contable"); // Agrega otro elemento a la lista
-		lista.add("Vendedor"); // Agrega un tercer elemento a la lista
-		lista.add("Arquitecto de Software"); // Agrega un cuarto elemento a la lista
-		// Agrega la lista al modelo con el nombre "listaVacantes" para que esté disponible en la vista
-		modelo.addAttribute("empleo", lista);
 
-		return "listado"; // Devuelve la cadena "listado", que normalmente corresponde al nombre de una vista
+	// Es una buena práctica usar un logger en lugar de System.out.println.
+	private static final Logger log = LoggerFactory.getLogger(HomeController.class);
+
+	// Definir el formato de fecha como una constante para reutilizarlo y ser más eficiente.
+	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
+
+	/**
+	 * Maneja las peticiones a la URL raíz ("/") de la aplicación. Muestra la página de inicio.
+	 *
+	 * @param modelo
+	 * 		El modelo para pasar datos a la vista.
+	 * @return El nombre de la vista "home" para ser renderizada.
+	 */
+	@GetMapping("/")
+	public String mostrarHome(Model modelo) {
+		// Este método es ideal para mostrar datos generales en la página principal.
+		modelo.addAttribute("mensaje", "Bienvenidos a Empleos App");
+		modelo.addAttribute("fecha", new Date());
+		log.info("Mostrando la página de inicio.");
+		return "home";
 	}
-*/
-	@GetMapping("/listado")// Anotación que indica que este método responderá a solicitudes HTTP GET en la ruta "/listado"
+
+	/**
+	 * Muestra una tabla con una lista de todas las vacantes.
+	 *
+	 * @param model
+	 * 		El modelo para pasar la lista de vacantes a la vista.
+	 * @return El nombre de la vista "tabla".
+	 */
+	@GetMapping("/tabla")
+	public String mostrarTabla(Model model) {
+		List<Vacante> lista = getVacantes();
+		model.addAttribute("vacantes", lista);
+		log.info("Enviando {} vacantes a la vista 'tabla'.", lista.size());
+		return "tabla";
+	}
+
+	/**
+	 * Muestra una página con un listado simple de nombres de empleos.
+	 *
+	 * @param modelo
+	 * 		El modelo para pasar la lista a la vista.
+	 * @return El nombre de la vista "listado".
+	 */
+	@GetMapping("/listado")
 	public String mostrarListado(Model modelo) {
-		// Crea una lista inmutable de cadenas (no se puede modificar después de su creación)
+		// List.of() crea una lista inmutable, lo cual es bueno para datos que no cambiarán.
 		List<String> lista = List.of("Ingeniería de Software", "Auxiliar Contable", "Vendedor", "Arquitecto de Software");
-
-		// Pasamos la lista inmutable directamente al modelo. Con el nombre "listaVacantes" para que est&eacute; disponible en la vista
 		modelo.addAttribute("empleo", lista);
-
 		return "listado";
 	}
 
-
-	// @GetMapping("/") -> Anotación que indica que este método responderá a solicitudes HTTP GET en
-	// la ruta "/" que representa la raíz del sitio web o aplicación.
-	@GetMapping("/")
-	public String mostrarHome(Model modelo) {
-		// Atributos
-		String nombre = "Auxiliar Contable";// Define un nombre
-		Date fecha = new Date(); // Crea un objeto Date que representa la fecha y hora actuales
-		double salario = 9000.0; // Define un salario de
-		boolean vigente = true; // Define un estado de vigencia
-
-		// El modelo se utiliza para pasar datos a la vista que se renderizará
-		modelo.addAttribute("atributo_nombre", nombre); // Agrega el atributo "nombre" al modelo
-		modelo.addAttribute("atributo_fecha", fecha); // Agrega el atributo "fecha" al modelo
-		modelo.addAttribute("atributo_salario", salario); // Agrega el atributo "salario" al modelo
-		modelo.addAttribute("atributo_vigente", vigente); // Agrega el atributo "vigente" al modelo
-
-		/*
-		 *  En Spring MVC, este String ("home") no es un texto cualquiera, es el nombre de la vista (el archivo de la plantilla, como home.html)
-		 * que Spring debe buscar y renderizar.
-		 */
-		return "home"; // return "home"; -> Devuelve la cadena "home", que normalmente corresponde al nombre de una vista
-
-	}
-
-	@GetMapping("/detalle")// Anotación que indica que este método responderá a solicitudes HTTP GET en la ruta "/detalles"
-	// Este método no recibe parámetros, pero puede recibir un objeto Model para pasar datos a la vista
+	/**
+	 * Muestra la página de detalles para una vacante específica (de ejemplo).
+	 *
+	 * @param modelo
+	 * 		El modelo para pasar el objeto Vacante a la vista.
+	 * @return El nombre de la vista "detalle".
+	 */
+	@GetMapping("/detalle")
 	public String mostrarDetalles(Model modelo) {
 		Vacante vacante = new Vacante();
-		vacante.setNombre("Ingeniero de comunicación");
+		vacante.setNombre("Ingeniero de Comunicación");
 		vacante.setDescripcion("Vacante para ingeniero de comunicaciones con experiencia en redes y telecomunicaciones.");
-		vacante.setFecha(new Date()); // Establece la fecha actual como la fecha de la vacante
-		vacante.setSalario(3800.0); // Establece el salario de la vacante
-		modelo.addAttribute("vacante", vacante); // Agrega el objeto vacante al modelo con el nombre "vacante"
-
-
+		vacante.setFecha(new Date());
+		vacante.setSalario(3800.0);
+		vacante.setDestacado(1); // Asignando datos de ejemplo
+		vacante.setImagen("logo_telecom.png"); // Asignando datos de ejemplo
+		modelo.addAttribute("vacante", vacante);
 		return "detalle";
 	}
 
-
-	@GetMapping("/tabla")
-	public String mostrarTabla(Model model) {
-
-		List<Vacante> lista = getVacantes();
-
-		model.addAttribute("vacantes", lista);
-
-
-		System.out.println("Lista de Vacantes: " + lista);
-		return "tabla";
-
-	}
-
-
-
-	// Antes de crear la capa servicio colocamos esta logic aquí por motivos pedagogic
+	/**
+	 * Método de utilidad para generar datos de prueba. En una aplicación real, estos datos vendrían de una capa de servicio. pero con fines de demostración didactic , se
+	 * crean aquí directamente hasta que se implemente una base de datos. y la capa de servicio.
+	 *
+	 * @return Una lista de objetos Vacante con datos completos.
+	 */
 	private List<Vacante> getVacantes() {
-
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		List<Vacante> lista = new LinkedList<>();
-
 		try{
-			// Ofertas de trabajo 1
+			// --- Creación de Objetos Vacante con datos completos ---
+
 			Vacante vacante1 = new Vacante();
 			vacante1.setId(1);
 			vacante1.setNombre("Ingeniero Civil");
-			vacante1.setDescripcion("Solicitamos Para el equipo de construcción de puente peatonal");
-			vacante1.setFecha(simpleDateFormat.parse("01/01/2025"));
+			vacante1.setDescripcion("Solicitamos para el equipo de construcción de puente peatonal");
+			vacante1.setFecha(DATE_FORMAT.parse("01-01-2025"));
 			vacante1.setSalario(8500.0);
+			vacante1.setDestacado(1); // CORREGIDO: Se asigna el valor destacado.
+			vacante1.setImagen("logo1.png"); // CORREGIDO: Se asigna la imagen.
 
-
-			//Oferta de trabajo 2
 			Vacante vacante2 = new Vacante();
 			vacante2.setId(2);
-			vacante2.setNombre("Contador publico");
+			vacante2.setNombre("Contador Público");
 			vacante2.setDescripcion("Contador titulado con experiencia en contabilidades de costo");
-			vacante2.setFecha(simpleDateFormat.parse("01/02/2025"));
+			vacante2.setFecha(DATE_FORMAT.parse("01-02-2025"));
 			vacante2.setSalario(12000.0);
+			vacante2.setDestacado(0); // CORREGIDO: Se asigna el valor destacado.
+			vacante2.setImagen("logo2.png"); // CORREGIDO: Se asigna la imagen.
 
-			//Oferta de trabajo 3
 			Vacante vacante3 = new Vacante();
 			vacante3.setId(3);
 			vacante3.setNombre("Ingeniero Eléctrico");
 			vacante3.setDescripcion("Ingeniero eléctrico con experiencia en instalaciones industriales");
-			vacante3.setFecha(simpleDateFormat.parse("01/03/2025"));
+			vacante3.setFecha(DATE_FORMAT.parse("01-03-2025"));
 			vacante3.setSalario(10500.0);
+			vacante3.setDestacado(0); // CORREGIDO: Se asigna el valor destacado.
+			// No se asigna imagen, usará la de por defecto "no-image.png".
 
-			//Oferta de trabajo 4
 			Vacante vacante4 = new Vacante();
 			vacante4.setId(4);
 			vacante4.setNombre("Diseñador Gráfico");
 			vacante4.setDescripcion("Diseñador gráfico con experiencia en diseño digital y branding");
-			vacante4.setFecha(simpleDateFormat.parse("01/04/2025"));
+			vacante4.setFecha(DATE_FORMAT.parse("01-04-2025"));
 			vacante4.setSalario(7900.0);
+			vacante4.setDestacado(1); // CORREGIDO: Se asigna el valor destacado.
+			vacante4.setImagen("logo4.png"); // CORREGIDO: Se asigna la imagen.
 
 			lista.add(vacante1);
 			lista.add(vacante2);
 			lista.add(vacante3);
 			lista.add(vacante4);
 
-			System.out.println("lista = " + lista);
-
 		} catch(ParseException e){
-			System.out.println("Error: " + e.getMessage());
+			log.error("Error al parsear la fecha en getVacantes()", e);
 		}
-
-
 		return lista;
 	}
-
-
-
 }
-
-    /*
-    * En Spring Boot, la anotación <<<<<<`@Controller`>>>>>> se asocia comúnmente con otras anotaciones para manejar solicitudes web.
-    * Aquí un "mapa" de las anotaciones más usadas junto a `@Controller`:
-
-- `@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping`: Definen métodos que responden a solicitudes HTTP GET, POST, PUT y DELETE.
-- `@RequestMapping`: Permite mapear rutas y métodos HTTP de forma más general.
-- `@RequestParam`: Extrae parámetros de la URL.
-- `@PathVariable`: Extrae variables de la ruta.
-- `@ModelAttribute`: Vincula datos de formularios a objetos.
-- `@RequestBody`: Recibe datos en formato JSON o XML en el cuerpo de la solicitud.
-- `@ResponseBody`: Indica que el valor devuelto se escribe directamente en la respuesta HTTP (usado más en `@RestController`).
-
-   Estas anotaciones permiten que el controlador reciba, procese y responda a solicitudes web de manera flexible.
-
-   */
-
-
-	/*
-
-
-                                    <<<<<<<<<<<<<<<<<<<<  @Controller vs. @RestController:  >>>>>>>>>>>>>>>>>>>>>>>>>>>
-	•@Controller: Se usa para aplicaciones web tradicionales. Los métodos típicamente devuelven un String que representa el nombre de una vista.
-	•@RestController: Se usa para construir APIs RESTful. Es una anotación de conveniencia que combina @Controller y @ResponseBody.
-	 Esto significa que los métodos devuelven datos (como un objeto User) directamente,
-	 los cuales Spring convierte automáticamente a un formato como JSON y los escribe en
-	 el cuerpo de la respuesta HTTP.( No se devuelven nombres de vistas).
-
-
-
---------------------------------------------------------------------------------------
-Paso 1: El objeto que vamos a devolver (El "Dato Puro")Primero,
-necesitamos una clase que represente los datos. Es un simple objeto Java (POJO).
-________________________________________________________________________________________
-	// Este es nuestro objeto de datos. No necesita anotaciones especiales.
-   public class Vacante {
-       private int id;
-       private String titulo;
-       private double salario;
-
-    // Constructor
-    public Vacante(int id, String titulo, double salario) {
-        this.id = id;
-        this.titulo = titulo;
-        this.salario = salario;
-    }
-
-
-    // Getters y Setters...
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-    public String getTitulo() { return titulo; }
-    public void setTitulo(String titulo) { this.titulo = titulo; }
-    public double getSalario() { return salario; }
-    public void setSalario(double salario) { this.salario = salario; }
-}
-
-
-
-
-
-------------------------------------------------------------------------------------------------------------
-Paso 2: El @RestControllerAhora creamos un controlador especial para nuestra API. Nota las diferencias clave.
--------------------------------------------------------------------------------------------------------------
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-
-// 1. Usamos @RestController en lugar de @Controller
-@RestController
-public class VacantesApiController {
-
-    // 2. Mapeamos una ruta, por ejemplo /api/vacantes/{id}
-    // El {id} es una variable en la URL.
-    @GetMapping("/api/vacantes/{id}")
-    public Vacante getVacante(@PathVariable int id) {
-        // En un caso real, buscaríamos la vacante en una base de datos usando el 'id'.
-        // Aquí, para el ejemplo, creamos una vacante en el momento.
-        Vacante vacante = new Vacante(id, "Ingeniero de Software Senior", 120000.0);
-
-        // 3. ¡La magia! Devolvemos el objeto 'vacante' directamente.
-        // No devolvemos un String como "home" o "listado".
-        return vacante;
-    }
-}
-
-
------------------------------------------------------------------------------------------------------------------------------------
-Paso 3: Si ahora abres tu navegador y vas a la dirección: http://localhost:8080/api/vacantes/105 No verás una página HTML.
-En su lugar, verás directamente los datos del objeto Vacante que creamos,convertidos automáticamente a formato JSON por Spring Boot:
-------------------------------------------------------------------------------------------------------------------------------------
-{
-  "id": 105,
-  "titulo": "Ingeniero de Software Senior",
-  "salario": 120000.0
-}
-
-
-	 *  Resumen de la Diferencia| Característica | @Controller (Tu HomeController) || @RestController (Nuestro VacantesApiController)
-	 * | Propósito: Crear páginas web completas para humanos.|| Crear "endpoints" de API para que otras aplicaciones (o JavaScript) consuman datos.
-	 * | ¿Qué devuelve?: Un String con el nombre de una vista HTML.|| Un objeto de datos (como un objeto Java) que Spring convierte a JSON.
-	 * | Resultado final: El navegador renderiza una página HTML.|| El navegador (o cliente) recibe un texto en formato JSON.
-	 * | @RestController es la base para construir APIs REST ful, que son el estándar de la industria para que las aplicaciones se comuniquen entre sí.
-
-
-
-	 */
