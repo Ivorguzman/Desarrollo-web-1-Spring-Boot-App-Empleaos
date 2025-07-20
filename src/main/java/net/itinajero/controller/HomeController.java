@@ -1,4 +1,25 @@
+// Define que esta clase pertenece al paquete 'net.tinajero.controller'.
+// Los paquetes son como carpetas que organizan tu código de manera lógica.
 package net.itinajero.controller;
+
+// --- SECCIÓN DE IMPORTACIONES ---
+// Aquí se "importan" clases de otras librerías o paquetes para poder usarlas en este archivo.
+
+// Importa la clase Vacante, que es el modelo de datos para una oferta de trabajo.
+
+
+/*
+ *                            --- SECCIÓN DE IMPORTACIONES ---
+ * Aquí se "importan" las clases y anotaciones necesarias de otras librerías y paquetes
+ * para que la clase HomeController pueda funcionar correctamente.
+ * - Importa org.slf4j.LoggerFactory; Importa la fábrica (factory) que crea instancias del Logger.
+ * - Importa net.itinajero.model.Vacante: El modelo de datos para una oferta de trabajo.
+ * - Importa org.slf4j.*: Clases para el sistema de logging (SLF4J), una forma profesional de registrar eventos.
+ * - Importa org.springframework.*: Anotaciones y clases del framework Spring para definir controladores,
+ *   Importa mapear URLs (@GetMapping) y pasar datos a las vistas (Model).
+ * - Importa java.text.*: Clases para manejar y formatear fechas.
+ * - Importa java.util.*: Clases de utilidad de Java, como Date, List y LinkedList.
+ */
 
 import net.itinajero.model.Vacante;
 import org.slf4j.Logger;
