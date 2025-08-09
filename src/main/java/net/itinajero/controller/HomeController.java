@@ -48,7 +48,7 @@ public class HomeController {
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 
 	/**
-	 * Maneja las peticiones a la URL raíz ("/") de la aplicación. Muestra la página de inicio.
+	 * Maneja las peticiones a la URL raíz ("/") de la aplicación. Muestra la página de inicio. Añadiendo valores de los tributos al modelo en forma estática
 	 *
 	 * @param modelo
 	 * 		El modelo para pasar datos a la vista.
@@ -58,13 +58,17 @@ public class HomeController {
 	public String mostrarHome(Model modelo) {
 		// Este método es ideal para mostrar datos generales en la página principal.
 		modelo.addAttribute("mensaje", "Bienvenidos a Empleos App");
+		modelo.addAttribute("nombre", "Nombre de la vacate ");
 		modelo.addAttribute("fecha", new Date());
+		modelo.addAttribute("salario", "Salario de la vacante ");
+		modelo.addAttribute("vigente", "SI | NO");
 		log.info("Mostrando la página de inicio.");
 		return "home";
 	}
 
 	/**
-	 * Muestra una tabla con una lista de todas las vacantes.
+	 * Muestra una tabla con una lista de todas las vacantes. Añadiendo valores de los tributos al modelo en forma dinámica Mostrando ejemplos de:  log.info, log.error y
+	 * log.warn en consola.
 	 *
 	 * @param model
 	 * 		El modelo para pasar la lista de vacantes a la vista.
@@ -75,6 +79,8 @@ public class HomeController {
 		List<Vacante> lista = getVacantes();
 		model.addAttribute("vacantes", lista);
 		log.info("Enviando {} vacantes a la vista 'tabla'.", lista.size());
+		log.error("¡Alerta roja! ¡Algo se rompió!");
+		log.warn("¡Cuidado! Algo inesperado pasó, pero la nave sigue funcionando.");
 		return "tabla";
 	}
 
@@ -106,11 +112,11 @@ public class HomeController {
 		vacante.setNombre("Ingeniero de Comunicación");
 		vacante.setDescripcion("Vacante para ingeniero de comunicaciones con experiencia en redes y telecomunicaciones.");
 		vacante.setFecha(new Date());
-		vacante.setSalario(3800.0);
+		vacante.setSalario(10000.0);
 		vacante.setDestacado(1); // Asignando datos de ejemplo
 		vacante.setImagen("logo_telecom.png"); // Asignando datos de ejemplo
 		modelo.addAttribute("vacante", vacante);
-		return "detalle";
+		return "detalleSueldo";
 	}
 
 	/**
@@ -165,7 +171,7 @@ public class HomeController {
 			lista.add(vacante3);
 			lista.add(vacante4);
 
-		} catch(ParseException e){
+		} catch (ParseException e){
 			log.error("Error al parsear la fecha en getVacantes()", e);
 		}
 		return lista;

@@ -1,46 +1,18 @@
 <!DOCTYPE html>
-º       º
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Home</title>
+   <meta charset="UTF-8">
+   <title>Home</title>
 </head>
 <body>
-<!--<h1 th:text="${atributo_mensaje}"></h1>-->
-<!--<h2> Hoy es : [[${atributo_fecha}]]</h2>-->
 
-<!--Método 1: Código embebido en etiquetas HTML con Thymeleaf-->
 
-<!--
-<h1>Bienvenidos</h1>
+<!--Método : Uso de atributos Thymeleaf concatedaos(+) con strigs -->
+<h1 th:text=${mensaje}></h1>
 <h2>Oferta de trabajo</h2>
-<h3>Nombre: [[${atributo_nombre}]]</h3>
-<h3>Fecha: [[${atributo_fecha}]]</h3>
-<h3>Salario: [[${atributo_salario}]]</h3>
-<h3>Vacante Vigente: [[${atributo_vigente}]] </h3>
--->
-
-
-<!--Metodo 2: Uso de atributos Thymeleaf -->
-<!--
-<h1>Bienvenidos</h1>
-<h2>Oferta de trabajo</h2>
-<h2>Nombre:</h2>
-<h3 th:text="${atributo_nombre}"></h3>
-<h2>Fecha:</h2>
-<h3 th:text="${atributo_fecha}"></h3>
-<h2>Salario</h2>
-<h3 th:text="${atributo_salario}"></h3>
-<h2>Vacantge Vigente:</h2>
-<h3 th:text="${atributo_vigente}"></h3>
--->
-
-<!--Metodo : Uso de atributos Thymeleaf concatedaos(+) con strigs -->
-<h1>Bienvenidos</h1>
-<h2>Oferta de trabajo</h2>
-<h3 th:text="'Nombre:' + ${atributo_nombre}"></h3>
-<h3 th:text="'Fecha:' + ${atributo_fecha}"></h3>
-<h3 th:text="'Salario:' + ${atributo_salario} +'$'"></h3>
-<h3 th:text="'Vacante Vigente:' + ${atributo_vigente}"></h3>
+<h3 th:text="'Nombre: ' + ${nombre}"></h3>
+<h3 th:text="'Fecha: ' + ${fecha}"></h3>
+<h3 th:text="'Salario: ' + ${salario} +'($ Americanos)'"></h3>
+<h3 th:text="'Vacante Vigente: ' + ${vigente}"></h3>
 </body>
 </html>

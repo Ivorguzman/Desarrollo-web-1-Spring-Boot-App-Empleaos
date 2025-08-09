@@ -12,23 +12,23 @@
     Declara el "namespace" de Thymeleaf, permitiendo que el navegador y las herramientas
     entiendan que todos los atributos que empiezan con "th:" pertenecen a Thymeleaf.
 -->
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de Vacantes</title>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Listado de Vacantes</title>
 
-    <!--
-      THYMELEAF EN ACCIÓN: Enlaces a Recursos Estáticos
-      - th:href="@{/css/bootstrap.min.css}": Esta es la forma correcta de enlazar recursos en Thymeleaf.
-        - th:href: Es el atributo de Thymeleaf que reemplazará el 'href' del HTML final.
-        - @{...}: Esta sintaxis se usa para crear URLs (enlaces). Thymeleaf automáticamente
-          añadirá el "context path" de la aplicación si es necesario. Esto hace que los enlaces
-          sean robustos y funcionen sin importar dónde se despliegue la aplicación.
-    -->
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-    <link rel="stylesheet" th:href="@{/css/all.min.css}">
-    <link rel="stylesheet" th:href="@{/css/tabla.css}">
+   <!--
+     THYMELEAF EN ACCIÓN: Enlaces a Recursos Estáticos
+     - th:href="@{/css/bootstrap.min.css}": Esta es la forma correcta de enlazar recursos en Thymeleaf.
+       - th:href: Es el atributo de Thymeleaf que reemplazará el 'href' del HTML final.
+       - @{...}: Esta sintaxis se usa para crear URLs (enlaces). Thymeleaf automáticamente
+         añadirá el "context path" de la aplicación si es necesario. Esto hace que los enlaces
+         sean robustos y funcionen sin importar dónde se despliegue la aplicación.
+   -->
+   <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+   <link rel="stylesheet" th:href="@{/css/all.min.css}">
+   <link rel="stylesheet" th:href="@{/css/tabla.css}">
 </head>
 <body>
 
@@ -42,130 +42,118 @@
 <h1 class="text-primary">Listado con Vacantes</h1>
 
 <table class="table table-striped table-bordered table-hover">
-    <thead>
-    <tr>
-        <th>Logo</th>
-        <th>Id</th>
-        <th>Nombre</th>
-        <th>Descripción</th>
-        <th>Fecha Publicación</th>
-        <th>Salario</th>
-        <th>Destacado</th>
-        <th>Editar</th>
-        <th>Borrar</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!--
-      THYMELEAF EN ACCIÓN: Iteración sobre una Colección (El Bucle 'for-each')
-      - th:each="vacante : ${vacantes}": Esta es una de las características más potentes de Thymeleaf.
-        - ${vacantes}: Accede a la variable 'vacantes' que fue pasada desde el controlador de Spring
-          a través del objeto 'Model'. Se espera que sea una lista o colección de objetos.
-        - vacante : ...: Declara una variable local llamada 'vacante' que, en cada repetición del bucle,
-          contendrá un elemento de la lista 'vacantes'.
-      - El resultado es que la etiqueta <tr> (y todo su contenido) se repetirá una vez por cada
-        objeto 'Vacante' que haya en la lista 'vacantes'.
-    -->
-    <tr th:each="vacante : ${vacantes}">
+   <thead>
+   <tr>
+      <th>Logo</th>
+      <th>Id</th>
+      <th>Nombre</th>
+      <th>Descripción</th>
+      <th>Fecha Publicación</th>
+      <th>Salario</th>
+      <th>Destacado</th>
+      <th>Editar</th>
+      <th>Borrar</th>
+   </tr>
+   </thead>
+   <tbody>
+   <!--
+     THYMELEAF EN ACCIÓN: Iteración sobre una Colección (El Bucle 'for-each')
+     - th:each="vacante : ${vacantes}": Esta es una de las características más potentes de Thymeleaf.
+       - ${vacantes}: Accede a la variable 'vacantes' que fue pasada desde el controlador de Spring
+         a través del objeto 'Model'. Se espera que sea una lista o colección de objetos.
+       - vacante : ...: Declara una variable local llamada 'vacante' que, en cada repetición del bucle,
+         contendrá un elemento de la lista 'vacantes'.
+     - El resultado es que la etiqueta <tr> (y todo su contenido) se repetirá una vez por cada
+       objeto 'Vacante' que haya en la lista 'vacantes'.
+   -->
+   <tr th:each="vacante : ${vacantes}">
 
-        <td>
-            <!--
-              THYMELEAF EN ACCIÓN: URL Dinámica con Variables
-              - th:src="@{/images/{img}(img=${vacante.imagen})}": Construye una URL dinámica.
-                - @{...}: Sintaxis para crear una URL.
-                - /images/{img}: Define una URL con una variable de ruta llamada 'img'.
-                - (img=${vacante.imagen}): Asigna un valor a la variable de ruta 'img'.
-                  - ${vacante.imagen}: Obtiene el valor de la propiedad 'imagen' del objeto 'vacante' actual
-                    en el bucle (por ejemplo, "logo1.png").
-              - El resultado final sería una URL como "/images/logo1.png".
-            -->
-            <img src="#" th:src="@{/images/{img}(img=${vacante.imagen})}" width="100"
-                 height="100" alt="Logo de la vacante">
-        </td>
+      <td>
+         <!--
+           THYMELEAF EN ACCIÓN: URL Dinámica con Variables
+           - th:src="@{/images/{img}(img=${vacante.imagen})}": Construye una URL dinámica.
+              - @{...}: Sintaxis para crear una URL.
+              - /images/{img}: Define una URL con una variable de ruta llamada 'img'.
+              - (img=${vacante.imagen}): Asigna un valor a la variable de ruta 'img'.
+              - ${vacante.imagen}: Obtiene el valor de la propiedad 'imagen' del
+                objeto 'vacante' actual en el bucle (por ejemplo, "logo1.png").
+           - El resultado final sería una URL como "/images/logo1.png".
+         -->
+         <img src="#" th:src="@{/images/{img}(img=${vacante.imagen})}" width="100"
+              height="100" alt="Logo de la vacante">
+      </td>
 
-        <!--
-          THYMELEAF EN ACCIÓN: Mostrar Texto de Forma Segura
-          - th:text="${vacante.id}": Muestra el valor de la propiedad 'id' del objeto 'vacante'.
-            - th:text: Reemplaza el contenido de la etiqueta <td> con el valor proporcionado.
-            - Es seguro contra ataques XSS (Cross-Site Scripting) porque escapa cualquier
-              carácter HTML, mostrando el texto plano en lugar de interpretarlo como HTML.
-        -->
-        <td th:text="${vacante.id}"></td>
-        <td th:text="${vacante.nombre}"></td>
-        <td th:text="${vacante.descripcion}"></td>
+      <!--
+        THYMELEAF EN ACCIÓN: Mostrar Texto de Forma Segura
+        - th:text="${vacante.id}": Muestra el valor de la propiedad 'id' del objeto 'vacante'.
+        - th:text: Reemplaza el contenido de la etiqueta <td> con el valor proporcionado.
+        - Es seguro contra ataques XSS (Cross-Site Scripting) porque escapa cualquier
+            carácter HTML, mostrando el texto plano en lugar de interpretarlo como HTML.
+      -->
+      <td th:text="${vacante.id}"></td>
+      <td th:text="${vacante.nombre}"></td>
+      <td th:text="${vacante.descripcion}"></td>
 
-        <!--
-          THYMELEAF EN ACCIÓN: Uso de Objetos de Utilidad (#) para Formatear
-          - El símbolo '#' se usa para acceder a los "Objetos de Utilidad" de Thymeleaf.
-          - th:text="${#dates.format(vacante.fecha, 'dd-MM-yyyy')}":
-            - #dates: Es el objeto de utilidad para trabajar con fechas (java.util.Date).
-            - .format(...): Es un método de #dates que formatea una fecha a un String.
-            - vacante.fecha: El objeto Date que se va a formatear.
-            - 'dd-MM-yyyy': El patrón de formato deseado.
-        -->
-        <td th:text="${#dates.format(vacante.fecha, 'dd-MM-yyyy')}"></td>
+      <!--
+        THYMELEAF EN ACCIÓN: Uso de Objetos de Utilidad (#) para Formatear
+        - El símbolo '#' se usa para acceder a los "Objetos de Utilidad" de Thymeleaf.
+        - th:text="${#dates.format(vacante.fecha, 'dd-MM-yyyy')}":
+        - #dates: Es la caja de herramientas para trabajar con fechas (java.util.Date,
+            java.util.Calendar, etc.).•#dates.format(vacante.fecha, 'dd-MM-yyyy'): Le
+            estás diciendo a Thymeleaf: "Toma el objeto Date del campo vacante.fecha,
+            y usa la herramienta format de la caja #dates para convertirlo en un texto
+            con el formato 'día-mes-año'".
+          - .format(...): Es un método de #dates que formatea una fecha a un String.
+          - vacante.fecha: El objeto Date que se va a formatear.
+          - 'dd-MM-yyyy': El patrón de formato deseado.-->
+      <td th:text="${#dates.format(vacante.fecha, 'dd-MM-yyyy')}"></td>
 
-        <!--
-          THYMELEAF EN ACCIÓN: Formateo de Números
-          - th:text="${#numbers.formatCurrency(vacante.salario)}":
-            - #numbers: Es el objeto de utilidad para trabajar con números.
-            - .formatCurrency(...): Formatea un número como una moneda, añadiendo el símbolo
-              de la moneda local (ej. $, €) y los separadores de miles/decimales.
-        -->
-        <!--
-En Thymeleaf, el símbolo de la almohadilla (#)
-se utiliza para acceder a los "Objetos de Utilidad" (Utility Objects).
-
-1.
-#dates: Es la caja de herramientas para trabajar con fechas (java.util.Date,
-java.util.Calendar, etc.).•#dates.format(vacante.fecha, 'dd-MM-yyyy'): Le estás diciendo a
-Thymeleaf: "Toma el objeto Date del campo vacante.fecha, y usa la herramienta format
-de la caja #dates para convertirlo en un texto con el formato 'día-mes-año'".
-
-2.
-#numbers: Es la caja de herramientas para formatear números.
-#numbers.formatCurrency(vacante.salario): Le estás diciendo:
-"Toma el valor numérico del campo vacante.salario y usa la herramienta
-formatCurrency de la caja #numbers para mostrarlo como una moneda
-(por ejemplo, añadiendo el símbolo de dólar $, comas para los miles y dos decimales)".
-En resumen: El # es tu atajo para usar las potentes "cajas de herramientas"
-de Thymeleaf para formatear fechas, números, cadenas de texto, listas y mucho más.
--->
-        <td th:text="${#numbers.formatCurrency(vacante.salario)}"></td>
-        <td>
-            <!--
-              THYMELEAF EN ACCIÓN: Lógica Condicional
-              - th:if="${vacante.destacado == 1}": Muestra la etiqueta <span> (y su contenido)
-                SOLAMENTE SI la condición es verdadera. En este caso, si la propiedad 'destacado' es 1.
-              - th:unless="${vacante.destacado == 1}": Es lo contrario de th:if. Muestra la etiqueta
-                SOLAMENTE SI la condición es falsa. Es una forma más legible que escribir "th:if not ...".
-            -->
-            <span th:if="${vacante.destacado == 1}" class="badge badge-success">Si</span>
-            <span th:unless="${vacante.destacado == 1}"
-                  class="badge badge-danger">No</span>
-        </td>
-        <td>
-            <!--
-              THYMELEAF EN ACCIÓN: Enlaces Dinámicos para Acciones
-              - th:href="@{/vacantes/editar/{id}(id=${vacante.id})}": Crea un enlace dinámico para editar.
-                - /vacantes/editar/{id}: Define una URL con una variable de ruta 'id'.
-                - (id=${vacante.id}): Asigna el valor de la propiedad 'id' del objeto 'vacante' actual
-                  a la variable de ruta 'id'.
-              - El resultado es un enlace único para cada fila, como "/vacantes/editar/1", "/vacantes/editar/2", etc.
-            -->
-            <a th:href="@{/vacantes/editar/{id}(id=${vacante.id})}"
-               class="btn btn-warning btn-sm" role="button" title="Editar">
-                <i class="fas fa-pencil-alt" aria-hidden="true"></i>
-            </a>
-        </td>
-        <td>
-            <a th:href="@{/vacantes/borrar/{id}(id=${vacante.id})}"
-               class="btn btn-danger btn-sm" role="button" title="Borrar">
-                <i class="fas fa-trash-alt" aria-hidden="true"></i>
-            </a>
-        </td>
-    </tr>
-    </tbody>
+      <!--
+        THYMELEAF EN ACCIÓN: Formateo de Números
+        - th:text="${#numbers.formatCurrency(vacante.salario)}":
+        - #numbers.formatCurrency(vacante.salario): Le estás diciendo:
+          "Toma el valor numérico del campo vacante.salario y usa la herramienta
+          formatCurrency de la caja #numbers para mostrarlo como una moneda
+          (por ejemplo, añadiendo el símbolo de dólar $,
+          comas para los miles y dos decimales)".
+        - .formatCurrency(...): Formatea un número como una moneda, añadiendo el
+           símbolo de la moneda local (ej. $, €) y los separadores de miles/decimales.
+      -->
+      <td th:text="${#numbers.formatCurrency(vacante.salario)}"></td>
+      <td>
+         <!--
+           THYMELEAF EN ACCIÓN: Lógica Condicional
+           - th:if="${vacante.destacado == 1}": Muestra la etiqueta <span> (y su contenido)
+             SOLAMENTE SI la condición es verdadera. En este caso, si la propiedad 'destacado' es 1.
+           - th:unless="${vacante.destacado == 1}": Es lo contrario de th:if. Muestra la etiqueta
+             SOLAMENTE SI la condición es falsa. Es una forma más legible que escribir "th:if not ...".
+         -->
+         <span th:if="${vacante.destacado == 1}" class="badge badge-success">Si</span>
+         <span th:unless="${vacante.destacado == 1}"
+               class="badge badge-danger">No </span>
+      </td>
+      <td>
+         <!--
+           THYMELEAF EN ACCIÓN: Enlaces Dinámicos para Acciones
+           - th:href="@{/vacantes/editar/{id}(id=${vacante.id})}": Crea un enlace dinámico para editar.
+           - /vacantes/editar/{id}: Define una URL con una variable de ruta 'id'.
+           - (id=${vacante.id}): Asigna el valor de la propiedad 'id' del objeto 'vacante' actual
+               a la variable de ruta 'id'.
+           - El resultado es un enlace único para cada fila, como "/vacantes/editar/1", "/vacantes/editar/2", etc.
+         -->
+         <a th:href="@{/vacantes/editar/{id}(id=${vacante.id})}"
+            class="btn btn-warning btn-sm" role="button" title="Editar">
+            <i class="fas fa-pencil-alt" aria-hidden="true"></i>
+         </a>
+      </td>
+      <td>
+         <a th:href="@{/vacantes/borrar/{id}(id=${vacante.id})}"
+            class="btn btn-danger btn-sm" role="button" title="Borrar">
+            <i class="fas fa-trash-alt" aria-hidden="true"></i>
+         </a>
+      </td>
+   </tr>
+   </tbody>
 </table>
 
 <!-- Enlaces a los scripts de JavaScript, usando la misma sintaxis robusta de Thymeleaf -->
