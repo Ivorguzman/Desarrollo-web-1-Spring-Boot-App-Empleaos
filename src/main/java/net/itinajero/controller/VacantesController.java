@@ -18,138 +18,138 @@
 //    y miembros (modificadores de acceso como 'default' o 'protected').
 package net.itinajero.controller;
 
-// =======================================================================================
-// SECCIÓN 2: LAS IMPORTACIONES (LA CAJA DE HERRAMIENTAS)
-// =======================================================================================
-// ¿Qué son?
-// Las declaraciones 'import' son como pedir prestadas herramientas específicas de una
-// gran caja de herramientas (la biblioteca de Spring Framework y Java estándar).
-// Nos permiten usar clases y anotaciones de otros paquetes sin tener que escribir
-// su nombre completo (calificado) cada vez.
+/*
+ =======================================================================================
+ SECCIÓN 2: LAS IMPORTACIONES (LA CAJA DE HERRAMIENTAS)
+ =======================================================================================
+ ¿Qué son?
+ Las declaraciones 'import' son como pedir prestadas herramientas específicas de una
+ gran caja de herramientas (la biblioteca de Spring Framework y Java estándar).
+ Nos permiten usar clases y anotaciones de otros paquetes sin tener que escribir
+ su nombre completo (calificado) cada vez.
+ ¿Cómo funcionan?
+ Cuando importas una clase, le dices al compilador de Java dónde encontrar esa clase
+ para que puedas referenciarla directamente por su nombre corto.
+ ¿Por qué se usan?
+ Para hacer el código más legible y conciso, evitando la necesidad de escribir
+ nombres de paquete largos repetidamente.
+*/
 
-// ¿Cómo funcionan?
-// Cuando importas una clase, le dices al compilador de Java dónde encontrar esa clase
-// para que puedas referenciarla directamente por su nombre corto.
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
-// ¿Por qué se usan?
-// Para hacer el código más legible y conciso, evitando la necesidad de escribir
-// nombres de paquete largos repetidamente.
-
-import org.springframework.stereotype.Controller; // Importa @Controller: Marca esta clase como un componente de Spring que maneja peticiones web.
-import org.springframework.ui.Model;             // Importa Model: Una interfaz que nos permite pasar datos desde el controlador a la vista (HTML).
-import org.springframework.web.bind.annotation.PathVariable; // Importa @PathVariable: Extrae valores de la URL de la petición.
-import org.springframework.web.bind.annotation.RequestMapping; // Importa @RequestMapping: Mapea peticiones web a métodos específicos del controlador.
-import org.springframework.web.bind.annotation.RequestMethod; // Importa RequestMethod: Define el tipo de método HTTP (GET, POST, etc.) para una petición.
-
-// =======================================================================================
-// SECCIÓN 3: LA DECLARACIÓN DE LA CLASE (EL EDIFICIO DE OFICINAS)
-// =======================================================================================
-
-// ¿Qué es?
-// Esta es la definición de la clase 'VacantesController', que actuará como el
-// punto de entrada para manejar las peticiones relacionadas con las "vacantes"
-// en nuestra aplicación web.
-
-// ¿Cómo funciona?
-// Spring escanea las clases anotadas con @Controller y las gestiona para que
-// puedan responder a las solicitudes HTTP de los usuarios.
-
-// ¿Por qué se implementa así?
-// Es el patrón estándar en Spring MVC para crear controladores que manejan la
-// lógica de negocio y la interacción con las vistas.
-
-@Controller // ¿Qué hace? Esta anotación le dice a Spring que esta clase es un "controlador".
-            // ¿Cómo lo logra? Spring la detecta durante el escaneo de componentes y la registra
-            // para que pueda manejar las peticiones web.
-            // ¿Por qué se usa? Es fundamental para que Spring MVC reconozca esta clase como
-            // una que puede procesar solicitudes HTTP.
-
-@RequestMapping("/vacantes") // ¿Qué hace? Establece una "ruta base" para todas las URLs manejadas por los métodos
-                             // dentro de esta clase. Es como un prefijo para todas las URLs.
-                             // ¿Cómo lo logra? Cualquier método dentro de esta clase que tenga su propio
-                             // @RequestMapping, verá su ruta combinada con esta ruta base. Por ejemplo,
-                             // si un método tiene @RequestMapping("/detalle"), la URL completa será "/vacantes/detalle".
-                             // ¿Por qué se usa? Ayuda a organizar las URLs de forma lógica y evita la repetición
-                             // del prefijo "/vacantes" en cada método.
+/**
+ * Controlador para gestionar las operaciones relacionadas con las Vacantes.
+ * Esta clase maneja las peticiones web para crear, ver, editar y eliminar vacantes.
+ */
+@Controller
+@RequestMapping("/vacantes")
 public class VacantesController {
 
-	// =======================================================================================
-	// SECCIÓN 4: EL MÉTODO (LA OFICINA Y SU FUNCIÓN)
-	// =======================================================================================
 
-	// ¿Qué es?
-	// Este método, 'verDetalles', está diseñado para mostrar los detalles de una vacante
-	// específica cuando un usuario accede a una URL con un ID de vacante.
+	/*
+	 * ================================ SECCIÓN: ATRIBUTOS DE LA CLASE ======================
+	 * ¿Qué es un Logger? Un Logger es una herramienta para registrar mensajes
+	 * (información, advertencias, errores) que ocurren mientras tu aplicación se está ejecutando. Es como un diario de la aplicación. ¿Cómo funciona?
+	 * `LoggerFactory.getLogger(HomeController.class)` crea una instancia de Logger asociada a esta clase. Luego, puedes usar `log.info()`, `log.error()`, etc., para escribir
+	 * mensajes en la consola o en archivos de log. ¿Por qué se usa? Es una práctica mucho mejor que `System.out.println()` para depurar y monitorear aplicaciones en entornos
+	 * de producción. Permite controlar el nivel de detalle de los mensajes y dónde se guardan.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(VacantesController.class);
 
-	// ¿Cómo funciona?
-	// Recibe el ID de la vacante de la URL, lo imprime para depuración y luego pasa
-	// ese ID a la vista para que pueda mostrar la información correspondiente.
+	/**
+	 * Constructor por defecto de VacantesController.
+	 */
+	private VacantesController() {
+	}
 
-	// ¿Por qué se implementa así?
-	// Es la forma en que Spring MVC permite que un controlador reciba datos de la URL
-	// (como un ID) y prepare una vista dinámica con esos datos.
 
-	// @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
-	// ¿Qué hace? Mapea una petición HTTP GET a este método.
-	//   - value = "/view/{id}": Define la URL específica que activará este método.
-	//     - "/view/": Es una parte fija de la URL.
-	//     - "{id}": Es una variable de ruta. Spring capturará cualquier valor en esta
-	//       posición de la URL y lo asignará a un parámetro del método.
-	//   - method = RequestMethod.GET: Indica que este método solo responderá a peticiones
-	//     HTTP de tipo GET (cuando el navegador solicita una página para verla).
-	// ¿Cómo lo logra? Spring intercepta las peticiones que coinciden con esta URL y
-	// el método HTTP, y luego invoca este método 'verDetalles'.
-	// ¿Por qué se usa? Para definir de manera precisa qué tipo de petición y qué URL
-	// debe manejar este método en particular.
-	@RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
-	// public String verDetalles(@PathVariable("id") int IdVacante, Model model)
-	// ¿Qué hace? Esta es la firma del método.
-	//   - public: Indica que el método es accesible desde cualquier otra clase.
-	//   - String: El tipo de dato que el método devolverá. En Spring MVC, un String
-	//     devuelto por un método de controlador generalmente es el nombre lógico de una vista.
-	//   - verDetalles: El nombre del método, descriptivo de su función.
-	//   - @PathVariable("id") int IdVacante:
-	//     - @PathVariable("id"): Anotación que le dice a Spring que tome el valor
-	//       de la variable de ruta llamada "id" (definida en @RequestMapping("/view/{id}"))
-	//       y lo inyecte en el parámetro del método.
-	//     - int IdVacante: El tipo de dato (entero) y el nombre de la variable donde
-	//       se almacenará el ID de la vacante.
-	//   - Model model:
-	//     - Model: Un objeto proporcionado por Spring que actúa como un "mapa" o
-	//       "contenedor" para pasar datos desde el controlador a la vista.
-	// ¿Cómo lo logra? Spring inyecta automáticamente el valor de la variable de ruta
-	// y un objeto Model cuando invoca este método.
-	// ¿Por qué se usa? Permite al controlador recibir datos dinámicos de la URL y
-	// preparar los datos necesarios para que la vista (HTML) los muestre.
-	public String verDetalles(@PathVariable("id") int IdVacante, Model model) {
+	/**
+	 * Crea una nueva instancia de VacantesController.
+	 * Este es un método de fábrica estático.
+	 * @return Una nueva instancia de VacantesController.
+	 */
+	public static VacantesController createVacantesController() {
+		return new VacantesController();
+	}
 
-		// System.out.println("IdVacante = " + IdVacante);
-		// ¿Qué hace? Imprime el valor de la variable 'IdVacante' en la consola del servidor.
-		// ¿Cómo lo logra? Utiliza el método estándar de Java para imprimir en la salida
-		// de la consola.
-		// ¿Por qué se usa? Principalmente para propósitos de depuración. Permite al
-		// desarrollador verificar que el ID se está capturando correctamente de la URL.
-		System.out.println("IdVacante = " + IdVacante);
 
-		// model.addAttribute("IdVacante", IdVacante);
-		// ¿Qué hace? Añade un atributo al objeto 'Model'. Este atributo estará disponible
-		// en la vista (HTML) bajo el nombre "IdVacante".
-		//   - "IdVacante": Es el nombre (clave) con el que se accederá a este dato en la vista.
-		//   - IdVacante: Es el valor real de la variable que se está pasando.
-		// ¿Cómo lo logra? El objeto Model actúa como un puente entre el controlador y la vista.
-		// Spring se encarga de que los atributos añadidos al Model sean accesibles en el contexto
-		// de la vista que se renderizará.
-		// ¿Por qué se usa? Para enviar datos dinámicos desde el controlador a la página HTML,
-		// permitiendo que la vista muestre información específica de la vacante.
-		model.addAttribute("IdVacante", IdVacante);
+	/**
+	 * Muestra los detalles de una vacante utilizando un PathVariable.
+	 *
+	 * @param idVacante El ID de la vacante a mostrar.
+	 * @param model El objeto Model para pasar datos a la vista.
+	 * @return El nombre de la vista de detalle.
+	 */
+	@RequestMapping(value = "/view-patch/{id}", method = RequestMethod.GET)
+	public String verDetallesPathVariable(@PathVariable("id") int idVacante, Model model) {
 
-		// return "vacantes/detalle";
-		// ¿Qué hace? Indica a Spring el nombre lógico de la vista que debe renderizarse.
-		// ¿Cómo lo logra? Spring, utilizando un ViewResolver configurado (por ejemplo,
-		// Thymeleaf), buscará un archivo de plantilla HTML llamado 'detalle.html'
-		// dentro de la carpeta 'templates/vacantes/'.
-		// ¿Por qué se usa? Para dirigir al usuario a la página HTML correcta después
-		// de que el controlador ha procesado la petición y preparado los datos.
-		return "vacantes/detalle";
+
+		/* `log. info(...)`: Se registra un mensaje informativo en el log, indicando que la página de
+		 * inicio está siendo mostrada. Esto es útil para el seguimiento y depuración.*/
+		log.info("Mostrando detalles para la vacante método  verDetallesPathVariable(@PathVariable('id')  "
+				+ "int idVacante, Model model) con pase de parameter [http://localhost:9098/vacantes/view-patch/{}]", idVacante);
+
+
+
+		/*
+		 model.addAttribute("idVacante", idVacante);
+		 ¿Qué hace? Añade un atributo al objeto 'Model'. Este atributo estará disponible en la vista (HTML) bajo el nombre "idVacante".
+		   - "idVacante": Es el nombre (clave) con el que se accederá a este dato en la vista.
+		   - idVacante: Es el valor real de la variable que se está pasando.
+		 ¿Cómo lo logra? El objeto Model actúa como un puente entre el controlador y la vista.
+		 Spring se encarga de que los atributos añadidos al Model sean accesibles en el contexto de la vista que se renderizará.
+		 ¿Por qué se usa? Para enviar datos dinámicos desde el controlador a la página HTML,
+		 permitiendo que la vista muestre información específica de la vacante.*/
+		model.addAttribute("idVacante", idVacante);
+
+		/*
+		 return "vacantes/detalle";
+		 ¿Qué hace? Indica a Spring el nombre lógico de la vista que debe renderizarse.
+		 ¿Cómo lo logra? Spring, utilizando un ViewResolver configurado (por ejemplo, Thymeleaf),
+		 buscará un archivo de plantilla HTML llamado 'detallePathVariable. html 'dentro de la carpeta 'templates/vacantes/'.
+		 ¿Por qué se usa? Para dirigir al usuario a la página HTML correcta después
+		 de que el controlador ha procesado la petición y preparado los datos.*/
+		return "vacantes/detallePathVariable";
+	}
+
+	/**
+	 * Muestra los detalles de una vacante utilizando un RequestParam.
+	 *
+	 * @param idVacante El ID de la vacante a mostrar.
+	 * @return El nombre de la vista de detalle.
+	 */
+	@RequestMapping(value = "/view-request", method = RequestMethod.GET)
+	public String verDatalleRequestParam(@RequestParam("idVacante") int idVacante) {
+
+		/* Misma explicación Anterior Misma explicación Anterior  (Query String  ==> idVacante={})*/
+		log.info(
+				"Mostrando detalles para la vacante método verDatalleRequestParam(@RequestParam(idVacante) int idVacante) con  pase de variable [http://localhost:9098/vacantes/view-request?idVacante={}]",
+				idVacante);
+
+		return "vacantes/detalleRequestParam";/* Misma explicación Anterior */
+	}
+
+	/**
+	 * Elimina una vacante.
+	 *
+	 * {@code @GetMapping("/delete")}
+	 * @param idVacante El ID de la vacante a eliminar.
+	 * @param model El objeto Model para pasar datos a la vista.
+	 * @return El nombre de la vista de mensaje.
+	 */
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public String eliminar(@RequestParam("id") int idVacante, Model model) {
+		log.info(
+				"Mostrando detalles para la vacante método eliminar(@RequestParam(id) int idVacante, Model model) con  pase de variable [http://localhost:9098/vacantes/delete?id={}]",
+				idVacante);
+		model.addAttribute("id", idVacante);
+		return "mensaje";
 	}
 }

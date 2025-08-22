@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+   <meta charset="UTF-8">
+   <title>Detalle de la Vacante</title>
+</head>
+<body>
+<h1 th:text="'idVacante = '+${idVacante}"></h1>
+<!--La versión con las barras verticales |...| le dice a Thymeleaf que procese todo lo que está dentro como una sola cadena de texto, reemplazando las expresiones ${...}
+automáticamente. Es un poco más limpio y a veces más fácil de leer.-->
+<h1 th:text="|idVacante : ${idVacante}|"></h1>
+<h1>Id de la Vacante: <span th:text="|${idVacante}|"></span></h1>
+
+</body>
+</html>
