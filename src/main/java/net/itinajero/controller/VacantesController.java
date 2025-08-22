@@ -75,11 +75,23 @@ public class VacantesController {
 	 * Este es un método de fábrica estático.
 	 * @return Una nueva instancia de VacantesController.
 	 */
+	/**
+	 * Crea una nueva instancia de VacantesController.
+	 * Este es un método de fábrica estático.
+	 * @return Una nueva instancia de VacantesController.
+	 */
 	public static VacantesController createVacantesController() {
 		return new VacantesController();
 	}
 
 
+	/**
+	 * Muestra los detalles de una vacante utilizando un PathVariable.
+	 *
+	 * @param idVacante El ID de la vacante a mostrar.
+	 * @param model El objeto Model para pasar datos a la vista.
+	 * @return El nombre de la vista de detalle.
+	 */
 	/**
 	 * Muestra los detalles de una vacante utilizando un PathVariable.
 	 *
@@ -125,6 +137,12 @@ public class VacantesController {
 	 * @param idVacante El ID de la vacante a mostrar.
 	 * @return El nombre de la vista de detalle.
 	 */
+	/**
+	 * Muestra los detalles de una vacante utilizando un RequestParam.
+	 *
+	 * @param idVacante El ID de la vacante a mostrar.
+	 * @return El nombre de la vista de detalle.
+	 */
 	@RequestMapping(value = "/view-request", method = RequestMethod.GET)
 	public String verDatalleRequestParam(@RequestParam("idVacante") int idVacante) {
 
@@ -140,6 +158,13 @@ public class VacantesController {
 	 * Elimina una vacante.
 	 *
 	 * {@code @GetMapping("/delete")}
+	 * @param idVacante El ID de la vacante a eliminar.
+	 * @param model El objeto Model para pasar datos a la vista.
+	 * @return El nombre de la vista de mensaje.
+	 */
+	/**
+	 * Elimina una vacante.
+	 *
 	 * @param idVacante El ID de la vacante a eliminar.
 	 * @param model El objeto Model para pasar datos a la vista.
 	 * @return El nombre de la vista de mensaje.

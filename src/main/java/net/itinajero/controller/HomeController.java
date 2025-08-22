@@ -52,7 +52,7 @@ import java.util.List;
 @Controller
 public class HomeController {
 
-	/**
+	/*
 	 * Constructor por defecto de HomeController.
 	 */
 	public HomeController() {
@@ -86,10 +86,15 @@ public class HomeController {
 	 * 		El objeto Model para pasar datos a la vista.
 	 * @return El nombre de la vista "home".
 	 */
+	/**
+	 * Maneja las peticiones HTTP GET que llegan a la URL raíz de la aplicación ("/").
+	 * Su propósito es preparar los datos necesarios y mostrar la página de inicio (home).
+	 *
+	 * @param modelo El objeto Model para pasar datos a la vista.
+	 * @return El nombre de la vista "home".
+	 */
 	@GetMapping("/")
 	public String mostrarHome(Model modelo) {
-		// Se añade el valor del atributo en forma manual
-		// Este método es ideal para mostrar datos generales en la página principal.
 		modelo.addAttribute("mensaje", "Bienvenidos a Empleos App");
 		modelo.addAttribute("nombre", "Nombre de la vacate ");
 		modelo.addAttribute("fecha", new Date());
@@ -118,6 +123,14 @@ public class HomeController {
 	 * 		El objeto Model para pasar datos a la vista.
 	 * @return El nombre de la vista "tabla".
 	 */
+	/**
+	 * Maneja las peticiones HTTP GET a la URL "/tabla". Su función es obtener una lista de vacantes
+	 * (ofertas de trabajo) y pasarlas a una vista para que se muestren en una tabla.
+	 * También demuestra el uso de diferentes niveles de logging (info, error, warn).
+	 *
+	 * @param model El objeto Model para pasar datos a la vista.
+	 * @return El nombre de la vista "tabla".
+	 */
 	@GetMapping("/tabla")
 	public String mostrarTabla(Model model) {
 		List<Vacante> lista = getVacantes();
@@ -133,7 +146,7 @@ public class HomeController {
 	/**
 	 * ¿Qué hace este método? Este método maneja las peticiones HTTP GET a la URL " /listado". Su propósito es crear una lista simple de nombres de empleos (cadenas de texto)
 	 * y pasarla a una vista para su visualización. ¿Cómo lo logra? 1. `@GetMapping("/listado")`: Mapea este método para que se ejecute cuando se acceda a la URL `/listado`.
-	 * 2. `List<String> lista = List.of(...)`: Crea una lista inmutable de cadenas de texto. - `List.of()` es un método conveniente introducido en Java 9 para crear listas
+	 * 2. `List&lt;String&gt; lista = List.of(...)`: Crea una lista inmutable de cadenas de texto. - `List.of()` es un método conveniente introducido en Java 9 para crear listas
 	 * pequeñas y fijas de forma concisa. Al ser inmutable, no se pueden añadir ni quitar elementos después de su creación, lo cual es adecuado para datos estáticos como
 	 * estos. 3. `modelo.addAttribute("empleo", lista);`: Añade esta lista de cadenas al objeto `Model`, haciéndola disponible en la vista bajo el nombre "empleo". 4. `return
 	 * "listado"`: Indica a Spring que debe renderizar la plantilla `listado.html`. ¿Por qué se implementa así? - **Simplicidad**: Demuestra cómo pasar datos sencillos (una
@@ -143,6 +156,13 @@ public class HomeController {
 	 *
 	 * @param modelo
 	 * 		El objeto Model para pasar datos a la vista.
+	 * @return El nombre de la vista "listado".
+	 */
+	/**
+	 * Maneja las peticiones HTTP GET a la URL "/listado". Su propósito es crear una lista simple de nombres de empleos
+	 * (cadenas de texto) y pasarla a una vista para su visualización.
+	 *
+	 * @param modelo El objeto Model para pasar datos a la vista.
 	 * @return El nombre de la vista "listado".
 	 */
 	@GetMapping("/listado")
@@ -167,6 +187,13 @@ public class HomeController {
 	 *
 	 * @param modelo
 	 * 		El objeto Model para pasar datos a la vista.
+	 * @return El nombre de la vista "detalleSueldo".
+	 */
+	/**
+	 * Maneja las peticiones HTTP GET a la URL "/detalle". Su función es crear un objeto `Vacante` de ejemplo
+	 * con datos predefinidos y pasarlo a una vista para mostrar los detalles de una única vacante.
+	 *
+	 * @param modelo El objeto Model para pasar datos a la vista.
 	 * @return El nombre de la vista "detalleSueldo".
 	 */
 	@GetMapping("/detalle")
@@ -197,6 +224,12 @@ public class HomeController {
 	 * contenida y separada de la lógica principal del controlador. - **Manejo de Errores**: El bloque `try-catch` es un ejemplo fundamental de cómo manejar excepciones en
 	 * Java, asegurando que la aplicación sea más robusta frente a errores inesperados (como un formato de fecha incorrecto). - **Preparación para el Futuro**: Este método
 	 * será reemplazado más adelante por una capa de servicio que interactúe con una base de datos real, pero cumple su función didáctica y de prototipado inicial.
+	 *
+	 * @return Una lista de objetos Vacante de prueba.
+	 */
+	/**
+	 * Método auxiliar (privado) que genera una lista de objetos `Vacante` con datos de prueba.
+	 * Simula lo que en una aplicación real sería la obtención de datos de una fuente persistente (ej. base de datos).
 	 *
 	 * @return Una lista de objetos Vacante de prueba.
 	 */

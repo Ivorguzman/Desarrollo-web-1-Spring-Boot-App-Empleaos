@@ -122,58 +122,114 @@ public class Vacante {
 	// - **Convención**: Son una convención estándar en Java para las clases de modelo (POJOs),
 	//   y muchos frameworks (como Spring, JPA, Hibernate) dependen de ellos para funcionar correctamente.
 
+	/**
+	 * Obtiene el identificador único de la vacante.
+	 * @return El ID de la vacante.
+	 */
 	public Integer getId() {
 		return id;
 	}
 
+	/**
+	 * Establece el identificador único de la vacante.
+	 * @param id El ID de la vacante a establecer.
+	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
+	/**
+	 * Obtiene el nombre o título del puesto de la vacante.
+	 * @return El nombre de la vacante.
+	 */
 	public String getNombre() {
 		return nombre;
 	}
 
+	/**
+	 * Establece el nombre o título del puesto de la vacante.
+	 * @param nombre El nombre de la vacante a establecer.
+	 */
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
 
+	/**
+	 * Obtiene la descripción detallada de la vacante.
+	 * @return La descripción de la vacante.
+	 */
 	public String getDescripcion() {
 		return descripcion;
 	}
 
+	/**
+	 * Establece la descripción detallada de la vacante.
+	 * @param descripcion La descripción de la vacante a establecer.
+	 */
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
 
+	/**
+	 * Obtiene la fecha de publicación de la vacante.
+	 * @return La fecha de la vacante.
+	 */
 	public Date getFecha() {
 		return fecha;
 	}
 
+	/**
+	 * Establece la fecha de publicación de la vacante.
+	 * @param fecha La fecha de la vacante a establecer.
+	 */
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
 
+	/**
+	 * Obtiene el salario ofrecido para el puesto de la vacante.
+	 * @return El salario de la vacante.
+	 */
 	public double getSalario() {
 		return salario;
 	}
 
+	/**
+	 * Establece el salario ofrecido para el puesto de la vacante.
+	 * @param salario El salario de la vacante a establecer.
+	 */
 	public void setSalario(double salario) {
 		this.salario = salario;
 	}
 
+	/**
+	 * Obtiene el indicador de si la vacante es destacada (1) o no (0).
+	 * @return El indicador de destacado.
+	 */
 	public Integer getDestacado() {
 		return destacado;
 	}
 
+	/**
+	 * Establece el indicador de si la vacante es destacada (1) o no (0).
+	 * @param destacado El indicador de destacado a establecer.
+	 */
 	public void setDestacado(Integer destacado) {
 		this.destacado = destacado;
 	}
 
+	/**
+	 * Obtiene el nombre del archivo de imagen asociado a la vacante.
+	 * @return El nombre del archivo de imagen.
+	 */
 	public String getImagen() {
 		return imagen;
 	}
 
+	/**
+	 * Establece el nombre del archivo de imagen asociado a la vacante.
+	 * @param imagen El nombre del archivo de imagen a establecer.
+	 */
 	public void setImagen(String imagen) {
 		this.imagen = imagen;
 	}
@@ -216,6 +272,10 @@ public class Vacante {
 	 * Negocio**: Encapsula la lógica para clasificar el salario dentro de la propia clase `Vacante`, lo que hace que el modelo sea más inteligente y autónomo. -
 	 * **Reutilización**: Permite que cualquier parte de la aplicación que tenga un objeto `Vacante` pueda obtener fácilmente su nivel salarial sin duplicar la lógica de
 	 * clasificación. - **Claridad**: Al usar constantes para los umbrales y una enumeración para los niveles, el código es muy legible y fácil de entender.
+	 */
+	/**
+	 * Calcula y devuelve el {@link NivelSalarial} de la vacante basándose en su salario actual.
+	 * @return El nivel salarial de la vacante (BAJO, NORMAL, ALTO).
 	 */
 	public NivelSalarial getNivelSalarial() {
 		// Usando las constantes que definimos previamente
