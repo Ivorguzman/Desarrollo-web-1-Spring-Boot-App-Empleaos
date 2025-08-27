@@ -39,14 +39,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
- * Controlador para gestionar las operaciones relacionadas con las Vacantes.
- * Esta clase maneja las peticiones web para crear, ver, editar y eliminar vacantes.
+ * Controlador para gestionar las operaciones relacionadas con las Vacantes. Esta clase maneja las peticiones web para crear, ver, editar y eliminar vacantes.
  */
 @Controller
 @RequestMapping("/vacantes")
@@ -63,43 +59,18 @@ public class VacantesController {
 	 */
 	private static final Logger log = LoggerFactory.getLogger(VacantesController.class);
 
-	/**
-	 * Constructor por defecto de VacantesController.
-	 */
-	private VacantesController() {
-	}
-
-
-	/**
-	 * Crea una nueva instancia de VacantesController.
-	 * Este es un método de fábrica estático.
-	 * @return Una nueva instancia de VacantesController.
-	 */
-	/**
-	 * Crea una nueva instancia de VacantesController.
-	 * Este es un método de fábrica estático.
-	 * @return Una nueva instancia de VacantesController.
-	 */
-	public static VacantesController createVacantesController() {
-		return new VacantesController();
-	}
-
 
 	/**
 	 * Muestra los detalles de una vacante utilizando un PathVariable.
 	 *
-	 * @param idVacante El ID de la vacante a mostrar.
-	 * @param model El objeto Model para pasar datos a la vista.
+	 * @param idVacante
+	 * 		El ID de la vacante a mostrar.
+	 * @param model
+	 * 		El objeto Model para pasar datos a la vista.
 	 * @return El nombre de la vista de detalle.
 	 */
-	/**
-	 * Muestra los detalles de una vacante utilizando un PathVariable.
-	 *
-	 * @param idVacante El ID de la vacante a mostrar.
-	 * @param model El objeto Model para pasar datos a la vista.
-	 * @return El nombre de la vista de detalle.
-	 */
-	@RequestMapping(value = "/view-patch/{id}", method = RequestMethod.GET)
+	// @GetMapping("/view-path/{id}")// Es Una especialización en forma abreviada de @RequestMapping(value = "/view-patch/{id}"
+	@RequestMapping(value = "/view-patch/{id}", method = RequestMethod.GET) // Codificación Antigua Pero Completa
 	public String verDetallesPathVariable(@PathVariable("id") int idVacante, Model model) {
 
 
@@ -132,49 +103,56 @@ public class VacantesController {
 	}
 
 	/**
-	 * Muestra los detalles de una vacante utilizando un RequestParam.
+	 * Muestra los detalles de una vacante utilizando un RequestParam. Muestra detalle  {@code @GetMapping("/view-request") }.
 	 *
-	 * @param idVacante El ID de la vacante a mostrar.
+	 * @param idVacante
+	 * 		El ID de la vacante a mostrar.
 	 * @return El nombre de la vista de detalle.
 	 */
-	/**
-	 * Muestra los detalles de una vacante utilizando un RequestParam.
-	 *
-	 * @param idVacante El ID de la vacante a mostrar.
-	 * @return El nombre de la vista de detalle.
-	 */
-	@RequestMapping(value = "/view-request", method = RequestMethod.GET)
-	public String verDatalleRequestParam(@RequestParam("idVacante") int idVacante) {
+	@GetMapping("/view-request") // Es Una especialización en forma abreviada de @RequestMapping(value = "/view-request", method = RequestMethod.GET)"
+	//@RequestMapping(value = "/view-request", method = RequestMethod.GET) // Codificación Antigua Pero Completa
+	public String verDatalleRequestParam(@RequestParam("idVacante") int idVacante, Model model) {
 
 		/* Misma explicación Anterior Misma explicación Anterior  (Query String  ==> idVacante={})*/
 		log.info(
 				"Mostrando detalles para la vacante método verDatalleRequestParam(@RequestParam(idVacante) int idVacante) con  pase de variable [http://localhost:9098/vacantes/view-request?idVacante={}]",
 				idVacante);
+		model.addAttribute("idVacante", idVacante);
+
 
 		return "vacantes/detalleRequestParam";/* Misma explicación Anterior */
 	}
 
 	/**
-	 * Elimina una vacante.
-	 *
-	 * {@code @GetMapping("/delete")}
-	 * @param idVacante El ID de la vacante a eliminar.
-	 * @param model El objeto Model para pasar datos a la vista.
+	 * @param idVacante
+	 * 		El ID de la vacante a eliminar.
+	 * @param model
+	 * 		objeto Model para pasar datos a la vista.
 	 * @return El nombre de la vista de mensaje.
 	 */
-	/**
-	 * Elimina una vacante.
-	 *
-	 * @param idVacante El ID de la vacante a eliminar.
-	 * @param model El objeto Model para pasar datos a la vista.
-	 * @return El nombre de la vista de mensaje.
-	 */
+	// @GetMapping("/delete") Es Una especialización en forma abreviada de @RequestMapping(value = "/delete", method = RequestMethod.GET)"
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public String eliminar(@RequestParam("id") int idVacante, Model model) {
-		log.info(
-				"Mostrando detalles para la vacante método eliminar(@RequestParam(id) int idVacante, Model model) con  pase de variable [http://localhost:9098/vacantes/delete?id={}]",
-				idVacante);
+		log.info("Mostrando detalles para la vacante método eliminar(@RequestParam(id) " + "int idVacante, Model model) "
+				+ "con  pase de variable [http://localhost:9098/vacantes/delete?id={}]", idVacante);
 		model.addAttribute("id", idVacante);
 		return "mensaje";
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

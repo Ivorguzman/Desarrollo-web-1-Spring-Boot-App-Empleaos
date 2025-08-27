@@ -5,6 +5,11 @@
    <title>Title</title>
 </head>
 <body>
-<h1>Hola Soy el método detalleRequestParam()</h1>
+<h1 th:text="|idVacante : ${idVacante}|"></h1>
+<h1>Id de la vacante (Con codificación Moderna de Th:) = <span
+    th:text="|${idVacante}|"></span></h1>
+<h2
+    th:text="'Id de la vacante (Con codificación clásica de Th:) = ' +  ${idVacante}">
+</h2>
 </body>
 </html>

@@ -52,12 +52,6 @@ import java.util.List;
 @Controller
 public class HomeController {
 
-	/*
-	 * Constructor por defecto de HomeController.
-	 */
-	public HomeController() {
-		// Constructor por defecto
-	}
 
 
 
@@ -87,10 +81,10 @@ public class HomeController {
 	 * @return El nombre de la vista "home".
 	 */
 	/**
-	 * Maneja las peticiones HTTP GET que llegan a la URL raíz de la aplicación ("/").
-	 * Su propósito es preparar los datos necesarios y mostrar la página de inicio (home).
+	 * Maneja las peticiones HTTP GET que llegan a la URL raíz de la aplicación ("/"). Su propósito es preparar los datos necesarios y mostrar la página de inicio (home).
 	 *
-	 * @param modelo El objeto Model para pasar datos a la vista.
+	 * @param modelo
+	 * 		El objeto Model para pasar datos a la vista.
 	 * @return El nombre de la vista "home".
 	 */
 	@GetMapping("/")
@@ -124,11 +118,11 @@ public class HomeController {
 	 * @return El nombre de la vista "tabla".
 	 */
 	/**
-	 * Maneja las peticiones HTTP GET a la URL "/tabla". Su función es obtener una lista de vacantes
-	 * (ofertas de trabajo) y pasarlas a una vista para que se muestren en una tabla.
-	 * También demuestra el uso de diferentes niveles de logging (info, error, warn).
+	 * Maneja las peticiones HTTP GET a la URL "/tabla". Su función es obtener una lista de vacantes (ofertas de trabajo) y pasarlas a una vista para que se muestren en una
+	 * tabla. También demuestra el uso de diferentes niveles de logging (info, error, warn).
 	 *
-	 * @param model El objeto Model para pasar datos a la vista.
+	 * @param model
+	 * 		El objeto Model para pasar datos a la vista.
 	 * @return El nombre de la vista "tabla".
 	 */
 	@GetMapping("/tabla")
@@ -159,10 +153,11 @@ public class HomeController {
 	 * @return El nombre de la vista "listado".
 	 */
 	/**
-	 * Maneja las peticiones HTTP GET a la URL "/listado". Su propósito es crear una lista simple de nombres de empleos
-	 * (cadenas de texto) y pasarla a una vista para su visualización.
+	 * Maneja las peticiones HTTP GET a la URL "/listado". Su propósito es crear una lista simple de nombres de empleos (cadenas de texto) y pasarla a una vista para su
+	 * visualización.
 	 *
-	 * @param modelo El objeto Model para pasar datos a la vista.
+	 * @param modelo
+	 * 		El objeto Model para pasar datos a la vista.
 	 * @return El nombre de la vista "listado".
 	 */
 	@GetMapping("/listado")
@@ -190,10 +185,11 @@ public class HomeController {
 	 * @return El nombre de la vista "detalleSueldo".
 	 */
 	/**
-	 * Maneja las peticiones HTTP GET a la URL "/detalle". Su función es crear un objeto `Vacante` de ejemplo
-	 * con datos predefinidos y pasarlo a una vista para mostrar los detalles de una única vacante.
+	 * Maneja las peticiones HTTP GET a la URL "/detalle". Su función es crear un objeto `Vacante` de ejemplo con datos predefinidos y pasarlo a una vista para mostrar los
+	 * detalles de una única vacante.
 	 *
-	 * @param modelo El objeto Model para pasar datos a la vista.
+	 * @param modelo
+	 * 		El objeto Model para pasar datos a la vista.
 	 * @return El nombre de la vista "detalleSueldo".
 	 */
 	@GetMapping("/detalle")
@@ -228,8 +224,8 @@ public class HomeController {
 	 * @return Una lista de objetos Vacante de prueba.
 	 */
 	/**
-	 * Método auxiliar (privado) que genera una lista de objetos `Vacante` con datos de prueba.
-	 * Simula lo que en una aplicación real sería la obtención de datos de una fuente persistente (ej. base de datos).
+	 * Método auxiliar (privado) que genera una lista de objetos `Vacante` con datos de prueba. Simula lo que en una aplicación real sería la obtención de datos de una fuente
+	 * persistente (ej. base de datos).
 	 *
 	 * @return Una lista de objetos Vacante de prueba.
 	 */

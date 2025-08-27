@@ -26,7 +26,11 @@ package net.itinajero.model;
 // Para reutilizar código y funcionalidades ya existentes, sin tener que reescribirlas.
 // Esto hace que tu código sea más conciso y eficiente.
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Date;
+
 
 // =======================================================================================
 // SECCIÓN 3: LA DECLARACIÓN DE LA CLASE (EL PLANO DE LA VACANTE)
@@ -82,6 +86,7 @@ public class Vacante {
 	 */
 	private static final double UMBRAL_SALARIO_BAJO = 2000.0;
 	private static final double UMBRAL_SALARIO_NORMAL = 8000.0;
+	private static final Logger log = LoggerFactory.getLogger(Vacante.class);
 
 	// =======================================================================================
 	// SECCIÓN 6: CONSTRUCTOR (CÓMO CREAR UN OBJETO VACANTE)
@@ -124,6 +129,7 @@ public class Vacante {
 
 	/**
 	 * Obtiene el identificador único de la vacante.
+	 *
 	 * @return El ID de la vacante.
 	 */
 	public Integer getId() {
@@ -132,7 +138,9 @@ public class Vacante {
 
 	/**
 	 * Establece el identificador único de la vacante.
-	 * @param id El ID de la vacante a establecer.
+	 *
+	 * @param id
+	 * 		El ID de la vacante a establecer.
 	 */
 	public void setId(Integer id) {
 		this.id = id;
@@ -140,6 +148,7 @@ public class Vacante {
 
 	/**
 	 * Obtiene el nombre o título del puesto de la vacante.
+	 *
 	 * @return El nombre de la vacante.
 	 */
 	public String getNombre() {
@@ -148,7 +157,9 @@ public class Vacante {
 
 	/**
 	 * Establece el nombre o título del puesto de la vacante.
-	 * @param nombre El nombre de la vacante a establecer.
+	 *
+	 * @param nombre
+	 * 		El nombre de la vacante a establecer.
 	 */
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
@@ -156,6 +167,7 @@ public class Vacante {
 
 	/**
 	 * Obtiene la descripción detallada de la vacante.
+	 *
 	 * @return La descripción de la vacante.
 	 */
 	public String getDescripcion() {
@@ -164,7 +176,9 @@ public class Vacante {
 
 	/**
 	 * Establece la descripción detallada de la vacante.
-	 * @param descripcion La descripción de la vacante a establecer.
+	 *
+	 * @param descripcion
+	 * 		La descripción de la vacante a establecer.
 	 */
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
@@ -172,6 +186,7 @@ public class Vacante {
 
 	/**
 	 * Obtiene la fecha de publicación de la vacante.
+	 *
 	 * @return La fecha de la vacante.
 	 */
 	public Date getFecha() {
@@ -180,7 +195,9 @@ public class Vacante {
 
 	/**
 	 * Establece la fecha de publicación de la vacante.
-	 * @param fecha La fecha de la vacante a establecer.
+	 *
+	 * @param fecha
+	 * 		La fecha de la vacante a establecer.
 	 */
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
@@ -188,6 +205,7 @@ public class Vacante {
 
 	/**
 	 * Obtiene el salario ofrecido para el puesto de la vacante.
+	 *
 	 * @return El salario de la vacante.
 	 */
 	public double getSalario() {
@@ -196,7 +214,9 @@ public class Vacante {
 
 	/**
 	 * Establece el salario ofrecido para el puesto de la vacante.
-	 * @param salario El salario de la vacante a establecer.
+	 *
+	 * @param salario
+	 * 		El salario de la vacante a establecer.
 	 */
 	public void setSalario(double salario) {
 		this.salario = salario;
@@ -204,6 +224,7 @@ public class Vacante {
 
 	/**
 	 * Obtiene el indicador de si la vacante es destacada (1) o no (0).
+	 *
 	 * @return El indicador de destacado.
 	 */
 	public Integer getDestacado() {
@@ -212,7 +233,9 @@ public class Vacante {
 
 	/**
 	 * Establece el indicador de si la vacante es destacada (1) o no (0).
-	 * @param destacado El indicador de destacado a establecer.
+	 *
+	 * @param destacado
+	 * 		El indicador de destacado a establecer.
 	 */
 	public void setDestacado(Integer destacado) {
 		this.destacado = destacado;
@@ -220,6 +243,7 @@ public class Vacante {
 
 	/**
 	 * Obtiene el nombre del archivo de imagen asociado a la vacante.
+	 *
 	 * @return El nombre del archivo de imagen.
 	 */
 	public String getImagen() {
@@ -228,7 +252,9 @@ public class Vacante {
 
 	/**
 	 * Establece el nombre del archivo de imagen asociado a la vacante.
-	 * @param imagen El nombre del archivo de imagen a establecer.
+	 *
+	 * @param imagen
+	 * 		El nombre del archivo de imagen a establecer.
 	 */
 	public void setImagen(String imagen) {
 		this.imagen = imagen;
@@ -275,6 +301,7 @@ public class Vacante {
 	 */
 	/**
 	 * Calcula y devuelve el {@link NivelSalarial} de la vacante basándose en su salario actual.
+	 *
 	 * @return El nivel salarial de la vacante (BAJO, NORMAL, ALTO).
 	 */
 	public NivelSalarial getNivelSalarial() {

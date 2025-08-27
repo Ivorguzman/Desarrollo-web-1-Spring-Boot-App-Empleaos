@@ -5,11 +5,13 @@
    <title>Detalle de la Vacante</title>
 </head>
 <body>
-<h1 th:text="'idVacante = '+${idVacante}"></h1>
+
 <!--La versión con las barras verticales |...| le dice a Thymeleaf que procese todo lo que está dentro como una sola cadena de texto, reemplazando las expresiones ${...}
 automáticamente. Es un poco más limpio y a veces más fácil de leer.-->
 <h1 th:text="|idVacante : ${idVacante}|"></h1>
-<h1>Id de la Vacante: <span th:text="|${idVacante}|"></span></h1>
+<h1>Id de la vacante (Con codificación Moderna de Th:) = <span
+    th:text="|${idVacante}|"></span></h1>
+<h2 th:text="'Id de la vacante (Con codificación clásica de Th:) = ' +${idVacante}"></h2>
 
 </body>
 </html>
