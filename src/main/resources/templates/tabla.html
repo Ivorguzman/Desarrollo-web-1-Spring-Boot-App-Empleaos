@@ -129,8 +129,7 @@
              SOLAMENTE SI la condición es falsa. Es una forma más legible que escribir "th:if not ...".
          -->
          <span th:if="${vacante.destacado == 1}" class="badge badge-success">Si</span>
-         <span th:unless="${vacante.destacado == 1}"
-               class="badge badge-danger">No </span>
+         <span th:unless="${vacante.destacado == 1}" class="badge badge-danger">No</span>
       </td>
       <td>
          <!--
@@ -141,13 +140,54 @@
                a la variable de ruta 'id'.
            - El resultado es un enlace único para cada fila, como "/vacantes/editar/1", "/vacantes/editar/2", etc.
          -->
-         <a th:href="@{/vacantes/editar/{id}(id=${vacante.id})}"
+
+
+      <td>
+         <!--
+           THYMELEAF EN ACCIÓN: Enlace con Parámetro de Consulta (Query Parameter)
+           - th:href="@{/vacantes/view-request(idVacante=${vacante.id})}": Crea un enlace dinámico para la acción de editar.
+             - @{...}: Sintaxis para crear una URL.
+             - /vacantes/view-request: Es la ruta base a la que apuntará el enlace.
+             - (idVacante=${vacante.id}): Esta sintaxis con paréntesis se usa para añadir PARÁMETROS DE CONSULTA.
+               - 'idVacante' es el nombre del parámetro.
+               - ${vacante.id} es el valor obtenido del objeto 'vacante' actual.
+           - El resultado es una URL con un formato como "/vacantes/view-request?idVacante=1", etc.
+           - Este tipo de URL es manejada en el controlador de Spring por un método que usa la anotación @RequestParam("idVacante")
+             para capturar el valor del parámetro.
+         -->
+         <!-- Con Anotación @RequestParam("id") ==> [id=X..]
+         Paso de  variable de Ruta :(id=${vacante.id}) ==> [?id=X..] -->
+         <a th:href="@{/vacantes/view-request(idVacante=${vacante.id})}"
             class="btn btn-warning btn-sm" role="button" title="Editar">
             <i class="fas fa-pencil-alt" aria-hidden="true"></i>
          </a>
+
+
+         <!-- Con Anotación @PathVariable("id") ==> Paso de Parameter de Ruta
+                 <a th:href="@{/vacantes/view-patch/{id}(id=${vacante.id})}"
+                    class="btn btn-warning btn-sm" role="button" title="Editar">
+                    <i class="fas fa-pencil-alt" aria-hidden="true"></i>
+                 </a>
+          -->
       </td>
+
       <td>
-         <a th:href="@{/vacantes/borrar/{id}(id=${vacante.id})}"
+         <!--
+      THYMELEAF EN ACCIÓN: Enlace con Parámetro de Consulta (Query Parameter)
+   - th:href="@{/vacantes/delete(id=${vacante.id})}": Crea un enlace dinámico para la
+      acción de borrado.
+      - @{...}: Sintaxis para crear una URL.
+      - /vacantes/delete: Es la ruta base a la que apuntará el enlace.
+      - (id=${vacante.id}): Esta sintaxis con paréntesis se usa para añadir PARÁMETROS DE CONSULTA.
+      - 'id' es el nombre del parámetro.
+      - ${vacante.id} es el valor obtenido del objeto 'vacante' actual.
+    - El resultado es una URL con un formato como "/vacantes/delete?id=1", "/vacantes/delete?id=2", etc.
+    - Este tipo de URL es manejada en el controlador de Spring por un método que usa la
+      anotación @RequestParam("id") para capturar el valor del parámetro.-->
+
+         <!-- Con Anotación @RequestParam("id") ==> [id=X..]
+          Paso de  variable de Ruta :(id=${vacante.id}) ==> [?id=X..] -->
+         <a th:href="@{/vacantes/delete(id=${vacante.id})}"
             class="btn btn-danger btn-sm" role="button" title="Borrar">
             <i class="fas fa-trash-alt" aria-hidden="true"></i>
          </a>

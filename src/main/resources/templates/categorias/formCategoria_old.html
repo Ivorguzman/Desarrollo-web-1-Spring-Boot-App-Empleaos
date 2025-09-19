@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+   <meta charset="UTF-8">
+   <meta content="width=device-width, initial-scale=1.0" name="viewport">
+   <title>Formulario de Categoría</title>
+
+   <!--
+     MEJORA: Rutas de recursos corregidas.
+     - Se usa th:href="@{...}" para que Thymeleaf y el IDE resuelvan las rutas correctamente.
+     - Se han eliminado los enlaces CSS duplicados (CDN) para mejorar el rendimiento.
+       Es mejor cargar los recursos una sola vez.
+   -->
+   <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+   <link rel="stylesheet" th:href="@{/css/all.min.css}">
+
+</head>
+<!-- Establece el cuerpo como un contenedor flexible en columna y con altura mínima del 100% de la pantalla -->
+<body class="d-flex flex-column min-vh-100">
+
+<!-- Inserción de la barra de navegación usando Thymeleaf -->
+<!--<header th:insert="~{/fragments/menu :: menu-principal}"></header>-->
+
+<!-- Contenedor principal con ancho completo -->
+<div class="container mt-5" style="width: 100%;">
+   <!-- Contenedor interno con ancho reducido para mejor presentación -->
+   <div class="container mt-5" style="width: 60%;">
+
+      <!-- Creación de una tarjeta que encierra el formulario -->
+      <div class="card">
+         <div class="card-body p-4">
+            <!-- Encabezado de la tarjeta con título -->
+            <div class="card-header">
+               <h3 class="text-primary">Datos de la Categoría</h3>
+            </div>
+            <h1>Aquí va el formulario</h1>
+
+            <!-- Inicio del formulario -->
+            <form method="post" th:action="@{/categorias/save}" th:object="${categoria}">
+
+               <!-- Muestra errores de validación si existen -->
+               <div class="alert alert-danger mt-3" th:if="${#fields.hasErrors('*')}">
+                  <h5>Error:</h5>
+                  <h6>Por favor corrija los siguientes errores:</h6>
+               </div>
+
+               <!-- Campo de entrada para el nombre -->
+               <div class="form-row">
+                  <div class="form-group col-md-6">
+                     <label for="nombre">Nombre</label>
+                     <!--
+                       MEJORA: Vinculación de datos con th:field.
+                       - th:field="*{nombre}" conecta este input con el campo 'nombre' del objeto 'categoria'.
+                       - Thymeleaf genera automáticamente los atributos 'id', 'name' y 'value'.
+                       - Esto es crucial para mostrar datos existentes al editar y para repoblar el formulario si hay errores.
+                     -->
+                     <input class="form-control" placeholder="Ingresa el nombre"
+                            th:field="*{nombre}" id="nombre" type="text">
+                     <!--
+                       MEJORA: Visualización de errores con th:errors.
+                       - th:errors="*{nombre}" es la forma estándar y más limpia de mostrar los mensajes de error
+                         de validación para un campo específico.
+                     -->
+                     <div class="alert alert-danger mt-2"
+                          th:if="${#fields.hasErrors('nombre')}">
+                        <p th:errors="*{nombre}"></p>
+                     </div>
+                  </div>
+               </div>
+
+               <!-- Campo de texto para la descripción -->
+               <div class="form-row d-flex align-items-stretch">
+                  <div class="form-group col-md-9 d-flex flex-column">
+                     <label for="descripcion">Descripción</label>
+                     <!-- MEJORA: Usamos th:field también para el textarea. Funciona igual que con el input. -->
+                     <textarea id="descripcion" class="form-control flex-grow-1"
+                               placeholder="Ingresa la descripción"
+                               rows="3" th:field="*{descripcion}"></textarea>
+                     <div class="alert alert-danger mt-2"
+                          th:if="${#fields.hasErrors('descripcion')}">
+                        <p th:errors="*{descripcion}"></p>
+                     </div>
+                  </div>
+               </div>
+
+               <!-- Botón de envío del formulario -->
+               <button class="btn btn-primary" type="submit">Guardar &raquo;</button>
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
+
+<!--
+  MEJORA: Sección de scripts unificada y limpiada.
+  - Se han eliminado todas las cargas duplicadas de JS para evitar conflictos y mejorar la velocidad.
+  - Se usan rutas compatibles con Thymeleaf (th:src="@{...}") para eliminar las advertencias del IDE.
+  - Se ha corregido el error tipográfico en la ruta de TinyMCE (era 'tiniymce').
+-->
+<script th:src="@{/js/jquery-3.3.1.slim.min.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/all.min.js}"></script>
+<script th:src="@{/tinymce/tinymce.min.js}"></script>
+
+<!-- Script para inicializar TinyMCE -->
+<script type="text/javascript">
+   tinymce.init({
+      selector: '#descripcion',
+      height: 300,
+      plugins: ['textcolor', 'table', 'lists', 'code'],
+      toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | ' +
+         'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
+         'forecolor backcolor emoticons | help',
+      menu: {
+         favs: {title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons'}
+      },
+   });
+</script>
+
+<!-- Footer -->
+<footer class="footer mt-auto py-3  footer-dark  bg-dark" th:fragment="pie-pagina">
+   <div class="container text-center">
+      <span class="text-muted">© 2024 EmpleosApp, Inc. | WebApp Desarrollada con Spring Boot | Realizado
+        por: Ivor A. Guzmán Zambrano | <a th:href="@{#}">Privacy</a> · <a th:href="@{#}">Terms</a>
+      </span>
+   </div>
+</footer>
+
+</body>
+</html>

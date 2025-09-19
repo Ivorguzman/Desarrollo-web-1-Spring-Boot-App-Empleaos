@@ -1,11 +1,70 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+   <meta charset="UTF-8">
+   <meta content="width=device-width, initial-scale=1.0" name="viewport">
+   <title>Formulario de Categoría</title>
+
+   <!--
+     MEJORA: Rutas de recursos corregidas.
+     - Se usa th:href="@{...}" para que Thymeleaf y el IDE resuelvan las rutas correctamente.
+     - Se han eliminado los enlaces CSS duplicados (CDN) para mejorar el rendimiento.
+       Es mejor cargar los recursos una sola vez.
+   -->
+   <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+   <link rel="stylesheet" th:href="@{/css/all.min.css}">
+
 </head>
-<body>
-<h1> Se mostrara el formulario de categorias</h1>
+<!-- Establece el cuerpo como un contenedor flexible en columna y con altura mínima del 100% de la pantalla -->
+<body class="d-flex flex-column min-vh-100">
+
+<!-- Inserción de la barra de navegación usando Thymeleaf -->
+<!--<header th:insert="~{/fragments/menu :: menu-principal}"></header>-->
+
+<!-- Contenedor principal con ancho completo -->
+<div class="container mt-5" style="width: 100%;">
+   <!-- Contenedor interno con ancho reducido para mejor presentación -->
+   <div class="container mt-5" style="width: 60%;">
+
+      <!-- Creación de una tarjeta que encierra el formulario -->
+      <div class="card">
+         <div class="card-body p-4">
+            <!-- Encabezado de la tarjeta con título -->
+            <div class="card-header">
+               <h3 class="text-primary">Datos de la Categoría</h3>
+            </div>
+            <h1>Aquí va el formulario</h1>
+
+            <!--           Inicio del formulario  -->
+            <!--            <form method="post" th:action="@{/categorias/save}" th:object="${categoria}">-->
+            <form method="post" th:action="@{/categorias/save}">
+               Nombre: <br>
+               <input type="text" name="var_nombre" value="">
+               <br>
+               Descripción: <br>
+               <input type="text" name="var_descripcion" value="">
+               <br>
+               <br>
+               <input type="submit" value="Guardar">
+
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
+
+<!--
+  MEJORA: Sección de scripts unificada y limpiada.
+  - Se han eliminado todas las cargas duplicadas de JS para evitar conflictos y mejorar la velocidad.
+  - Se usan rutas compatibles con Thymeleaf (th:src="@{...}") para eliminar las advertencias del IDE.
+  - Se ha corregido el error tipográfico en la ruta de TinyMCE (era 'tiniymce').
+-->
+<script th:src="@{/js/jquery-3.3.1.slim.min.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/all.min.js}"></script>
+<script th:src="@{/tinymce/tinymce.min.js}"></script>
+
 
 </body>
 </html>

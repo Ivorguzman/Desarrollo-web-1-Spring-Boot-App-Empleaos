@@ -2,9 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
    <meta charset="UTF-8">
-   <title>Title</title>
+   <title>Confirmación de Eliminación</title> <!-- Un título más descriptivo -->
 </head>
 <body>
-<h1>Soy la plantilla mensaje.html con el atributo id = [[${id}]] Para se eliminado</h1>
+
+<!--<h1>Soy la plantilla mensaje.html y se procesará la eliminación para el ID: [[${id}]] Para-->
+<!--   ID_DE_EJEMPLO</h1>-->
+<h1>
+   Soy la plantilla mensaje.html y se procesará la eliminación para el ID_DE_EJEMPLO:
+   <span th:text="${id}"></span>
+</h1>
 </body>
 </html>
