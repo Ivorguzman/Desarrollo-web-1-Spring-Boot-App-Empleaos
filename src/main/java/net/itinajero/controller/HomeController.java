@@ -52,8 +52,9 @@ public class HomeController {
 	 *
 	 * @param serviceVacantes
 	 * 		La instancia del servicio de vacantes que será inyectada por el contenedor de Spring.
-	 * @Autowired: Esta anotación le dice a Spring que debe usar este constructor para crear el bean de HomeController. Spring buscará un bean que coincida con el tipo del
-	 * parámetro (Itf_VacanteService), lo encontrará (porque VacanteService_Impl está anotado con @Service) y lo pasará automáticamente al constructor. Nota: Si una clase
+	 * @Autowired: Esta anotación le dice a Spring que debe usar este constructor para crear el bean (crear una instancia/objeto de la clase HomeController, pero no una
+	 * instancia cualquiera, sino una instancia especial que será gestionada por el contenedor de Spring) de HomeController. Spring buscará un bean que coincida con el tipo
+	 * del parámetro (Itf_VacanteService), lo encontrará (porque VacanteService_Impl está anotado con @Service) y lo pasará automáticamente al constructor. Nota: Si una clase
 	 * tiene un solo constructor, la anotación @Autowired es opcional desde Spring 4.3.
 	 */
 	@Autowired
