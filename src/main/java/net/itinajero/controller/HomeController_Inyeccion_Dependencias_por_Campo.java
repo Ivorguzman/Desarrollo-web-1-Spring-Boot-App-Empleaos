@@ -5,7 +5,6 @@ import net.itinajero.service.Itf_VacanteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -15,13 +14,15 @@ import java.util.List;
 /**
  * VERSIÓN INTERMEDIA DEL CONTROLADOR (INYECCIÓN POR CAMPO). Esta clase representa el primer paso de la refactorización. La lógica para obtener datos se ha movido a una capa
  * de servicio (Itf_VacanteService) y se inyecta en este controlador. En esta versión se usa la "Inyección por Campo", que es funcional pero menos recomendada que la
- * inyección por constructor. NOTA: La anotación @Controller está comentada para evitar conflictos con el HomeController principal. Si quieres probar esta versión, descomenta
- * la anotación y comenta la del otro HomeController.
+ * inyección por constructor.
+ *
+ * NOTA: La anotación @Controller está comentada para evitar conflictos con el HomeController principal. Si quieres probar esta versión, descomenta la anotación y comenta la
+ * del otro HomeController.
  */
-@Controller
-public class HomeController {
+//@Controller
+public class HomeController_Inyeccion_Dependencias_por_Campo {
 
-	private static final Logger log = LoggerFactory.getLogger(HomeController.class);
+	private static final Logger log = LoggerFactory.getLogger(HomeController_Inyeccion_Dependencias_por_Campo.class);
 
 	/**
 	 * Inyección de Dependencias por Campo (Por Inyección de Campo).

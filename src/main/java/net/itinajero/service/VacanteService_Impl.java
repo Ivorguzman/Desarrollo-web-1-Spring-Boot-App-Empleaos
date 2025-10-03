@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Implementación concreta de la interfaz Itf_VacanteService. Esta clase se encarga de la lógica de negocio relacionada con la gestión de vacantes. En esta versión, actúa
@@ -19,6 +20,7 @@ import java.util.List;
  * componente (como HomeController) pida una instancia de Itf_VacanteService, Spring le inyectará siempre este mismo objeto. 3. Marca esta clase como parte de la "capa de
  * servicio" de la aplicación, lo que es semánticamente importante para la arquitectura.
  */
+
 @Service
 public class VacanteService_Impl implements Itf_VacanteService {
 
@@ -43,7 +45,7 @@ public class VacanteService_Impl implements Itf_VacanteService {
 	 * "base de datos en memoria" con datos de prueba. En una aplicación real, este constructor podría estar vacío y los datos se cargarían desde una base de datos real a
 	 * través de otros métodos.
 	 */
-	VacanteService_Impl() {
+	public VacanteService_Impl() {
 
 		// Se define un formato de fecha estándar para convertir Strings a objetos Date.
 		final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
@@ -61,7 +63,7 @@ public class VacanteService_Impl implements Itf_VacanteService {
 			vacante1.setNombre("Ingeniero Civil");
 			vacante1.setDescripcion("Solicitamos para el equipo de construcción de puente peatonal");
 			vacante1.setFecha(DATE_FORMAT.parse("01-01-2025"));
-			vacante1.setSalario(8500.0);
+			vacante1.setSalario(14000.0);
 			vacante1.setDestacado(1);
 			vacante1.setImagen("logo1.png");
 
@@ -123,6 +125,17 @@ public class VacanteService_Impl implements Itf_VacanteService {
 		// Simplemente devuelve la referencia a la lista que ya está en memoria.
 		// Como la lista es un atributo de la clase, su estado se mantiene mientras la aplicación esté en ejecución.
 		return listaVacantes;
+	}
+
+	@Override
+	public List<Vacante> buscarPorId(Integer idVacante) {
+		for (Vacante vacante : listaVacantes)
+
+			if (Objects.equals(vacante.getId(), idVacante)){
+				return List.of(vacante); // Devuelve una lista con la vacante encontrada
+			}
+		// Si no se encuentra la vacante, se devuelve una lista vacía.
+		return List.of();
 	}
 
 

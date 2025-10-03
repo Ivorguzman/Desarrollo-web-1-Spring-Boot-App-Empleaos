@@ -51,7 +51,7 @@
       <th>Fecha Publicación</th>
       <th>Salario</th>
       <th>Destacado</th>
-      <th>Editar</th>
+      <th>Detalle</th>
       <th>Borrar</th>
    </tr>
    </thead>
@@ -131,15 +131,15 @@
          <span th:if="${vacante.destacado == 1}" class="badge badge-success">Si</span>
          <span th:unless="${vacante.destacado == 1}" class="badge badge-danger">No</span>
       </td>
-      <td>
-         <!--
-           THYMELEAF EN ACCIÓN: Enlaces Dinámicos para Acciones
-           - th:href="@{/vacantes/editar/{id}(id=${vacante.id})}": Crea un enlace dinámico para editar.
-           - /vacantes/editar/{id}: Define una URL con una variable de ruta 'id'.
-           - (id=${vacante.id}): Asigna el valor de la propiedad 'id' del objeto 'vacante' actual
-               a la variable de ruta 'id'.
-           - El resultado es un enlace único para cada fila, como "/vacantes/editar/1", "/vacantes/editar/2", etc.
-         -->
+
+      <!--
+        THYMELEAF EN ACCIÓN: Enlaces Dinámicos para Acciones
+        - th:href="@{/vacantes/editar/{id}(id=${vacante.id})}": Crea un enlace dinámico para editar.
+        - /vacantes/editar/{id}: Define una URL con una variable de ruta 'id'.
+        - (id=${vacante.id}): Asigna el valor de la propiedad 'id' del objeto 'vacante' actual
+            a la variable de ruta 'id'.
+        - El resultado es un enlace único para cada fila, como "/vacantes/editar/1", "/vacantes/editar/2", etc.
+      -->
 
 
       <td>
