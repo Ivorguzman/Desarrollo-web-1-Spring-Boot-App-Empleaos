@@ -9,14 +9,14 @@
    <link rel="stylesheet" th:href="@{/css/tabla.css}">
 </head>
 <body>
-<h1 th:text="|idVacante : ${idVacante}|"></h1>
-<h1>Id de la vacante (Con codificación Moderna de Th:) = <span
-    th:text="|${idVacante}|"></span></h1>
-<h2
-    th:text="'Id de la vacante (Con codificación clásica de Th:) = ' +  ${idVacante}">
-</h2>
+<!--<h1 th:text="|idVacante : ${idVacante}|"></h1>-->
+<!--<h1>Id de la vacante (Con codificación Moderna de Th:) = <span-->
+<!--    th:text="|${idVacante}|"></span></h1>-->
+<!--<h2-->
+<!--    th:text="'Id de la vacante (Con codificación clásica de Th:) = ' +  ${idVacante}">-->
+<!--</h2>-->
 
-<img src="#" th:src="@{/images/logo.png}" width="136" height="136" alt="Logo de la App">"
+<img src="#" th:src="@{/images/logo.png}" width="136" height="136" alt="Logo de la App">
 <h1 class="text-primary">Detalles de la vacante</h1>
 
 <table class="table table-striped table-bordered table-hover">
@@ -32,7 +32,25 @@
    </tr>
    </thead>
 
-   <tr></tr>
+   <tbody>
+   <tr th:each="objeto_Vacante: ${idVacante}">
+      <td>
+         <img src="#" th:src="@{/images/{img}(img=${objeto_Vacante.imagen})}" width="100"
+              height="100" alt="Logo de la vacante">
+      </td>
+      <td th:text="${objeto_Vacante.id}"></td>
+      <td th:text="${objeto_Vacante.nombre}"></td>
+      <td th:text="${objeto_Vacante.descripcion}"></td>
+      <td th:text="${#dates.format(objeto_Vacante.fecha, 'dd-MM-yyyy')}"></td>
+      <td th:text="${#numbers.formatCurrency(objeto_Vacante.salario)}"></td>
+      <td>
+         <span th:if="${objeto_Vacante.destacado == 1}"
+               class="badge badge-success">Si ></span>
+         <span th:unless="${objeto_Vacante.destacado == 1}"
+               class="badge badge-danger">No</span>
+      </td>
+   </tr>
+   </tbody>
 </table>
 <!-- Enlaces a los scripts de JavaScript, usando la misma sintaxis robusta de Thymeleaf -->
 <script th:src="@{/js/jquery-3.3.1.slim.min.js}"></script>

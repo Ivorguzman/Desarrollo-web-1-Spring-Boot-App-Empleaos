@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,10 +32,34 @@ public class HomeController {
 	@Autowired
 	private Itf_VacanteService serviceVacantes;
 
+	//	@GetMapping("/")
+	//	public String mostrarHome(Model modelo) {
+	//		modelo.addAttribute("mensaje", "Bienvenidos a Empleos App (Versión con Servicio)");
+	//		modelo.addAttribute("fecha", new Date());
+	//		return "home";
+	//	}
+
+	@SuppressWarnings("SequencedCollectionMethodCanBeUsed")
 	@GetMapping("/")
 	public String mostrarHome(Model modelo) {
-		modelo.addAttribute("mensaje", "Bienvenidos a Empleos App (Versión con Servicio)");
-		modelo.addAttribute("fecha", new Date());
+		// 1. Se obtiene la lista completa de vacantes desde el servicio.
+		List<Vacante> listaDeVacantes = serviceVacantes.buscarTodas();
+		log.info("Enviando {} vacantes a la vista 'home' desde el servicio.", listaDeVacantes.size());
+		log.info("Enviando {} contenido del objeto vacante", listaDeVacantes);
+
+		modelo.addAttribute("mensaje", "Bienvenidos a Empleos App");
+
+		// 2. ¡LA SOLUCIÓN! Se comprueba si la lista no está vacía.
+		if (!listaDeVacantes.isEmpty()){
+			// 3. Si no está vacía, se añade al modelo SOLO EL PRIMER objeto de la lista (en la posición 0).
+			// Ahora, la variable "vacante" en la vista "home.html" será un único objeto Vacante,
+			// por lo que la expresión "vacante.nombre" funcionará correctamente.
+			modelo.addAttribute("vacante", listaDeVacantes.get(3));
+			log.info("Enviando la primera vacante a la vista 'home'.");
+		} else{
+			log.warn("No hay vacantes en la lista para mostrar en la página de inicio.");
+		}
+
 		return "home";
 	}
 
@@ -44,11 +67,12 @@ public class HomeController {
 	 * Este método ahora delega la responsabilidad de obtener los datos al servicio inyectado. El controlador ya no sabe de dónde vienen las vacantes, solo las pide.
 	 */
 	@GetMapping("/tabla")
-	public String mostrarTabla(Model model) {
+	public String mostrarTabla(Model modelo) {
 		// Se llama al método del servicio para obtener la lista de vacantes.
 		List<Vacante> listaDeVacantes = serviceVacantes.buscarTodas();
-		model.addAttribute("vacantes", listaDeVacantes);
+		modelo.addAttribute("vacantes", listaDeVacantes);
 		log.info("Enviando {} vacantes a la vista 'tabla' desde el servicio.", listaDeVacantes.size());
+		log.info("Enviando {} contenido del objeto vacante de la vista tabla", listaDeVacantes);
 		return "tabla";
 	}
 

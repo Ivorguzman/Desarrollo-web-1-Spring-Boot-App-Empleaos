@@ -59,6 +59,7 @@ public class VacanteService_Impl implements Itf_VacanteService {
 			// --- Inicio de la creación de datos de prueba (simulación de una base de datos) ---
 
 			Vacante vacante1 = new Vacante();
+			// set (Establecer, Poner, Asignar).
 			vacante1.setId(1);
 			vacante1.setNombre("Ingeniero Civil");
 			vacante1.setDescripcion("Solicitamos para el equipo de construcción de puente peatonal");

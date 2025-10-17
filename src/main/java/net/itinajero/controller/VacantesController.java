@@ -35,6 +35,7 @@ package net.itinajero.controller;
  nombres de paquete largos repetidamente.
 */
 
+import net.itinajero.model.Vacante;
 import net.itinajero.service.Itf_VacanteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Controlador para gestionar las operaciones relacionadas con las Vacantes. Esta clase maneja las peticiones web para crear, ver, editar y eliminar vacantes.
@@ -119,8 +122,11 @@ public class VacantesController {
 		log.info(
 				"Mostrando detalles para la vacante método verDatalleRequestParam(@RequestParam(idVacante) int idVacante) con  pase de variable [http://localhost:9098/vacantes/view-request?idVacante={}]",
 				idVacante);
-		model.addAttribute("idVacante", idVacante);
 
+		List<Vacante> objeto_Vacante = serviceVacantes.buscarPorId(idVacante);
+
+		model.addAttribute("idVacante", objeto_Vacante);
+		log.info("Mostrando detalles para la vacante con ID {} desde el servicio.", objeto_Vacante);
 
 		return "vacantes/detalleRequestParam";/* Misma explicación Anterior */
 	}
