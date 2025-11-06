@@ -1,19 +1,17 @@
 /*
- * === SECCIÓN 1: EL PAQUETE (LA DIRECCIÓN DEL ARCHIVO)===
- * ¿Qué es un paquete? Un paquete es como una carpeta que organiza tus clases de Java.
- * Ayuda a evitar conflictos de nombres y a estructurar tu proyecto de manera lógica. ¿Cómo funciona? La palabra clave `package` al inicio del archivo indica a qué paquete
- * pertenece esta clase. ¿Por qué se usa? Para mantener el código ordenado, modular y fácil de mantener, especialmente en proyectos grandes.
+ * === SECCIÓN 1: EL PAQUETE (LA DIRECCIÓN DEL ARCHIVO) ===
+ * ¿Qué es? Un paquete en Java es un contenedor que agrupa clases relacionadas, como una carpeta.
+ * ¿Cómo funciona? `package net.itinajero.controller;` ubica esta clase dentro del paquete `controller`.
+ * ¿Por qué se usa? Para organizar el código, evitar conflictos de nombres y controlar el acceso a las clases.
  */
-
 package net.itinajero.controller;
 
 /*
  * === SECCIÓN 2: LAS IMPORTACIONES (LA CAJA DE HERRAMIENTAS) ===
- *  ¿Qué son las importaciones? Las importaciones son declaraciones que permiten a tu
- * clase usar otras clases que están definidas en diferentes paquetes o librerías. ¿Cómo funcionan? La palabra clave `import` le dice al compilador dónde encontrar las clases
- * que necesitas. ¿Por qué se usan? Para reutilizar código y funcionalidades ya existentes, sin tener que reescribirlas. Esto hace que tu código sea más conciso y eficiente.
+ * ¿Qué son? Son directivas para usar clases de otros paquetes sin escribir su nombre completo.
+ * ¿Cómo funcionan? `import` le dice al compilador dónde encontrar las definiciones de `Logger`, `Model`, `Controller`, etc.
+ * ¿Por qué se usan? Para reutilizar código y hacerlo más legible y conciso.
  */
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -22,70 +20,67 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 /**
- * ============ SECCIÓN 3: LA DECLARACIÓN DE LA CLASE (EL EDIFICIO DE OFICINAS) ============ ¿Qué es esta clase?. Esta clase es un 'Controlador' en el patrón de diseño
- * Model-View-Controller (MVC). Se encarga de recibir las peticiones de los usuarios relacionadas con las categorías, procesarlas y decidir qué vista (página HTML) mostrar o
- * qué acción realizar.
- * <p>
- * ¿Cómo funciona? La anotación `@Controller` le dice a Spring que esta clase es un componente especial que maneja las solicitudes web. Spring es el framework que se encarga
- * de escanear, detectar y dar vida a esta clase durante el arranque de la aplicación.
- * <p>
- * ¿Por qué se implementa así? Es la forma estándar en Spring Boot para crear controladores web. Permite organizar la lógica de la aplicación de manera clara, separando la
- * gestión de peticiones de la lógica de negocio y de la capa de presentación (la vista).
+ * ============ SECCIÓN 3: LA DECLARACIÓN DE LA CLASE (EL EDIFICIO DE OFICINAS) ============
+ * ¿Qué es esta clase? Es un Controlador de Spring MVC. Su responsabilidad es manejar las peticiones web (clics de usuario, URLs) relacionadas con las "Categorías".
+ *
+ * ¿Cómo funciona?
+ * - `@Controller`: Es una anotación que le dice a Spring: "Esta clase es un componente web, escanéala y úsala para manejar peticiones HTTP".
+ * - `@RequestMapping("/categorias")`: Actúa como un prefijo para todas las URLs que maneja esta clase. Cualquier método con un mapeo aquí dentro comenzará con `/categorias`.
+ *   Por ejemplo, un método mapeado a `/index` será accesible en la URL `/categorias/index`.
+ *
+ * ¿Por qué se implementa así?
+ * - **Organización**: Agrupa toda la lógica de URLs para las categorías en un solo lugar.
+ * - **Claridad**: Hace que las URLs de la aplicación sean más consistentes y fáciles de entender.
  */
 @Controller
-/*  ¿Qué hace esta anotación?
- * `@RequestMapping("/categorias")` establece una "ruta base" para todas las URLs manejadas
- * por los métodos dentro de esta clase. Es como un prefijo para todas las URLs.
- ¿Cómo lo logra?
- * Cualquier método dentro de esta clase que tenga su propio `@RequestMapping`, verá su ruta
- * combinada con esta ruta base. Por ejemplo, si un método tiene `@RequestMapping("/lista")`,
- * la URL completa para acceder a ese método será `/categorias/lista`.
- ¿Por qué se usa?
- * Ayuda a organizar las URLs de forma lógica y evita la repetición del prefijo `/categorias`
- * en cada método. Esto mejora la legibilidad y el mantenimiento del código.
- */
 @RequestMapping("/categorias")
 public class CategoriaController {
 
-	private static final Logger log = LoggerFactory.getLogger(CategoriaController.class);
-
+	/*
+	 * ============ SECCIÓN 4: LOS ATRIBUTOS (LA MEMORIA Y HERRAMIENTAS DE LA CLASE) ============
+	 */
 
 	/**
-	 * ======================================================================================= SECCIÓN 4: MÉTODOS DEL CONTROLADOR (LAS OFICINAS Y SUS FUNCIONES)
-	 * ======================================================================================= ¿Qué hace este método? Este método maneja las peticiones HTTP GET que llegan a
-	 * la URL `/categorias/index`. Su propósito es mostrar una lista de categorías. ¿Cómo lo logra? `@RequestMapping(value = "/index", method = RequestMethod.GET)`: Esta
-	 * anotación de Spring le dice al framework que este método debe ejecutarse cuando un usuario accede a la dirección `/categorias/index` utilizando el método HTTP GET
-	 * (típicamente al escribir la URL en el navegador o hacer clic en un enlace). `public String mostrarIndex(Model model)`: Define el método. Aunque aquí se recibe un
-	 * objeto `Model`, en este ejemplo no se usa para pasar datos a la vista, pero es una buena práctica incluirlo si se planea usarlo en el futuro. `return
-	 * "categorias/listCategorias"`: El método devuelve la cadena `"categorias/listCategorias"`. Spring interpretará esto como el nombre lógico de la vista. Buscará una
-	 * plantilla HTML (por ejemplo, `listCategorias.html`) dentro de la carpeta `templates/categorias/` y la renderizará para el usuario. ¿Por qué se implementa así? -
-	 * **Mapeo de URL**: Es la forma estándar de mapear una URL específica a un método controlador en Spring MVC. - **Separación de Responsabilidades**: El controlador se
-	 * encarga de la lógica de la petición y de seleccionar la vista adecuada, dejando la presentación a la vista (HTML). - **Preparación para Datos Dinámicos**: Aunque no se
-	 * usa aquí, el `Model` está listo para cuando se necesite pasar una lista real de categorías desde una base de datos a la vista. Aquí iría la lógica para buscar las
-	 * categorías en la base de datos y pasarlas al 'model' para que la vista las muestre.
+	 * ¿Qué es? Un objeto para registrar mensajes de log (informativos, de error, etc.). Es el estándar profesional para el seguimiento de la aplicación.
+	 * ¿Cómo funciona? `LoggerFactory.getLogger(...)` crea un logger asociado a esta clase. Usamos `log.info()`, `log.error()`, etc., para escribir mensajes.
+	 * ¿Por qué se usa? Es mucho más potente y configurable que `System.out.println()`. Permite controlar qué se registra y dónde (consola, archivos) en diferentes entornos (desarrollo, producción).
+	 */
+	private static final Logger log = LoggerFactory.getLogger(CategoriaController.class);
+
+	/*
+	 * =======================================================================================
+	 * SECCIÓN 5: MÉTODOS DEL CONTROLADOR (LAS OFICINAS Y SUS FUNCIONES)
+	 * =======================================================================================
+	 */
+
+	/**
+	 * ¿Qué hace este método? Maneja peticiones GET a `/categorias/index`. Su propósito es mostrar la página principal de la sección de categorías.
 	 *
-	 * @param model
-	 * 		El objeto Model para pasar datos a la vista.
-	 * @return El nombre de la vista "categorias/listCategorias".
+	 * ¿Cómo lo logra?
+	 * - `@RequestMapping(value = "/index", method = RequestMethod.GET)`: Mapea este método a las peticiones GET para la URL `/categorias/index`.
+	 * - `public String mostrarIndex(Model model)`: Define el método. Recibe un objeto `Model` que sirve como puente para pasar datos del controlador a la vista.
+	 * - `return "categorias/listCategorias"`: Devuelve el nombre lógico de la vista. Spring buscará un archivo `listCategorias.html` dentro de la carpeta `templates/categorias/`.
+	 *
+	 * ¿Por qué se implementa así?
+	 * - **Patrón MVC**: Separa la lógica de navegación (controlador) de la presentación (vista).
+	 * - **Preparado para el futuro**: Aunque ahora no se pasan datos, el `Model` está listo para cuando necesitemos enviar una lista de categorías desde la base de datos a la vista.
 	 */
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public String mostrarIndex(Model model) {
-
 		return "categorias/listCategorias";
 	}
 
 	/**
-	 * ¿Qué hace este método? Este método maneja las peticiones HTTP GET que llegan a la URL `/categorias/crear`. Su propósito es mostrar el formulario para crear una nueva
-	 * categoría. ¿Cómo lo logra? `@RequestMapping(value = "/crear", method = RequestMethod.GET)`: Mapea este método para que se ejecute cuando un usuario accede a
-	 * `/categorias/crear` con una petición GET. `public String crear()`: Define el método que no recibe parámetros adicionales del modelo o la URL. `return
-	 * "categorias/formCategoria"`: Devuelve el nombre lógico de la vista `"categorias/formCategoria"`. Spring buscará y renderizará la plantilla HTML `formCategoria.html`
-	 * dentro de la carpeta `templates/categorias/`. ¿Por qué se implementa así? - **Mostrar Formularios**: Es el patrón común para presentar un formulario vacío al usuario
-	 * para la entrada de datos. La petición GET es adecuada para esto, ya que solo se está solicitando una página. - **Claridad de Flujo**: Separa claramente la acción de
-	 * mostrar el formulario de la acción de procesar los datos del formulario (que típicamente sería un POST).
+	 * ¿Qué hace este método? Maneja peticiones GET a `/categorias/crear`. Su propósito es mostrar el formulario para que el usuario pueda crear una nueva categoría.
 	 *
-	 * @return El nombre de la vista "categorias/formCategoria".
+	 * ¿Cómo lo logra?
+	 * - `@RequestMapping(value = "/crear", method = RequestMethod.GET)`: Mapea este método a las peticiones GET para la URL `/categorias/crear`.
+	 * - `return "categorias/formCategoria"`: Le dice a Spring que renderice la vista `formCategoria.html` que se encuentra en `templates/categorias/`.
+	 *
+	 * ¿Por qué se implementa así?
+	 * - **Flujo de usuario claro**: Es el patrón estándar para mostrar un formulario. El usuario pide ver el formulario (GET), y luego lo enviará (POST).
+	 * - **Separación de acciones**: Separa la acción de "mostrar el formulario" de la acción de "procesar los datos del formulario".
 	 */
 	@RequestMapping(value = "/crear", method = RequestMethod.GET)
 	public String crear() {
@@ -93,59 +88,32 @@ public class CategoriaController {
 	}
 
 	/**
-	 * ¿Qué hace este método? Este método maneja las peticiones HTTP POST que llegan a la URL `/categorias/save`. Su propósito es recibir los datos enviados desde un
-	 * formulario (por ejemplo, los datos de una nueva categoría) y procesarlos (en este caso, simular que los guarda). ¿Cómo lo logra? `@RequestMapping(value = "/save",
-	 * method = RequestMethod.POST)`: Mapea este método para que se ejecute cuando se envía un formulario a `/categorias/save` utilizando el método HTTP POST. El método POST
-	 * es crucial para enviar datos que modifican el estado del servidor (como guardar una nueva categoría). `public String guardar()`: Define el método. En una aplicación
-	 * real, este método recibiría los datos del formulario como parámetros (por ejemplo, un objeto `Categoria`). `System.out.println("Guardando la categoría...")`: Una línea
-	 * de depuración que imprime un mensaje en la consola del servidor, indicando que la acción de guardar se está ejecutando. `return "redirect:/categorias/formCategoria"`:
-	 * Esta es una instrucción especial. En lugar de renderizar una vista directamente, `"redirect:"` le dice al navegador del usuario que realice una nueva petición GET a la
-	 * URL especificada (`/categorias/formCategoria`). Esto es conocido como el patrón Post/Redirect/Get (PRG). ¿Por qué se implementa así? - **Procesamiento de
-	 * Formularios**: Es el patrón estándar para manejar el envío de datos de formularios en aplicaciones web. El método POST es seguro para esto. - **Patrón
-	 * Post/Redirect/Get (PRG)**: La redirección después de un POST es una buena práctica para evitar problemas como el reenvío accidental del formulario si el usuario
-	 * refresca la página, y para asegurar que la URL en el navegador refleje el estado actual de la aplicación (una petición GET). - **Simulación de Lógica de Negocio**:
-	 * Aunque aquí solo se imprime un mensaje, este es el lugar donde se integraría la lógica real para guardar la categoría en una base de datos o llamar a un servicio.
+	 * ¿Qué hace este método? Procesa los datos enviados desde el formulario de creación de categorías. Se activa con peticiones POST a `/categorias/save`.
 	 *
-	 * @return La redirección a la URL especificada después de guardar.
+	 * ¿Cómo lo logra?
+	 * - `@RequestMapping(value = "/save", method = RequestMethod.POST)`: Mapea este método específicamente a peticiones POST. Esto es crucial para la seguridad y las buenas prácticas, ya que las operaciones que modifican datos no deben ser GET.
+	 * - `@RequestParam("var_nombre") String var_nombre`: Esta anotación extrae los datos enviados en el cuerpo de la petición POST. Busca un parámetro llamado `var_nombre` (que corresponde al atributo `name` de un campo `<input>` en el formulario HTML) y lo asigna a la variable `String var_nombre`.
+	 * - `log.info(...)`: Registra los valores recibidos en el log del servidor. Esto es extremadamente útil para depurar y verificar qué datos están llegando al controlador.
+	 * - `System.out.println(...)`: Una forma más simple (pero menos recomendada que el logging) de ver una salida en la consola.
+	 * - `return "categorias/formCategoria"`: Después de procesar los datos, devuelve al usuario a la vista del formulario. (Nota: Una mejor práctica sería usar `redirect`, como se explica abajo).
+	 *
+	 * ¿Por qué se implementa así?
+	 * - **Procesamiento de Formularios**: Es el patrón estándar para recibir y manejar datos enviados por el usuario.
+	 * - **Seguridad**: Usar POST previene que los datos se envíen como parte de la URL y protege contra ciertos tipos de ataques.
+	 * - **Depuración**: El logging permite a los desarrolladores rastrear el flujo de datos y diagnosticar problemas sin interrumpir la ejecución.
+	 * - **Patrón Post-Redirect-Get (PRG) - (Mejora Sugerida)**: En una aplicación real, en lugar de `return "categorias/formCategoria";`, se usaría `return "redirect:/categorias/index";`. Esto redirige al usuario a la página de la lista después de guardar, evitando reenvíos accidentales del formulario si el usuario refresca la página. La implementación actual es más simple para fines de demostración inicial.
 	 */
-	//@PostMapping("/save") // Opción moderna  y resumida de @RequestMapping(value =
-	// "/save", method = RequestMethod.POST) -- RECOMENDADA --
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String guardar(@RequestParam("var_nombre") String var_nombre, @RequestParam("var_descripcion") String var_descripcion) {
 
-		log.info("Mostrando detalles para la vacante método  verDetalles guardar(@RequestParam(\"var_nombre\") "
-				+ "String var_nombre, @RequestParam(\"var_descripcion\") String var_descripcion) con pase de parameter  var_nombre: "
-				+ "[http://localhost:9098/categorias/save/{}]", var_nombre);
+		log.info("Handler 'guardar': Procesando datos del formulario para nueva categoría.");
+		log.info("Nombre recibido: {}", var_nombre);
+		log.info("Descripción recibida: {}", var_descripcion);
 
-		log.info("Mostrando detalles para la vacante método  verDetalles guardar(@RequestParam(\"var_nombre\") "
-				+ "String var_nombre, @RequestParam(\"var_descripcion\") String var_descripcion) con pase de parameter var_descripcion:  "
-				+ "[http://localhost:9098/categorias/save/{}]", var_descripcion);
-
+		// Aquí iría la lógica para llamar a un servicio y guardar la categoría en la base de datos.
 		System.out.println("Guardando la categoría...");
 
-		/*
-		 Después de guardar, le decimos al navegador del usuario que vaya a otra página.
-		 "redirect:" es una instrucción especial para no mostrar una vista, sino para
-		 redirigir al usuario a la URL '/categorias/formCategoria'.
-		 return "redirect:/categorias/formCategoria";
-		 */
+		// Se devuelve al usuario a la vista del formulario.
 		return "categorias/formCategoria";
 	}
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

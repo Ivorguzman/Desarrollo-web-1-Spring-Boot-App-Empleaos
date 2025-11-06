@@ -1,0 +1,86 @@
+package net.itinajero.controller;
+
+import net.itinajero.model.Vacante;
+import net.itinajero.service.Itf_VacanteService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
+
+/**
+ * QUÉ ES ESTA CLASE: Es el controlador principal de la aplicación. Su trabajo es recibir peticiones del navegador del usuario para URLs específicas (como la página de inicio
+ * o la tabla de vacantes), procesarlas y devolver una respuesta, que normalmente es una vista HTML con datos.
+ *
+ * POR QUÉ EXISTE: Sigue el patrón de diseño Modelo-Vista-Controlador (MVC). Separa las responsabilidades: - El Modelo (clase Vacante) son los datos. - La Vista (archivos
+ * HTML) es la presentación. - El Controlador (esta clase) es el intermediario que los conecta. Esto hace que la aplicación sea ordenada, fácil de mantener y de probar.
+ *
+ * CÓMO FUNCIONA: La anotación @Controller le dice a Spring que esta clase es un componente especial. Spring la crea y la mantiene viva, escuchando las peticiones que
+ * coincidan con los métodos anotados con @GetMapping.
+ */
+@Controller
+public class HomeController_old {
+
+	private static final Logger log = LoggerFactory.getLogger(HomeController_old.class);
+
+	/**
+	 * QUÉ ES ESTO: Es la declaración de una dependencia. Esta clase NECESITA un objeto que implemente la interfaz Itf_VacanteService para poder obtener la lista de
+	 * vacantes.
+	 *
+	 * POR QUÉ SE HACE ASÍ (Inyección de Dependencias por Campo): Esta es una de las 3 formas de inyección de dependencias en Spring. Se busca desacoplar el controlador de la
+	 * implementación del servicio. El controlador no crea el servicio, solo declara que lo necesita. Es una forma muy concisa, pero se considera menos segura y más difícil
+	 * de probar que la inyección por constructor.
+	 *
+	 * CÓMO FUNCIONA: La anotación @Autowired es una orden para Spring. Le dice: "Cuando crees este objeto HomeController, busca en tu contenedor un bean que sea del tipo
+	 * Itf_VacanteService y asígnalo directamente a esta variable".
+	 */
+	@Autowired
+	private Itf_VacanteService serviceVacantes;
+
+	/**
+	 * QUÉ HACE ESTE MÉTODO: Maneja las peticiones a la URL raíz ("/") y muestra la página de inicio. Además, selecciona una vacante (la primera de la lista) para mostrarla
+	 * como destacada.
+	 *
+	 * POR QUÉ LO HACE: Para dar la bienvenida al usuario y presentarle un ejemplo de una oferta de trabajo sin que tenga que navegar a otras secciones. Es una forma común de
+	 * hacer la página de inicio más dinámica.
+	 *
+	 * CÓMO LO HACE: 1. @GetMapping("/"): Vincula este método a la URL raíz. 2. serviceVacantes.buscarTodas(): Pide al servicio la lista completa de vacantes. 3. if
+	 * (!listaDeVacantes.isEmpty()): Comprueba que la lista no esté vacía para evitar errores. 4. listaDeVacantes.get(0): Accede solo al primer objeto de la lista. 5.
+	 * modelo.addAttribute("vacante", ...): Añade ese único objeto al modelo. 6. return "home": Le dice a Spring que use la plantilla "home.html" para renderizar la
+	 * respuesta.
+	 */
+	@GetMapping("/")
+	public String mostrarHome(Model modelo) {
+		List<Vacante> listaDeVacantes = serviceVacantes.buscarTodas();
+		modelo.addAttribute("mensaje", "Bienvenidos a Empleos App");
+
+		if (!listaDeVacantes.isEmpty()){
+			modelo.addAttribute("vacante", listaDeVacantes.get(0));
+			log.info("Enviando la primera vacante a la vista 'home'.");
+		} else{
+			log.warn("No hay vacantes en la lista para mostrar en la página de inicio.");
+		}
+
+		return "home";
+	}
+
+	/**
+	 * QUÉ HACE ESTE MÉTODO: Maneja las peticiones a la URL "/tabla" y muestra una página con la lista completa de vacantes.
+	 *
+	 * POR QUÉ LO HACE: Para proporcionar una vista donde el usuario pueda ver todas las ofertas de trabajo disponibles en un formato de tabla claro y ordenado.
+	 *
+	 * CÓMO LO HACE: 1. @GetMapping("/tabla"): Vincula este método a la URL "/tabla". 2. serviceVacantes.buscarTodas(): Pide al servicio la lista completa de vacantes. 3.
+	 * modelo.addAttribute("vacantes", ...): Añade la LISTA COMPLETA al modelo. Es importante notar que aquí se pasa la lista entera, a diferencia del método mostrarHome. 4.
+	 * return "tabla": Le dice a Spring que use la plantilla "tabla.html", la cual deberá tener la lógica (con th:each) para recorrer y mostrar la lista de vacantes.
+	 */
+	@GetMapping("/tabla")
+	public String mostrarTabla(Model modelo) {
+		List<Vacante> listaDeVacantes = serviceVacantes.buscarTodas();
+		modelo.addAttribute("vacantes", listaDeVacantes);
+		log.info("Enviando {} vacantes a la vista 'tabla'.", listaDeVacantes.size());
+		return "tabla";
+	}
+}

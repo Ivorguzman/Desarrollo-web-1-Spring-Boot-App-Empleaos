@@ -1,4 +1,4 @@
-package net.itinajero.controller;
+package net.itinajero.service;
 
 import org.springframework.ui.Model;
 

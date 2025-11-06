@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org ">
+
+  <!-- Navegación -->
+  <nav th:fragment="menu-principal" class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" th:href="@{/}">EmpleosApp</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto">
+       <!--  <li class="nav-item"><a class="nav-link" href="#">Vacante</a></li> -->
+        <li class="nav-item"><a th:href="@{/vacantes/index}" class="nav-link">Vacantes</a></li>
+       <!--  <li class="nav-item"><a class="nav-link" href="#">Inicio</a></li> -->
+        <li class="nav-item"><a th:href="@{/categorias/index}" class="nav-link" href="#">Categorias</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Menu 2</a></li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <button class="btn btn-outline-primary my-2 my-sm-0" type="button">Ingresar</button>
+        <button class="btn btn-outline-primary my-2 my-sm-0 ml-2" type="button">Registrarse</button>
+      </form>
+    </div>
+  </nav>

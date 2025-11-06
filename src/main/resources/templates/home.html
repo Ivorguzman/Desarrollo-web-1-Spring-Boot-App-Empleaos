@@ -1,25 +1,134 @@
 <!DOCTYPE html>
+<!--
+    ==================== SECCIÓN 1: LA ESTRUCTURA DEL DOCUMENTO ====================
+    ¿Qué es esto? Es la declaración estándar de un documento HTML5.
+
+    ¿Cómo funciona?
+    - `<!DOCTYPE html>`: Le dice al navegador que esta página es un documento HTML moderno.
+    - `<html lang="en" xmlns:th="http://www.thymeleaf.org">`: Es la etiqueta raíz del documento.
+        - `lang="en"`: Declara que el idioma principal de la página es inglés (puede cambiarse a "es" para español).
+        - `xmlns:th="http://www.thymeleaf.org"`: Esta es la declaración MÁS IMPORTANTE. Es el "espacio de nombres" (namespace) de Thymeleaf.
+          Le dice al navegador y a las herramientas de desarrollo que todos los atributos que comiencen con el prefijo `th:` pertenecen a Thymeleaf y no son HTML estándar.
+
+    ¿Por qué se usa?
+    - Para establecer la estructura base de la página y para habilitar el motor de plantillas de Thymeleaf, permitiéndole procesar los atributos especiales `th:*`.
+-->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-   <meta charset="UTF-8">
-   <title>/Home</title>
+    <meta charset="UTF-8">
+    <title>Página Principal de Empleos</title>
+
+    <!--
+        ==================== SECCIÓN 2: ENLACES A RECURSOS ESTÁTICOS (CSS) ====================
+        ¿Qué es esto? Son los enlaces a las hojas de estilo (CSS) que le dan diseño y apariencia a nuestra página.
+
+        ¿Cómo funciona? (¡La forma Thymeleaf!)
+        - `th:href="@{...}"`: En lugar de usar el `href` normal de HTML, usamos `th:href`. Esto le dice a Thymeleaf que procese el enlace.
+        - `@{/css/bootstrap.min.css}`: Esta es una "expresión de enlace" (link expression) de Thymeleaf. Le indica que cree una URL relativa a la raíz de la aplicación.
+          Thymeleaf buscará el archivo en la carpeta `src/main/resources/static/css/`.
+
+        ¿Por qué se usa?
+        - **Robustez**: A diferencia de un enlace estático como `href="../css/style.css"`, la sintaxis `@{...}` es mucho más robusta. Funciona sin importar en qué nivel de profundidad
+          se encuentre la página o si la aplicación se despliega en un "context path" diferente (ej. `http://servidor.com/miApp/`). Thymeleaf siempre generará la ruta correcta.
+    -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/tabla.css}">
+
 </head>
 <body>
 
+<!--
+    ==================== SECCIÓN 3: REUTILIZACIÓN DE FRAGMENTOS (EL MENÚ) ====================
+    ¿Qué es esto? Es la inclusión de un fragmento de otra plantilla. En este caso, estamos insertando el menú de navegación.
 
-<!--Método : Uso de atributos Thymeleaf concatenates(+) con strings -->
-<h1 th:text=${mensaje}></h1>
-<h2>Oferta de trabajo</h2>
-<h3 th:text="'Id: ' + ${vacante.id}"></h3>
-<h3 th:text="'Nombre: ' + ${vacante.nombre}"></h3>
-<h3 th:text="'Fecha: ' + ${vacante.fecha}"></h3>
-<h3 th:text="'Salario: ' + ${vacante.salario} +'($ Americanos)'"></h3>
-<h3>
-   <span th:if="${vacante.destacado == 1}"
-         class="badge badge-success">Vacante disponible: Si</span>
-   <span th:unless="${vacante.destacado == 1}" class="badge badge-danger">Vacante
-      disponible: No</span>
-</h3>
+    ¿Cómo funciona?
+    - `<header th:insert="~{...}">`: El atributo `th:insert` le dice a Thymeleaf que reemplace esta etiqueta `<header>` completa por el contenido del fragmento que se especifica.
+    - `~{/fragments/menu :: menu-principal}`: Esta es una "expresión de fragmento".
+        - `/fragments/menu`: Le dice a Thymeleaf que busque el archivo `menu.html` dentro de la carpeta `templates/fragments/`.
+        - `::`: Es el separador que indica que vamos a seleccionar un fragmento específico dentro de ese archivo.
+        - `menu-principal`: Es el nombre del fragmento, que debe estar definido en `menu.html` con un atributo `th:fragment="menu-principal"`.
 
+    ¿Por qué se usa?
+    - **Principio DRY (Don't Repeat Yourself - No te repitas)**: Permite definir el menú una sola vez y reutilizarlo en todas las páginas del sitio. Si necesitas cambiar un enlace del menú, solo lo haces en un archivo.
+-->
+<header th:insert="~{/fragments/menu :: menu-principal}"></header>
+
+<!-- Contenido principal de la página -->
+<main class="container mt-5">
+
+    <!-- ... (código del buscador, que es HTML estándar) ... -->
+
+    <hr>
+    <h2 class="text-center text-primary">DESTACADOS</h2>
+    <hr>
+
+    <!--
+        ==================== SECCIÓN 4: LA ITERACIÓN (EL CORAZÓN DINÁMICO) ====================
+        ¿Qué es esto? Este es el bloque que se repetirá para mostrar cada una de las vacantes destacadas que el controlador nos envió.
+
+        ¿Cómo funciona?
+        - `th:each="vacante : ${vacantes}"`: Esta es la directiva de iteración (un bucle) de Thymeleaf.
+            - `${vacantes}`: Accede al atributo "vacantes" que fue añadido al `Model` en `HomeController`. Se espera que sea una lista o colección de objetos `Vacante`.
+            - `vacante : ...`: Por cada elemento en la lista `${vacantes}`, Thymeleaf creará una variable temporal llamada `vacante` que contendrá el objeto de esa iteración.
+            - El `<div>` que contiene este atributo se repetirá tantas veces como elementos haya en la lista.
+
+        ¿Por qué se usa?
+        - Para generar contenido HTML dinámicamente a partir de una colección de datos provenientes del backend. Es la forma de mostrar listas de resultados, tablas, etc.
+    -->
+    <div class="row" th:each="vacante : ${vacantes}">
+        <div class="col-md-3">
+            <!--
+                ¿Qué es esto? Es la imagen de la vacante.
+                ¿Cómo funciona? `th:src="@{/images/{img}(img=${vacante.imagen})}"`: Se crea una URL dinámica.
+                - `@{...}`: Crea una URL segura.
+                - `/images/{img}`: Es una plantilla de URL. `{img}` es un placeholder.
+                - `(img=${vacante.imagen})`: Aquí se sustituye el placeholder. Se obtiene el nombre del archivo de imagen del objeto `vacante` actual (ej. "logo1.png") y se inserta en lugar de `{img}`.
+                - El resultado final será una etiqueta `src="/images/logo1.png"`.
+                ¿Por qué se usa? Para mostrar la imagen específica asociada a cada vacante en el bucle.
+            -->
+            <img class="rounded mx-auto d-block" th:src="@{/images/{img}(img=${vacante.imagen})}" width="150" height="150" alt="Logo de la empresa">
+        </div>
+        <div class="col-md-9">
+            <!--
+                ¿Qué es esto? Es el texto que se mostrará en la página.
+                ¿Cómo funciona? `th:text="${vacante.nombre}"`: La directiva `th:text` reemplaza el contenido de esta etiqueta `<h2>` con el valor de la expresión.
+                - `${vacante.nombre}`: Accede a la propiedad `nombre` del objeto `vacante` actual en el bucle (esto internamente llama al método `getNombre()`).
+                ¿Por qué se usa? Para mostrar datos del modelo de forma segura. `th:text` escapa automáticamente cualquier carácter HTML, previniendo ataques de Cross-Site Scripting (XSS).
+            -->
+            <h2 th:text="${vacante.nombre}">Nombre de la Vacante</h2>
+            <h6 class="card-title"><strong>Publicado: </strong><span th:text="${#dates.format(vacante.fecha, 'dd-MM-yyyy')}"></span></h6>
+            <p th:text="${vacante.descripcion}">Descripción de la vacante.</p>
+            <!--
+                ¿Qué es esto? Es el enlace para ver los detalles de la vacante.
+                ¿Cómo funciona? `th:href="@{/vacantes/view-request(idVacante=${vacante.id})}"`: Crea un enlace dinámico con un parámetro de consulta.
+                - `@{/vacantes/view-request...}`: Crea la URL base.
+                - `(idVacante=${vacante.id})`: Añade un parámetro de consulta a la URL. Se obtiene el `id` del objeto `vacante` actual y se asigna al parámetro `idVacante`.
+                - El resultado final será una etiqueta `href="/vacantes/view-request?idVacante=1"` (o el ID que corresponda).
+                ¿Por qué se usa? Para crear un enlace único para cada vacante que lleve a su página de detalles específica.
+            -->
+            <p><a th:href="@{/vacantes/view-request(idVacante=${vacante.id})}" class="btn btn-primary">Ver Detalles &raquo;</a></p>
+        </div>
+    </div>
+    <hr>
+
+</main>
+
+<!--
+    ==================== SECCIÓN 5: REUTILIZACIÓN DE FRAGMENTOS (EL PIE DE PÁGINA) ====================
+    ¿Qué es esto? Al igual que el menú, estamos insertando un fragmento reutilizable para el pie de página.
+    ¿Cómo funciona? Exactamente igual que el `<header>`, pero apuntando al fragmento `pie-pagina` en el archivo `footer.html`.
+    ¿Por qué se usa? Por la misma razón: para no repetir código y facilitar el mantenimiento.
+-->
+<footer th:insert="~{fragments/footer :: pie-pagina}" class="mt-auto"></footer>
+
+<!--
+    ==================== SECCIÓN 6: ENLACES A RECURSOS ESTÁTICOS (JAVASCRIPT) ====================
+    ¿Qué es esto? Son los enlaces a los archivos de JavaScript necesarios para la interactividad de Bootstrap.
+    ¿Cómo funciona? Se usa la misma sintaxis `th:src="@{...}"` que se usó para los CSS. Thymeleaf buscará los archivos en `src/main/resources/static/js/`.
+    ¿Por qué se usa? Por la misma razón de robustez. Garantiza que los enlaces a los scripts funcionen correctamente sin importar el entorno de despliegue.
+-->
+<script th:src="@{/js/jquery-3.3.1.slim.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

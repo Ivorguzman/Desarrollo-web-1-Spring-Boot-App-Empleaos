@@ -1,59 +1,95 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--
+    ==================== SECCIÓN 1: LA ESTRUCTURA DEL DOCUMENTO ====================
+    ¿Qué es esto? Es la declaración estándar de un documento HTML5.
+    ¿Cómo funciona? `xmlns:th="http://www.thymeleaf.org"` habilita el motor de plantillas de Thymeleaf.
+    ¿Por qué se usa? Para establecer la estructura base de la página y activar Thymeleaf.
+-->
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title th:text="'Vacante Numero:' + ${idVacante}"></title>
-   <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-   <link rel="stylesheet" th:href="@{/css/all.min.css}">
-   <link rel="stylesheet" th:href="@{/css/tabla.css}">
+    <meta charset="UTF-8">
+
+    <!--
+        ==================== SECCIÓN 2: TÍTULO DINÁMICO ====================
+        ¿Qué es esto? Es el título que se mostrará en la pestaña del navegador.
+        ¿Cómo funciona? `th:text="'Vacante: ' + ${vacante.nombre}"`: La directiva `th:text` reemplaza el contenido de la etiqueta <title>.
+        - Concatena el texto estático 'Vacante: ' con el valor dinámico de la propiedad `nombre` del objeto `vacante` que viene del modelo.
+        ¿Por qué se usa? Para que cada página de detalle tenga un título único y descriptivo, lo cual es bueno para el SEO y la experiencia de usuario.
+    -->
+    <title th:text="'Vacante: ' + ${vacante.nombre}"></title>
+
+    <!-- Enlaces a CSS usando la sintaxis robusta de Thymeleaf `@{...}` -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/tabla.css}">
 </head>
 <body>
-<!--<h1 th:text="|idVacante : ${idVacante}|"></h1>-->
-<!--<h1>Id de la vacante (Con codificación Moderna de Th:) = <span-->
-<!--    th:text="|${idVacante}|"></span></h1>-->
-<!--<h2-->
-<!--    th:text="'Id de la vacante (Con codificación clásica de Th:) = ' +  ${idVacante}">-->
-<!--</h2>-->
 
-<img src="#" th:src="@{/images/logo.png}" width="136" height="136" alt="Logo de la App">
-<h1 class="text-primary">Detalles de la vacante</h1>
+<!-- Incluimos el fragmento del menú para reutilizar código -->
+<header th:insert="~{/fragments/menu :: menu-principal}"></header>
 
-<table class="table table-striped table-bordered table-hover">
-   <thead>
-   <tr>
-      <th>logo</th>
-      <th>Id</th>
-      <th>Nombre</th>
-      <th>Descripciòn</th>
-      <th>Fecha</th>
-      <th>Salario</th>
-      <th>Destacado</th>
-   </tr>
-   </thead>
+<main class="container mt-4">
+    <h1 class="text-primary text-center mb-4">Detalles de la Vacante</h1>
 
-   <tbody>
-   <tr th:each="objeto_Vacante: ${idVacante}">
-      <td>
-         <img src="#" th:src="@{/images/{img}(img=${objeto_Vacante.imagen})}" width="100"
-              height="100" alt="Logo de la vacante">
-      </td>
-      <td th:text="${objeto_Vacante.id}"></td>
-      <td th:text="${objeto_Vacante.nombre}"></td>
-      <td th:text="${objeto_Vacante.descripcion}"></td>
-      <td th:text="${#dates.format(objeto_Vacante.fecha, 'dd-MM-yyyy')}"></td>
-      <td th:text="${#numbers.formatCurrency(objeto_Vacante.salario)}"></td>
-      <td>
-         <span th:if="${objeto_Vacante.destacado == 1}"
-               class="badge badge-success">Si ></span>
-         <span th:unless="${objeto_Vacante.destacado == 1}"
-               class="badge badge-danger">No</span>
-      </td>
-   </tr>
-   </tbody>
-</table>
-<!-- Enlaces a los scripts de JavaScript, usando la misma sintaxis robusta de Thymeleaf -->
+    <!--
+        ==================== SECCIÓN 3: MOSTRAR DATOS DE UN ÚNICO OBJETO ====================
+        ¿Qué es esto? Es la tabla que muestra los detalles de la vacante específica que se consultó.
+
+        ¿Cómo funciona?
+        - A diferencia de `tabla.html`, aquí no necesitamos un bucle `th:each` porque el controlador nos ha pasado UN ÚNICO objeto `vacante` en el modelo.
+        - Accedemos directamente a las propiedades de ese objeto usando la sintaxis `${vacante.propiedad}`.
+        - Por ejemplo, `${vacante.id}` llama al método `getId()` del objeto `vacante` que está en el modelo.
+
+        ¿Por qué se implementa así?
+        - Es la forma más directa y eficiente de mostrar los datos de un solo elemento. Usar un bucle para un solo objeto sería innecesario y confuso.
+        - El código es más limpio y refleja directamente la intención: mostrar los detalles de "una" vacante.
+    -->
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th>Logo</th>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Fecha</th>
+            <th>Salario</th>
+            <th>Destacado</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- No se necesita bucle, solo hay una fila de datos -->
+        <tr>
+            <td>
+                <!-- Se muestra la imagen de la vacante usando una URL dinámica -->
+                <img th:src="@{/images/{img}(img=${vacante.imagen})}" width="100" height="100" alt="Logo de la vacante">
+            </td>
+            <!-- Se muestra el texto de cada propiedad del objeto `vacante` -->
+            <td th:text="${vacante.id}"></td>
+            <td th:text="${vacante.nombre}"></td>
+            <td th:text="${vacante.descripcion}"></td>
+            <!-- Usamos los objetos de utilidad de Thymeleaf para formatear la fecha y el salario -->
+            <td th:text="${#dates.format(vacante.fecha, 'dd-MM-yyyy')}"></td>
+            <td th:text="${#numbers.formatCurrency(vacante.salario)}"></td>
+            <td>
+                <!-- Usamos lógica condicional para mostrar un badge diferente según el valor -->
+                <span th:if="${vacante.destacado == 1}" class="badge badge-success">SÍ</span>
+                <span th:unless="${vacante.destacado == 1}" class="badge badge-danger">NO</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+        <a th:href="@{/}" class="btn btn-primary">Volver a la Página Principal</a>
+    </div>
+
+</main>
+
+<!-- Incluimos el fragmento del pie de página -->
+<footer th:insert="~{fragments/footer :: pie-pagina}" class="mt-auto"></footer>
+
+<!-- Enlaces a los scripts de JavaScript -->
 <script th:src="@{/js/jquery-3.3.1.slim.min.js}"></script>
-<script th:src="@{º/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script> <!-- Corregido: `@{/js/...}` -->
 </body>
 </html>

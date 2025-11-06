@@ -82,7 +82,7 @@ public class Vacante {
 	 * específica. Solo hay una copia de estas variables, compartida por todos los objetos `Vacante`. - `final`: Su valor no puede ser cambiado una vez inicializado. Son
 	 * inmutables. ¿Por qué se usan? - **Evitar "números mágicos"**: En lugar de usar `2000.0` directamente en el código, usamos un nombre descriptivo
 	 * (`UMBRAL_SALARIO_BAJO`), lo que mejora la legibilidad. - **Facilidad de Mantenimiento**: Si los umbrales cambian en el futuro, solo necesitas modificar el valor en un
-	 * único lugar (aquí), en lugar de buscar y cambiar cada ocurrencia en el código. - **Claridad**: Hacen que el propósito de los valores sea evidente.
+	 * único lugar (aquí), en vez  de buscar y cambiar cada ocurrencia en el código. - **Claridad**: Hacen que el propósito de los valores sea evidente.
 	 */
 	private static final double UMBRAL_SALARIO_BAJO = 2000.0;
 	private static final double UMBRAL_SALARIO_NORMAL = 8000.0;
