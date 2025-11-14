@@ -1,12 +1,49 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org ">
-  <!-- Footer -->
-  <footer th:fragment="pie-pagina" class="footer mt-auto py-3  footer-dark  bg-dark">
-    <div class="container text-center">
-      <span class="text-muted">© 2024 EmpleosApp, Inc. | WebApp Desarrollada con Spring Boot 2.1.2 | Realizado
-        por: Ivor A. Guzmán Zambrano | <a href="#">Privacy</a> · <a href="#">Terms</a>
-      </span>
-    </div>
-  </footer>
+<!--
+    ==================== SECCIÓN 1: LA ESTRUCTURA DEL DOCUMENTO ====================
+    ¿Qué es esto? Es la declaración estándar de un documento HTML5.
+    ¿Cómo funciona? `xmlns:th="http://www.thymeleaf.org"` habilita el motor de plantillas de Thymeleaf.
+    ¿Por qué se usa? Para establecer la estructura base y activar Thymeleaf. Aunque este archivo es solo un fragmento,
+    es una buena práctica mantener la estructura completa para que los IDEs y las herramientas de validación funcionen correctamente.
+-->
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 
+<!--
+    Este archivo NO está diseñado para ser mostrado por sí solo. Su único propósito es definir
+    bloques de código (fragmentos) que otras plantillas puedan importar y reutilizar.
+-->
+
+<body>
+
+<!--
+    ==================== SECCIÓN 2: LA DEFINICIÓN DEL FRAGMENTO ====================
+    ¿Qué es esto? Es la definición de un "fragmento" de Thymeleaf. Un fragmento es una porción de HTML
+    marcada con un nombre para que pueda ser reutilizada en otras plantillas.
+
+    ¿Cómo funciona?
+    - `<footer th:fragment="pie-pagina" ...>`: La directiva `th:fragment` es la que define el fragmento.
+        - `th:fragment="pie-pagina"`: Le asigna el nombre "pie-pagina" a esta etiqueta `<footer>` y a todo su contenido.
+          Este es el nombre que usaremos desde otras plantillas para poder "llamar" o "importar" este bloque de código.
+
+    ¿Por qué se implementa así?
+    - **Principio DRY (Don't Repeat Yourself - No te repitas)**: Es el pilar de la reutilización de código. Permite definir el pie de página una sola vez
+      y usarlo en todas las páginas del sitio (`home.html`, `tabla.html`, etc.).
+    - **Mantenimiento Centralizado**: Si necesitas cambiar algo en el pie de página (por ejemplo, actualizar el año del copyright o añadir un nuevo enlace),
+      solo tienes que modificar este archivo. El cambio se reflejará automáticamente en todas las páginas que lo importen.
+
+    ¿Cómo se usa desde otra plantilla?
+    - En otra plantilla (ej. `home.html`), se utiliza la directiva `th:insert` o `th:replace` para incluir este fragmento:
+      `<div th:insert="~{fragments/footer :: pie-pagina}"></div>`
+      - `~{fragments/footer :: pie-pagina}`: Esta expresión le dice a Thymeleaf: "Busca en la carpeta `fragments` el archivo `footer.html` y, dentro de él, tráeme el fragmento llamado `pie-pagina`".
+-->
+<footer th:fragment="pie-pagina" class="footer mt-auto py-3 bg-dark text-white">
+   <div class="container text-center">
+        <span class="text-muted">
+            &copy; 2024 EmpleosApp, Inc. | WebApp Desarrollada con Spring Boot 3.2.4 | Realizado por: Ivor A. Guzmán Zambrano | <a
+            href="#">Privacy</a> &middot; <a href="#">Terms</a>
+        </span>
+   </div>
+</footer>
+
+</body>
 </html>

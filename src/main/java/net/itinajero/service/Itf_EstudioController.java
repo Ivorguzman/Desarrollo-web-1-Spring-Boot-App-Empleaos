@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
  * se preocupa por el CÓMO lo hace. Es un concepto de Programación Orientada a Objetos para lograr el "desacoplamiento".
  *
  * ¿POR QUÉ CREAMOS ESTA INTERFAZ? (PROPÓSITO DEL ESTUDIO) El objetivo principal de este archivo es demostrar que el mismo patrón de diseño que usamos para la capa de
- * servicio (Itf_VacanteService -> VacanteService_Impl) también se puede aplicar a la capa de controladores. Permite ver cómo una clase (EstudioController_Impl) puede "firmar
+ * servicio (Itf_VacanteService -> Impl_VacanteService) también se puede aplicar a la capa de controladores. Permite ver cómo una clase (Impl_EstudioController) puede "firmar
  * un contrato" y estar obligada a implementar los métodos aquí definidos.
  *
  * ¿ES UNA PRÁCTICA COMÚN PARA LOS CONTROLADORES? No mucho. En la mayoría de los proyectos de Spring, los controladores son clases concretas que no implementan una interfaz.

@@ -1,70 +1,98 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--
+    ==================== SECCIÓN 1: LA ESTRUCTURA DEL DOCUMENTO ====================
+    ¿Qué es esto? Es la declaración estándar de un documento HTML5.
+    ¿Cómo funciona? `xmlns:th="http://www.thymeleaf.org"` habilita el motor de plantillas de Thymeleaf.
+    ¿Por qué se usa? Para establecer la estructura base de la página y activar Thymeleaf.
+-->
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
    <meta charset="UTF-8">
    <meta content="width=device-width, initial-scale=1.0" name="viewport">
    <title>Formulario de Categoría</title>
 
-   <!--
-     MEJORA: Rutas de recursos corregidas.
-     - Se usa th:href="@{...}" para que Thymeleaf y el IDE resuelvan las rutas correctamente.
-     - Se han eliminado los enlaces CSS duplicados (CDN) para mejorar el rendimiento.
-       Es mejor cargar los recursos una sola vez.
-   -->
+   <!-- Enlaces a CSS usando la sintaxis robusta de Thymeleaf @{...} -->
    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
    <link rel="stylesheet" th:href="@{/css/all.min.css}">
-
 </head>
-<!-- Establece el cuerpo como un contenedor flexible en columna y con altura mínima del 100% de la pantalla -->
 <body class="d-flex flex-column min-vh-100">
 
-<!-- Inserción de la barra de navegación usando Thymeleaf -->
-<!--<header th:insert="~{/fragments/menu :: menu-principal}"></header>-->
+<!-- Incluimos el fragmento del menú para reutilizar código -->
+<header th:insert="~{/fragments/menu :: menu-principal}"></header>
 
-<!-- Contenedor principal con ancho completo -->
-<div class="container mt-5" style="width: 100%;">
-   <!-- Contenedor interno con ancho reducido para mejor presentación -->
-   <div class="container mt-5" style="width: 60%;">
-
-      <!-- Creación de una tarjeta que encierra el formulario -->
-      <div class="card">
-         <div class="card-body p-4">
-            <!-- Encabezado de la tarjeta con título -->
-            <div class="card-header">
-               <h3 class="text-primary">Datos de la Categoría</h3>
+<main class="container mt-5 mb-5">
+   <div class="row justify-content-center">
+      <div class="col-md-8">
+         <div class="card">
+            <div class="card-header bg-primary text-white">
+               <h3 class="mb-0">Datos de la Categoría</h3>
             </div>
-            <h1>Aquí va el formulario</h1>
+            <div class="card-body">
+               <!--
+                   ==================== SECCIÓN 2: EL FORMULARIO (EL CORAZÓN DE LA PÁGINA) ====================
+                   ¿Qué es esto? Es un formulario HTML que permite al usuario enviar datos al servidor.
 
-            <!--           Inicio del formulario  -->
-            <!--            <form method="post" th:action="@{/categorias/save}" th:object="${categoria}">-->
-            <form method="post" th:action="@{/categorias/save}">
-               Nombre: <br>
-               <input type="text" name="var_nombre" value="">
-               <br>
-               Descripción: <br>
-               <input type="text" name="var_descripcion" value="">
-               <br>
-               <br>
-               <input type="submit" value="Guardar">
+                   ¿Cómo funciona?
+                   - `<form ...>`: Es la etiqueta que define el formulario.
+                   - `method="post"`: Especifica el método HTTP que se usará para enviar los datos. 'POST' es el método correcto para enviar datos que van a crear o modificar un recurso en el servidor. A diferencia de 'GET', los datos se envían en el cuerpo de la petición, no en la URL.
+                   - `th:action="@{/categorias/save}"`: Esta es la parte más importante.
+                       - `th:action`: Le dice a Thymeleaf que genere la URL a la que se enviarán los datos del formulario.
+                       - `@{/categorias/save}`: Thymeleaf creará la URL completa y correcta para la ruta `/categorias/save`. Esta URL debe coincidir con la ruta definida en una anotación `@PostMapping` en nuestro `CategoriaController`.
 
-            </form>
+                   ¿Por qué se implementa así?
+                   - Para crear un canal de comunicación desde el navegador del usuario hacia nuestro backend de Spring, permitiendo la creación de nuevos datos.
+               -->
+               <form method="post" th:action="@{/categorias/save}">
+                  <!--
+                      ==================== SECCIÓN 3: LOS CAMPOS DE ENTRADA (INPUTS) ====================
+                      ¿Qué es esto? Son los campos donde el usuario introduce la información.
+
+                      ¿Cómo funciona?
+                      - `<div class="form-group">`: Es un contenedor de Bootstrap para agrupar una etiqueta (`<label>`) y su campo de entrada (`<input>`).
+                      - `<label for="var_nombre">`: Mejora la accesibilidad y la experiencia de usuario. Al hacer clic en la etiqueta, el foco se pone en el campo de entrada asociado.
+                      - `<input type="text" ...>`: Define un campo para introducir texto.
+                      - `name="var_nombre"`: ¡ESTE ES EL ATRIBUTO CLAVE! El valor de `name` es el nombre del parámetro que Spring buscará en la petición.
+                        Debe coincidir exactamente con el nombre especificado en la anotación `@RequestParam("var_nombre")` en el método `guardar` del controlador. Así es como Spring sabe qué valor del formulario asignar a qué variable del método.
+
+                      ¿Por qué se implementa así?
+                      - Para capturar los datos del usuario y asignarle un nombre (una "llave") a cada dato, de modo que el backend pueda identificarlos y procesarlos.
+                  -->
+                  <div class="form-group mb-3">
+                     <label for="var_nombre">Nombre de la Categoría</label>
+                     <input type="text" class="form-control" id="var_nombre"
+                            name="var_nombre" placeholder="Ej. Ventas" required>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="var_descripcion">Descripción</label>
+                     <textarea class="form-control" id="var_descripcion"
+                               name="var_descripcion" rows="3"
+                               placeholder="Añade una breve descripción de la categoría"
+                               required></textarea>
+                  </div>
+
+                  <!--
+                      ==================== SECCIÓN 4: EL BOTÓN DE ENVÍO ====================
+                      ¿Qué es esto? Es el botón que, al ser presionado, empaqueta todos los datos del formulario y los envía a la URL especificada en `th:action`.
+                  -->
+                  <button type="submit" class="btn btn-primary btn-block">Guardar
+                     Categoría
+                  </button>
+               </form> <!-- Cierre del formulario -->
+            </div>
          </div>
       </div>
    </div>
-</div>
+</main>
 
-<!--
-  MEJORA: Sección de scripts unificada y limpiada.
-  - Se han eliminado todas las cargas duplicadas de JS para evitar conflictos y mejorar la velocidad.
-  - Se usan rutas compatibles con Thymeleaf (th:src="@{...}") para eliminar las advertencias del IDE.
-  - Se ha corregido el error tipográfico en la ruta de TinyMCE (era 'tiniymce').
--->
+<!-- Incluimos el fragmento del pie de página -->
+<footer th:insert="~{fragments/footer :: pie-pagina}" class="mt-auto"></footer>
+
+<!-- Enlaces a los scripts de JavaScript -->
 <script th:src="@{/js/jquery-3.3.1.slim.min.js}"></script>
 <script th:src="@{/js/popper.min.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
 <script th:src="@{/js/all.min.js}"></script>
 <script th:src="@{/tinymce/tinymce.min.js}"></script>
-
-
 </body>
 </html>

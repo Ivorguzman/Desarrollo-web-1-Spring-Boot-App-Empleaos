@@ -11,12 +11,12 @@ import java.util.List;
  * quiera ser considerada un "servicio de vacantes" DEBE proporcionar un conjunto específico de funcionalidades. Por ahora, solo exige una funcionalidad: la capacidad de
  * "buscar todas las vacantes".
  * <p>
- * ¿Por qué es tan importante? 1. DESACOPLAMIENTO: Componentes como HomeController no dependen de una clase concreta (como VacanteService_Impl), sino de esta interfaz (el
+ * ¿Por qué es tan importante? 1. DESACOPLAMIENTO: Componentes como HomeController no dependen de una clase concreta (como Impl_VacanteService), sino de esta interfaz (el
  * contrato). Esto significa que podemos cambiar la implementación (el CÓMO) sin tener que modificar el controlador. Por ejemplo, podemos pasar de una lista en memoria a una
  * base de datos real creando una nueva clase que implemente esta misma interfaz, y el controlador seguirá funcionando sin cambios.
  * <p>
  * 2. POLIMORFISMO: Permite que Spring inyecte cualquier clase que cumpla este contrato en los componentes que lo necesiten. El controlador solo pide "alguien que sepa hacer
- * lo que dice Itf_VacanteService", y Spring le proporciona la implementación que esté disponible y configurada (en nuestro caso, VacanteService_Impl).
+ * lo que dice Itf_VacanteService", y Spring le proporciona la implementación que esté disponible y configurada (en nuestro caso, Impl_VacanteService).
  * <p>
  * 3. CLARIDAD DE API: Define un API claro para la capa de negocio. Cualquiera que mire esta interfaz sabe qué operaciones están disponibles para las vacantes, sin necesidad
  * de mirar los detalles de la implementación.

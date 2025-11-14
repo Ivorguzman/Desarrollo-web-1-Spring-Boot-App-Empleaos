@@ -1,19 +1,55 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--
+    ==================== SECCIÓN 1: LA ESTRUCTURA DEL DOCUMENTO ====================
+    ¿Qué es esto? Es la declaración estándar de un documento HTML5.
+    ¿Cómo funciona? `xmlns:th="http://www.thymeleaf.org"` habilita el motor de plantillas de Thymeleaf.
+    ¿Por qué se usa? Para establecer la estructura base de la página y activar Thymeleaf.
+-->
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Listado de ofertas de trabajo </title>
+    <title>Listado de Ofertas de Trabajo</title>
+    <!-- Podríamos añadir enlaces a CSS aquí si quisiéramos darle estilo -->
 </head>
 <body>
-<h1>Bienvenidos</h1>
-<h2>Oferta de trabajo en forma dinámica (th:each)</h2>
-<ul>
-    <h3>Lista Desordenada</h3>
-    <li th:each="temp_empleo:${empleo}" th:text="${temp_empleo}"></li>
-</ul>
-<ol>
-    <h3>Lista Ordenada</h3>
-    <li th:each="temp_empleo:${empleo}" th:text="${temp_empleo}"></li>
-</ol>
+    <h1>Listado de Empleos</h1>
+    <hr>
+
+    <!--
+        ==================== SECCIÓN 2: LA ITERACIÓN (EL CORAZÓN DINÁMICO) ====================
+        ¿Qué es esto? Es una lista desordenada (`<ul>`) que se generará dinámicamente a partir de los datos del controlador.
+
+        ¿Cómo funciona?
+        - `th:each="temp_empleo : ${empleos}"`: Esta es la directiva de iteración (un bucle) de Thymeleaf.
+            - `${empleos}`: Accede al atributo "empleos" que fue añadido al `Model` en el método `mostrarListado` del controlador. Se espera que sea una lista de Strings.
+            - `temp_empleo : ...`: Por cada String en la lista `${empleos}`, Thymeleaf crea una variable temporal llamada `temp_empleo` que contendrá el valor de esa iteración (ej. "Ingeniería de Software").
+            - La etiqueta `<li>` que contiene este atributo se repetirá tantas veces como elementos haya en la lista.
+        - `th:text="${temp_empleo}"`: La directiva `th:text` reemplaza el contenido de la etiqueta `<li>` con el valor de la variable `temp_empleo` de la iteración actual.
+
+        ¿Por qué se usa?
+        - Para generar contenido HTML dinámicamente a partir de una colección de datos. Es la forma más básica y fundamental de mostrar listas de resultados.
+    -->
+    <h2>Ofertas de trabajo (Lista Desordenada)</h2>
+    <ul>
+        <li th:each="temp_empleo : ${empleos}" th:text="${temp_empleo}"></li>
+    </ul>
+
+    <hr>
+
+    <!--
+        ==================== SECCIÓN 3: REUTILIZACIÓN DE LA LÓGICA DE ITERACIÓN ====================
+        ¿Qué es esto? Es una lista ordenada (`<ol>`) que se genera usando exactamente la misma lógica que la lista anterior.
+
+        ¿Cómo funciona?
+        - El funcionamiento de `th:each` y `th:text` es idéntico al del ejemplo anterior. La única diferencia es que al estar dentro de una etiqueta `<ol>`, el navegador renderizará los elementos con números (1, 2, 3...).
+
+        ¿Por qué se usa?
+        - Para demostrar que la lógica de Thymeleaf es independiente de las etiquetas HTML que la contienen. Puedes usar `th:each` en `<li>`, `<div>`, `<tr>`, o cualquier otra etiqueta para repetir ese bloque de HTML.
+    -->
+    <h2>Ofertas de trabajo (Lista Ordenada)</h2>
+    <ol>
+        <li th:each="temp_empleo : ${empleos}" th:text="${temp_empleo}"></li>
+    </ol>
+
 </body>
 </html>

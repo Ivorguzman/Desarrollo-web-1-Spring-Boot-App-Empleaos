@@ -8,7 +8,7 @@ package net.itinajero.controller;
 // Aquí se declaran las clases de otras bibliotecas o paquetes que esta clase necesita para funcionar.
 
 import net.itinajero.model.Vacante;
-import net.itinajero.service.VacanteService_Impl;
+import net.itinajero.service.Impl_VacanteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
@@ -74,10 +74,10 @@ public class HomeController_codigoNativo_java {
 	@GetMapping("/tabla")
 	public String mostrarTabla(Model model) {
 
-		final VacanteService_Impl serviceVacantes = new VacanteService_Impl();
+		final Impl_VacanteService serviceVacantes = new Impl_VacanteService();
 
 		// Llama al método buscarTodas() de la capa de servicio (la dependencia que fue inyectada en el constructor).
-		// Esto desacopla al controlador de la lógica de cómo se obtienen los datos (que ahora reside en VacanteService_Impl).
+		// Esto desacopla al controlador de la lógica de cómo se obtienen los datos (que ahora reside en Impl_VacanteService).
 		List<Vacante> listaDeVacantes = serviceVacantes.buscarTodas();
 
 		// Añade la lista completa de vacantes al modelo bajo el nombre "vacantes".

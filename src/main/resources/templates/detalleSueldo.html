@@ -1,87 +1,72 @@
 <!DOCTYPE html>
+<!--
+    ==================== SECCIÓN 1: LA ESTRUCTURA DEL DOCUMENTO ====================
+    ¿Qué es esto? Es la declaración estándar de un documento HTML5.
+    ¿Cómo funciona? `xmlns:th="http://www.thymeleaf.org"` habilita el motor de plantillas de Thymeleaf.
+    ¿Por qué se usa? Para establecer la estructura base de la página y activar Thymeleaf.
+-->
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
-    <title>Detalle de Vacante</title>
+    <title th:text="'Detalle: ' + ${vacante.nombre}">Detalle de Vacante</title>
+    <!--
+        ==================== SECCIÓN 2: ESTILOS CSS LOCALES ====================
+        ¿Qué es esto? Es un bloque de estilos CSS definido directamente en la página.
+        ¿Cómo funciona? Define clases CSS (`.sueldo-bueno`, `.sueldo-normal`, etc.) que podremos aplicar a elementos HTML para cambiar su apariencia.
+        ¿Por qué se usa aquí? Para demostraciones rápidas o estilos muy específicos de una sola página. En una aplicación grande, estos estilos normalmente irían en un archivo .css externo.
+    -->
     <style>
-        .sueldo-bueno {
-            color: red;
-            font-weight: bold;
-        }
-        .sueldo-normal {
-            color: orange;
-            font-weight: bold;
-        }
-        .sueldo-malo {
-            color: grey;
-            font-weight: bold;
-        }
-
-        .descripcion{
-
-        font-style:
-            italic;
-            color: blue;
-        }
+        .sueldo-bueno { color: green; font-weight: bold; }
+        .sueldo-normal { color: orange; font-weight: bold; }
+        .sueldo-malo { color: red; font-weight: bold; }
+        .descripcion { font-style: italic; color: blue; }
     </style>
 </head>
-
-
 <body>
-<img src="#" th:src="@{/images/logo.png}" width="136" height="136" alt="Logo de la App">
-<h1 th:text="${vacante.nombre}" class='sueldo-bueno'>Nombre de la Vacante</h1>
-<p th:text="${vacante.descripcion}" class='descripcion'>Descripción de la vacante.</p>
-<p th:text="'Fecha de Publicación: ' + ${#dates.format(vacante.fecha, 'dd-MM-yyyy')}">
-    Fecha</p>
 
-<!--  Caso 1  (th:case) sin ternarios (Mezcla la lógica de negocio con la capa de
-presentación (la vista).)
-<div th:switch="true">
-    <p>
-        Salario:
-        <span th:case="${vacante.salario > 2000}" class="sueldo-bueno"  D
-              th:text="${#numbers.formatCurrency(vacante.salario)} + ' (Buen sueldo)'">
-        </span>
-        <span th:case="${vacante.salario >= 500}" class="sueldo-normal"
-              th:text="${#numbers.formatCurrency(vacante.salario)} + ' (Sueldo normal)'">
-        </span>
-        <span th:case="*" class="sueldo-malo"
-              th:text="${#numbers.formatCurrency(vacante.salario)} + ' (Mal sueldo)'">
-        </span>
-    </p>
-</div>
+<h1 th:text="${vacante.nombre}">Nombre de la Vacante</h1>
+<p th:text="${vacante.descripcion}" class='descripcion'>Descripción de la vacante.</p>
+<p th:text="'Fecha de Publicación: ' + ${#dates.format(vacante.fecha, 'dd-MM-yyyy')}">Fecha</p>
+<hr>
+
+<!--
+    ==================== SECCIÓN 3: LÓGICA DE PRESENTACIÓN VS. LÓGICA DE NEGOCIO ====================
+    Esta sección es la más importante de la plantilla. Demuestra la forma CORRECTA de manejar lógica compleja.
+
+    *** LA MALA PRÁCTICA (Lo que NO debemos hacer) ***
+    Las versiones comentadas en el archivo original usaban `th:switch` o ternarios complejos para decidir si un sueldo era "bueno", "normal" o "malo"
+    directamente en el HTML. Por ejemplo: `th:case="${vacante.salario > 2000}"`.
+    ¿Por qué es malo? Porque mezcla la "lógica de negocio" (la regla de qué define a un sueldo como bueno) con la "capa de presentación" (el HTML).
+    Si en el futuro las reglas de negocio cambian (ej. un sueldo bueno ahora es > 2500), tendríamos que buscar y modificar archivos HTML, lo cual es frágil y desorganizado.
+    La lógica de negocio debe residir en la capa del Modelo (en Java).
+
+    *** LA BUENA PRÁCTICA (La forma correcta, implementada abajo) ***
+    La vista no debe preguntar "¿es el salario mayor a 2000?". La vista debe preguntar al objeto: "Oye, objeto vacante, ¿cuál es tu nivel salarial?".
+    La responsabilidad de CÓMO se calcula ese nivel pertenece al objeto `Vacante` en Java (a través de su método `getNivelSalarial()`).
+    La vista solo se encarga de MOSTRAR el resultado de esa lógica. Esto se llama "Separación de Responsabilidades".
 -->
 
-
-<!-- caso 2:(th:case) Con operadores ternarios (Mezcla la lógica de negocio con la capa de
-presentación (la vista).) -->
-<!--<p th:with="status = ${vacante.salario > 2800 ? 'bueno' : (vacante.salario >= 700 ? 'normal' : 'malo')}">-->
-<!--    Salario: <span th:class="'sueldo-' + ${status}"-->
-<!--                   th:text="${#numbers.formatCurrency(vacante.salario)} +-->
-<!--                   ' (' +(${status == 'bueno' ? 'Buen sueldo' :(status == 'normal' ?-->
-<!--                   'Sueldo normal' : 'Sueldo malo')}) + ')'">-->
-<!--              </span>-->
-<!--</p>-->
-
-
-<!-- VERSIÓN REFACTORIZADA (No se Mezcla la lógica de negocio con la capa de
-presentación (la vista).) -->
+<!-- VERSIÓN REFACTORIZADA Y CORRECTA -->
 <div th:with="nivel=${vacante.getNivelSalarial()}">
     <p>
-        <!--
-        .name(): Este es un método estándar que tienen todos los enums en Java.
-        Su función es devolver el nombre exacto de la constante del enum como un String.
-        Ejemplo:
-        Si la variable nivel contiene el objeto NivelSalarial.ALTO, entonces ${nivel.name()}
-        se evaluará como el String "ALTO".•Si nivel contiene NivelSalarial.NORMAL, ${nivel.name()}
-        se evaluará como el String "NORMAL".
-        -->
         Salario:
-        <span th:class="'sueldo-bueno' + ${nivel.name().toLowerCase()}"
+        <!--
+            ¿Cómo funciona?
+            1. `th:with="nivel=${vacante.getNivelSalarial()}"`: Primero, llamamos al método del modelo para obtener el resultado de la lógica de negocio.
+               El resultado (un enum `NivelSalarial.ALTO`, `NORMAL` o `BAJO`) se guarda en una variable local llamada `nivel`.
+
+            2. `th:class="${nivel.name() == 'ALTO' ? 'sueldo-bueno' : (nivel.name() == 'NORMAL' ? 'sueldo-normal' : 'sueldo-malo')}"`:
+               Aquí usamos un ternario para la LÓGICA DE PRESENTACIÓN. Decidimos qué clase CSS usar basándonos en el resultado que nos dio el modelo.
+               Esto es aceptable, porque estamos mapeando un estado de negocio a un estilo visual, lo cual es responsabilidad de la vista.
+
+            3. `th:text="${#numbers.formatCurrency(vacante.salario)} + ' (' + ${nivel.getTextoDescriptivo()} + ')'"`:
+               Mostramos el salario formateado y concatenamos el texto descriptivo que también viene del enum en el modelo (`getTextoDescriptivo()`).
+               La vista no sabe qué texto mostrar, simplemente pide al modelo que se lo dé.
+        -->
+        <span th:class="${nivel.name() == 'ALTO' ? 'sueldo-bueno' : (nivel.name() == 'NORMAL' ? 'sueldo-normal' : 'sueldo-malo')}"
               th:text="${#numbers.formatCurrency(vacante.salario)} + ' (' + ${nivel.getTextoDescriptivo()} + ')'">
         </span>
     </p>
 </div>
-
 
 </body>
 </html>

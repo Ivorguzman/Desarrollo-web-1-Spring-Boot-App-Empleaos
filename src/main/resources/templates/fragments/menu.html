@@ -1,20 +1,86 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org ">
+<!--
+    ==================== SECCIÓN 1: LA ESTRUCTURA DEL DOCUMENTO HTML ====================
+    ¿Qué es esto? Es la declaración estándar de un documento HTML5.
+    ¿Cómo funciona? `xmlns:th="http://www.thymeleaf.org"` habilita el motor de plantillas de Thymeleaf.
+    ¿Por qué se usa? Para establecer la estructura base y activar Thymeleaf, lo que es una buena práctica incluso para archivos de fragmentos.
+-->
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 
-  <!-- Navegación -->
-  <nav th:fragment="menu-principal" class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" th:href="@{/}">EmpleosApp</a>
-    <div class="collapse navbar-collapse">
+<!--
+    Este archivo, al igual que footer.html, no está diseñado para ser mostrado por sí solo.
+    Su propósito es definir el fragmento del menú de navegación para que otras plantillas puedan reutilizarlo.
+-->
+<body>
+
+<!--
+    ==================== SECCIÓN 2: LA DEFINICIÓN DEL FRAGMENTO DE MENÚ ====================
+    ¿Qué es esto? Es la definición del fragmento que contiene toda la barra de navegación.
+
+    ¿Cómo funciona?
+    - `<nav th:fragment="menu-principal" ...>`: La directiva `th:fragment` le asigna el nombre "menu-principal" a esta etiqueta `<nav>` y a todo su contenido.
+      Este es el nombre que usaremos desde otras plantillas para poder "llamar" o "importar" este bloque de código.
+
+    ¿Por qué se implementa así?
+    - **Principio DRY (Don't Repeat Yourself)**: Permite definir el menú una sola vez y usarlo en todas las páginas.
+    - **Mantenimiento Centralizado**: Si necesitas añadir, quitar o modificar un enlace en el menú, solo tienes que hacerlo en este archivo, y el cambio se aplicará en todo el sitio.
+-->
+<nav th:fragment="menu-principal" class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+   <!--
+       ==================== SECCIÓN 3: ENLACES DE NAVEGACIÓN CON THYMELEAF Y BOOTSTRAP ====================
+       ¿Qué es esto? Son los enlaces (`<a>`) que permiten al usuario navegar entre las diferentes secciones de la aplicación.
+
+       ¿Cómo funciona?
+       - `th:href="@{...}"`: En lugar de usar el `href` normal de HTML, usamos `th:href`. Esto le dice a Thymeleaf que procese el enlace.
+       - `@{/}`: Esta es una "expresión de enlace" (link expression) que apunta a la URL raíz del sitio. Thymeleaf se asegura de que la ruta sea siempre correcta.
+         Este enlace será manejado por el método `mostrarHome` en `HomeController`.
+       - `@{/vacantes/index}`: Apunta a la URL `/vacantes/index`. Este enlace será manejado por un método en `VacantesController` (que deberíamos crear si no existe).
+       - `@{/categorias/index}`: Apunta a la URL `/categorias/index`. Este enlace será manejado por el método `mostrarIndex` en `CategoriaController`.
+
+       ¿Por qué se usa?
+       - **Robustez**: La sintaxis `@{...}` crea URLs que funcionan correctamente sin importar cómo se despliegue la aplicación.
+       - **Conexión con el Backend**: Cada enlace corresponde a un método `handler` (mapeado con `@GetMapping`) en uno de nuestros controladores de Spring.
+
+       Notas Adicionales:
+       - `navbar-brand`: Clase de Bootstrap para el logo o nombre de la marca.
+       - `navbar-nav mr-auto`: Clases de Bootstrap para la lista de enlaces de navegación, alineados a la izquierda.
+   -->
+   <a class="navbar-brand" th:href="@{/}">EmpleosApp</a>
+
+   <div class="collapse navbar-collapse">
       <ul class="navbar-nav mr-auto">
-       <!--  <li class="nav-item"><a class="nav-link" href="#">Vacante</a></li> -->
-        <li class="nav-item"><a th:href="@{/vacantes/index}" class="nav-link">Vacantes</a></li>
-       <!--  <li class="nav-item"><a class="nav-link" href="#">Inicio</a></li> -->
-        <li class="nav-item"><a th:href="@{/categorias/index}" class="nav-link" href="#">Categorias</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Menu 2</a></li>
+         <li class="nav-item">
+            <a th:href="@{/vacantes/index}" class="nav-link">Vacantes</a>
+         </li>
+         <li class="nav-item">
+            <a th:href="@{/categorias/index}" class="nav-link">Categorías</a>
+         </li>
+         <li class="nav-item">
+            <a class="nav-link" href="#">Acerca de</a>
+         </li>
       </ul>
+
+      <!--
+          ==================== SECCIÓN 4: FORMULARIO DE INICIO DE SESIÓN/REGISTRO ====================
+          ¿Qué es esto? Un pequeño formulario con botones para "Ingresar" y "Registrarse".
+
+          ¿Cómo funciona?
+          - `form-inline my-2 my-lg-0`: Clases de Bootstrap para un formulario en línea, con márgenes verticales.
+          - `btn btn-primary`, `btn btn-secondary`: Clases de Bootstrap para estilizar los botones.
+          - `ml-2`: Clase de Bootstrap para añadir un margen izquierdo de 2 unidades al segundo botón.
+
+          ¿Por qué se usa?
+          - **Interfaz de Usuario**: Proporciona puntos de entrada claros para
+          la autenticación y el registro de usuarios.
+      -->
       <form class="form-inline my-2 my-lg-0">
-        <button class="btn btn-outline-primary my-2 my-sm-0" type="button">Ingresar</button>
-        <button class="btn btn-outline-primary my-2 my-sm-0 ml-2" type="button">Registrarse</button>
+         <a class="btn btn-primary my-2 my-sm-0" th:href="@{/login}" role="button">Ingresar</a>
+         <a class="btn btn-secondary my-2 my-sm-0 ml-2" th:href="@{/signup}"
+            role="button">Registrarse</a>
       </form>
-    </div>
-  </nav>
+   </div>
+</nav>
+
+</body>
+</html>

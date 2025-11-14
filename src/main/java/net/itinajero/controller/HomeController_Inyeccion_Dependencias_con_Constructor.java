@@ -18,7 +18,6 @@ import net.itinajero.service.Itf_VacanteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -34,7 +33,7 @@ import java.util.List;
  *
  * ¿Por qué se implementa así? - Para ilustrar la "Inyección de Dependencias por Constructor", una práctica que hace el código más robusto, seguro y fácil de probar.
  */
-@Controller
+// @Controller
 public class HomeController_Inyeccion_Dependencias_con_Constructor {
 
 	/*

@@ -95,7 +95,7 @@ public class HomeController_Original_Sin_capa_servicio {
 		} catch (ParseException e){
 			// Si ocurre un error al parsear una fecha, se registra en el log para que el desarrollador lo vea.
 			// Esto evita que la aplicación se caiga por un formato de fecha incorrecto.
-			log.error("Error en el constructor de VacanteService_Impl al parsear una fecha: ", e);
+			log.error("Error en el constructor de Impl_VacanteService al parsear una fecha: ", e);
 		}
 		return listaVacantes;
 	}
