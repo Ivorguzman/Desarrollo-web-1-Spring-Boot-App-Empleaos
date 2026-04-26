@@ -15,18 +15,18 @@
 -->
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Listado de Vacantes</title>
+   <meta charset="UTF-8">
+   <title>Listado de Vacantes</title>
 
-    <!--
-        ==================== SECCIÓN 2: ENLACES A RECURSOS ESTÁTICOS (CSS) ====================
-        ¿Qué es esto? Son los enlaces a las hojas de estilo (CSS) que dan diseño a nuestra página.
-        ¿Cómo funciona? Se usa `th:href` con la sintaxis `@{...}` para crear una URL robusta que Thymeleaf resuelve correctamente.
-        ¿Por qué se usa? Para asegurar que los estilos se carguen sin importar cómo se despliegue la aplicación.
-    -->
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-    <link rel="stylesheet" th:href="@{/css/all.min.css}">
-    <link rel="stylesheet" th:href="@{/css/tabla.css}">
+   <!--
+       ==================== SECCIÓN 2: ENLACES A RECURSOS ESTÁTICOS (CSS) ====================
+       ¿Qué es esto? Son los enlaces a las hojas de estilo (CSS) que dan diseño a nuestra página.
+       ¿Cómo funciona? Se usa `th:href` con la sintaxis `@{...}` para crear una URL robusta que Thymeleaf resuelve correctamente.
+       ¿Por qué se usa? Para asegurar que los estilos se carguen sin importar cómo se despliegue la aplicación.
+   -->
+   <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+   <link rel="stylesheet" th:href="@{/css/all.min.css}">
+   <link rel="stylesheet" th:href="@{/css/tabla.css}">
 </head>
 <body>
 
@@ -34,106 +34,124 @@
 <header th:insert="~{/fragments/menu :: menu-principal}"></header>
 
 <main class="container mt-4">
-    <h1 class="text-primary text-center mb-4">Listado de Vacantes</h1>
+   <h1 class="text-primary text-center mb-4">Listado de Vacantes</h1>
 
-    <table class="table table-striped table-bordered table-hover">
-        <thead class="thead-dark">
-        <tr>
-            <th>Logo</th>
-            <th>Id</th>
-            <th>Nombre</th>
-            <th>Fecha</th>
-            <th>Salario</th>
-            <th>Destacado</th>
-            <th>Ver Detalle</th>
-            <th>Borrar</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!--
-            ==================== SECCIÓN 3: LA ITERACIÓN (EL CORAZÓN DE LA TABLA) ====================
-            ¿Qué es esto? Este es el bloque que se repetirá para crear una fila `<tr>` por cada vacante en nuestra lista.
+   <table class="table table-striped table-bordered table-hover">
+      <thead class="thead-dark">
+      <tr>
+         <th>Logo</th>
+         <th>Id</th>
+         <th>Nombre</th>
+         <th>Fecha</th>
+         <th>Salario</th>
+         <th>Destacado</th>
+         <th>Ver Detalle</th>
+         <th>Borrar</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!--
+          ==================== SECCIÓN 3: LA ITERACIÓN (EL CORAZÓN DE LA TABLA) ====================
+          ¿Qué es esto? Este es el bloque que se repetirá para crear una fila `<tr>` por cada vacante en nuestra lista.
 
-            ¿Cómo funciona?
-            - `th:each="vacante : ${vacantes}"`: Esta es la directiva de iteración (un bucle) de Thymeleaf.
-                - `${vacantes}`: Accede al atributo "vacantes" que fue añadido al `Model` en el controlador. Se espera que sea una lista de objetos `Vacante`.
-                - `vacante : ...`: Por cada elemento en la lista `${vacantes}`, Thymeleaf crea una variable temporal llamada `vacante` que contiene el objeto de esa iteración.
-                - La etiqueta `<tr>` que contiene este atributo (y todo su contenido) se repetirá para cada elemento de la lista.
+          ¿Cómo funciona?
+          - `th:each="vacante : ${vacantes}"`: Esta es la directiva de iteración (un bucle) de Thymeleaf.
+              - `${vacantes}`: Accede al atributo "vacantes" que fue añadido al `Model` en el método `mostrarTabla` de la clase `HomeController`. Se espera que sea una lista de objetos `Vacante`.
+              - `vacante : ...`: Por cada elemento en la lista `${vacantes}`, Thymeleaf crea una variable temporal llamada `vacante` que contiene el objeto de esa iteración.
+              - La etiqueta `<tr>` que contiene este atributo (y todo su contenido) se repetirá para cada elemento de la lista.
 
-            ¿Por qué se usa?
-            - Para generar contenido HTML dinámicamente a partir de una colección de datos. Es la forma estándar de mostrar listas o tablas de resultados.
-        -->
-        <tr th:each="vacante : ${vacantes}">
-            <td>
-                <!-- Se muestra la imagen de la vacante usando una URL dinámica -->
-                <img th:src="@{/images/{img}(img=${vacante.imagen})}" width="80" height="80" alt="Logo de la vacante">
-            </td>
+          ¿Por qué se usa?
+          - Para generar contenido HTML dinámicamente a partir de una colección de datos. Es la forma estándar de mostrar listas o tablas de resultados.
+      -->
+      <tr th:each="vacante : ${vacantes}">
+         <td>
+            <!-- Se muestra la imagen de la vacante usando una URL dinámica -->
+            <img th:src="@{/images/{img}(img=${vacante.imagen})}" width="80" height="80"
+                 alt="Logo de la vacante">
+         </td>
 
+         <!--
+             ==================== SECCIÓN 4: MOSTRAR DATOS DEL OBJETO ====================
+             ¿Qué es esto? Son las celdas que muestran las propiedades del objeto `vacante` actual del bucle.
+
+             ¿Cómo funciona?
+             - `th:text="${vacante.id}"`: La directiva `th:text` reemplaza el contenido de la etiqueta `<td>` con el valor de la expresión.
+             - `${vacante.id}`: Accede a la propiedad `id` del objeto `vacante` (internamente llama a `vacante.getId()`).
+             - `th:text` es seguro por defecto, ya que escapa caracteres HTML y previene ataques XSS.
+         -->
+         <td th:text="${vacante.id}"></td>
+         <td th:text="${vacante.nombre}"></td>
+
+         <!--
+             ==================== SECCIÓN 5: USO DE OBJETOS DE UTILIDAD (#) ====================
+             ¿Qué es esto? Es el uso de los "objetos de utilidad" de Thymeleaf, que son herramientas para tareas comunes.
+
+             ¿Cómo funciona?
+             - El símbolo `#` nos da acceso a estas herramientas (`#dates`, `#numbers`, `#strings`, etc.).
+             - `th:text="${#dates.format(vacante.fecha, 'dd-MM-yyyy')}"`: Usa el objeto `#dates` para formatear el campo `fecha` a un formato legible.
+             - `th:text="${#numbers.formatCurrency(vacante.salario)}"`: Usa el objeto `#numbers` para formatear el `salario` como una moneda, añadiendo el símbolo y los separadores correctos según la configuración regional.
+
+             ¿Por qué se usa?
+             - Para delegar la lógica de formato a la vista, manteniendo el modelo (los objetos Java) con datos puros y sin formato.
+         -->
+         <td th:text="${#dates.format(vacante.fecha, 'dd-MM-yyyy')}"></td>
+         <td th:text="${#numbers.formatCurrency(vacante.salario)}"></td>
+
+         <td>
             <!--
-                ==================== SECCIÓN 4: MOSTRAR DATOS DEL OBJETO ====================
-                ¿Qué es esto? Son las celdas que muestran las propiedades del objeto `vacante` actual del bucle.
+                ==================== SECCIÓN 6: LÓGICA CONDICIONAL ====================
+                ¿Qué es esto? Es la forma de mostrar contenido de manera condicional.
 
                 ¿Cómo funciona?
-                - `th:text="${vacante.id}"`: La directiva `th:text` reemplaza el contenido de la etiqueta `<td>` con el valor de la expresión.
-                - `${vacante.id}`: Accede a la propiedad `id` del objeto `vacante` (internamente llama a `vacante.getId()`).
-                - `th:text` es seguro por defecto, ya que escapa caracteres HTML y previene ataques XSS.
-            -->
-            <td th:text="${vacante.id}"></td>
-            <td th:text="${vacante.nombre}"></td>
-
-            <!--
-                ==================== SECCIÓN 5: USO DE OBJETOS DE UTILIDAD (#) ====================
-                ¿Qué es esto? Es el uso de los "objetos de utilidad" de Thymeleaf, que son herramientas para tareas comunes.
-
-                ¿Cómo funciona?
-                - El símbolo `#` nos da acceso a estas herramientas (`#dates`, `#numbers`, `#strings`, etc.).
-                - `th:text="${#dates.format(vacante.fecha, 'dd-MM-yyyy')}"`: Usa el objeto `#dates` para formatear el campo `fecha` a un formato legible.
-                - `th:text="${#numbers.formatCurrency(vacante.salario)}"`: Usa el objeto `#numbers` para formatear el `salario` como una moneda, añadiendo el símbolo y los separadores correctos según la configuración regional.
+                - `th:if="${vacante.destacado == 1}"`: Muestra la etiqueta `<span>` (y su contenido) SOLAMENTE SI la condición es verdadera.
+                - `th:unless="${vacante.destacado == 1}"`: Es lo contrario. Muestra la etiqueta SOLAMENTE SI la condición es falsa. Es más legible que `th:if="${vacante.destacado != 1}"`.
 
                 ¿Por qué se usa?
-                - Para delegar la lógica de formato a la vista, manteniendo el modelo (los objetos Java) con datos puros y sin formato.
+                - Para mostrar diferentes elementos visuales basados en el estado de los datos (ej. un badge verde para "Sí" y uno rojo para "No").
             -->
-            <td th:text="${#dates.format(vacante.fecha, 'dd-MM-yyyy')}"></td>
-            <td th:text="${#numbers.formatCurrency(vacante.salario)}"></td>
+            <span th:if="${vacante.destacado == 1}" class="badge badge-success">SÍ</span>
+            <span th:unless="${vacante.destacado == 1}"
+                  class="badge badge-danger">NO</span>
+         </td>
 
-            <td>
-                <!--
-                    ==================== SECCIÓN 6: LÓGICA CONDICIONAL ====================
-                    ¿Qué es esto? Es la forma de mostrar contenido de manera condicional.
+         <!--
+             ==================== SECCIÓN 7: ENLACES DINÁMICOS CON PARÁMETROS ====================
+             ¿Qué es esto? Son los enlaces a acciones (ver detalle, borrar) que son únicos para cada fila de la tabla.
 
-                    ¿Cómo funciona?
-                    - `th:if="${vacante.destacado == 1}"`: Muestra la etiqueta `<span>` (y su contenido) SOLAMENTE SI la condición es verdadera.
-                    - `th:unless="${vacante.destacado == 1}"`: Es lo contrario. Muestra la etiqueta SOLAMENTE SI la condición es falsa. Es más legible que `th:if="${vacante.destacado != 1}"`.
+             ¿Cómo funciona?
+             - `th:href="@{/vacantes/view-request(idVacante=${vacante.id})}"`: Crea una URL con un PARÁMETRO DE CONSULTA (Query Param).
+                 - `/vacantes/view-request`: Es la ruta base del enlace.
+                 - `(idVacante=${vacante.id})`: Añade `?idVacante=X` a la URL, donde X es el ID de la vacante actual.
+                 - Este tipo de URL es manejada en el controlador por un método que usa `@RequestParam("idVacante")`.
 
-                    ¿Por qué se usa?
-                    - Para mostrar diferentes elementos visuales basados en el estado de los datos (ej. un badge verde para "Sí" y uno rojo para "No").
-                -->
-                <span th:if="${vacante.destacado == 1}" class="badge badge-success">SÍ</span>
-                <span th:unless="${vacante.destacado == 1}" class="badge badge-danger">NO</span>
-            </td>
+             ¿Por qué se usa?
+             - Para pasar identificadores o datos a un controlador para que pueda realizar una acción sobre un elemento específico.
+         -->
 
-            <!--
-                ==================== SECCIÓN 7: ENLACES DINÁMICOS CON PARÁMETROS ====================
-                ¿Qué es esto? Son los enlaces a acciones (ver detalle, borrar) que son únicos para cada fila de la tabla.
+         <td>
+            <!-- Con el uso de @PathVariable("....") -->
+            <a th:href="@{/vacantes/view-path/{id} (id=${vacante.id})}"
+               class="btn btn-primary btn-sm" role="button" title="Ver Detalle"><i
+                class="fas fa-eye"></i></a>
+         </td>
 
-                ¿Cómo funciona?
-                - `th:href="@{/vacantes/view-request(idVacante=${vacante.id})}"`: Crea una URL con un PARÁMETRO DE CONSULTA (Query Param).
-                    - `/vacantes/view-request`: Es la ruta base del enlace.
-                    - `(idVacante=${vacante.id})`: Añade `?idVacante=X` a la URL, donde X es el ID de la vacante actual.
-                    - Este tipo de URL es manejada en el controlador por un método que usa `@RequestParam("idVacante")`.
 
-                ¿Por qué se usa?
-                - Para pasar identificadores o datos a un controlador para que pueda realizar una acción sobre un elemento específico.
-            -->
-            <td>
-                <a th:href="@{/vacantes/view-request(idVacante=${vacante.id})}" class="btn btn-primary btn-sm" role="button" title="Ver Detalle"><i class="fas fa-eye"></i></a>
-            </td>
-            <td>
-                <a th:href="@{/vacantes/delete(id=${vacante.id})}" class="btn btn-danger btn-sm" role="button" title="Borrar"><i class="fas fa-trash-alt"></i></a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+         <!-- Con el uso de @RequestParam(".....") -->
+         <!--         <td>-->
+         <!--            <a th:href="@{/vacantes/view-request(idVacante=${vacante.id})}"-->
+         <!--               class="btn btn-primary btn-sm"
+         role="button" title="Ver Detalle"><i-->
+         <!--                class="fas fa-eye"></i></a>-->
+         <!--         </td>-->
+         <td>
+
+            <a th:href="@{/vacantes/delete(id=${vacante.id})}"
+               class="btn btn-danger btn-sm" role="button" title="Borrar"><i
+                class="fas fa-trash-alt"></i></a>
+         </td>
+      </tr>
+      </tbody>
+   </table>
 </main>
 
 <!-- Incluimos el fragmento del pie de página -->

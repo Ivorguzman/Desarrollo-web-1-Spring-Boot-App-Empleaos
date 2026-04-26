@@ -1,0 +1,56 @@
+  <!--
+<table>: Define una tabla en HTML.
+<thead>: Significa "Table Head" y se utiliza para agrupar el contenido del encabezado de una tabla.
+<tr>:    Significa "Table Row" y se usa para definir una fila en una tabla.
+<th>:    Significa "Table Header" y se utiliza para definir una encabezado  celda de  en una tabla.
+<td>:    Significa "Table Data" y se usa para definir una celda de datos en una tabla.
+-->
+  <div class="container mt-5" style="width: 90%;">
+    <div class="card">
+      <!-- Añadido padding interno a card-body -->
+      <div class="card-body p-4">
+        <div class="card-header">
+          <h1 class="text-primary">Listado de ofertas de trabajo</h1>
+        </div>
+        <div class="p-4">
+          <a href="#" class=" btn btn-primary"> Nueva &raquo; </a>
+        </div>
+        <table class="table table-striped  table-bordered table-hover">
+          <thead>
+          <tr>
+            <th>Categoria</th>
+            <th>Nombre</th>
+            <th>Fecha Publicación</th>
+            <th>Estatus</th>
+            <th>Destacado</th>
+            <th>Editar</th>
+            <th>Borrar</th>
+          </tr>
+          </thead>
+          <!--     <tr th:each="_vacante : ${_vacantes}">-->
+          <tr>
+            <td></td>
+
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+              <!-- Botón Editar-->
+              <button class="btn btn-warning">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+            </td>
+            <!-- Botón Borrar-->
+            <td>
+              <button class="btn btn-danger">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+<!--

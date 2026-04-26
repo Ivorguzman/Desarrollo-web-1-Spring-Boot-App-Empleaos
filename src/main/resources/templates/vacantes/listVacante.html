@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listado de Vacantes</title>
+
+  <!--
+      ==================== SECCIÓN 2: ENLACES A RECURSOS ESTÁTICOS (CSS) ====================
+      ¿Qué es esto? Son los enlaces a las hojas de estilo (CSS) que le dan diseño y apariencia a nuestra página.
+
+      ¿Cómo funciona? (¡La forma Thymeleaf!)
+      - `th:href="@{...}"`: En lugar de usar el `href` normal de HTML, usamos `th:href`. Esto le dice a Thymeleaf que procese el enlace.
+      - `@{/css/bootstrap.min.css}`: Esta es una "expresión de enlace" (link expression) de Thymeleaf. Le indica que cree una URL relativa a la raíz de la aplicación.
+        Thymeleaf buscará el archivo en la carpeta `src/main/resources/static/css/`.
+
+      ¿Por qué se usa?
+      - **Robustez**: A diferencia ia de un enlace estático como `href="../css/style
+      .css"`, la sintaxis `@{...}` es mucho más robusta. Funciona sin importar en qué nivel de profundidad
+        se encuentre la página o si la aplicación se despliega en un "context path" diferente (ej. `http://servidor.com/miApp/`). Thymeleaf siempre generará la ruta correcta.
+  -->
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/css/all.min.css}">
+  <link rel="stylesheet" th:href="@{/css/tabla.css}">
+</head>
+<body class="d-flex flex-column min-vh-100">
+<!--
+    ==================== SECCIÓN 3: REUTILIZACIÓN DE FRAGMENTOS (EL MENÚ) ====================
+    ¿Qué es esto? Es la inclusión de un fragmento de otra plantilla. En este caso, estamos insertando el menú de navegación.
+
+    ¿Cómo funciona?
+    - `<header th:insert="~{...}">`: El atributo `th:insert` le dice a Thymeleaf que reemplace esta etiqueta `<header>` completa por el contenido del fragmento que se especifica.
+    - `~{/fragments/menu :: menu-principal}`: Esta es una "expresión de fragmento".
+        - `/fragments/menu`: Le dice a Thymeleaf que busque el archivo `menu.html` dentro de la carpeta `templates/fragments/`.
+        - `::`: Es el separador que indica que vamos a seleccionar un fragmento específico dentro de ese archivo.
+        - `menu-principal`: Es el nombre del fragmento, que debe estar definido en `menu.html` con un atributo `th:fragment="menu-principal"`.
+
+    ¿Por qué se usa?
+    - **Principio DRY (Don't Repeat Yourself - No te repitas)**: Permite definir el menú una sola vez y reutilizarlo en todas las páginas del sitio. Si necesitas cambiar un enlace del menú, solo lo haces en un archivo.
+-->
+<!-- Navegación -->
+<!-- <header th:insert="fragments/menu :: menu-principal"> Antes (Obsoleto)</header> -->
+<header th:insert="~{/fragments/menu :: menu-principal}"></header>
+<main class="container">
+  <!--
+<table>: Define una tabla en HTML.
+<thead>: Significa "Table Head" y se utiliza para agrupar el contenido del encabezado de una tabla.
+<tr>:    Significa "Table Row" y se usa para definir una fila en una tabla.
+<th>:    Significa "Table Header" y se utiliza para definir una encabezado  celda de  en una tabla.
+<td>:    Significa "Table Data" y se usa para definir una celda de datos en una tabla.
+-->
+  <div class="container mt-5" style="width: 90%;">
+    <div class="card">
+      <!-- Añadido padding interno a card-body -->
+      <div class="card-body p-4">
+        <div class="card-header">
+          <h1 class="text-primary">Listado de ofertas de trabajo</h1>
+        </div>
+        <div class="p-4">
+          <a href="#" class=" btn btn-primary"> Nueva &raquo; </a>
+        </div>
+        <table class="table table-striped  table-bordered table-hover">
+          <thead>
+          <tr>
+            <th>Categoria</th>
+            <th>Cargo</th>
+            <th>Fecha Publicación</th>
+            <th>Estatus</th>
+            <th>Salario</th>
+            <th>Destacado</th>
+            <th>Editar</th>
+            <th>Borrar</th>
+          </tr>
+          </thead>
+          <tbody>
+          <!--     <tr th:each="_vacante : ${_vacantes}">-->
+          <tr th:each="item_vacante : ${TodasVacantes}">
+            <!--        <td >No Implementado</td>-->
+            <td th:text="${item_vacante.categoria}"></td>
+            <td th:text="${item_vacante.nombre}"></td>
+            <td th:text="${item_vacante.fecha}"></td>
+            <td th:text="${item_vacante.estatus}"></td><!--   Pruebas-->
+            <!--            <td th:text="${item_vacante.estatus}"></td>-->
+            <td th:text="${item_vacante.salario}"></td>
+
+            <td th:text="${item_vacante.destacado}"></td>
+            <td>
+              <!-- Botón Editar-->
+              <button class="btn btn-warning">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+            </td>
+            <!-- Botón Borrar-->
+            <td>
+              <button class="btn btn-danger">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+<!--
+    ==================== SECCIÓN 5: REUTILIZACIÓN DE FRAGMENTOS (EL PIE DE PÁGINA) ====================
+    ¿Qué es esto? Al igual que el menú, estamos insertando un fragmento reutilizable para el pie de página.
+    ¿Cómo funciona? Exactamente igual que el `<header>`, pero apuntando al fragmento `pie-pagina` en el archivo `footer.html`.
+    ¿Por qué se usa? Por la misma razón: para no repetir código y facilitar el mantenimiento.
+-->
+<footer th:insert="~{fragments/footer :: pie-pagina}" class="mt-auto"></footer>
+
+<!--
+    ==================== SECCIÓN 6: ENLACES A RECURSOS ESTÁTICOS (JAVASCRIPT) ====================
+    ¿Qué es esto? Son los enlaces a los archivos de JavaScript necesarios para la interactividad de Bootstrap.
+    ¿Cómo funciona? Se usa la misma sintaxis `th:src="@{...}"` que se usó para los CSS. Thymeleaf buscará los archivos en `src/main/resources/static/js/`.
+    ¿Por qué se usa? Por la misma razón de robustez. Garantiza que los enlaces a los scripts funcionen correctamente sin importar el entorno de despliegue.
+-->
+<script th:src="@{/js/jquery-3.3.1.slim.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+</body>
+

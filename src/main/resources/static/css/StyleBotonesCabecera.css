@@ -1,0 +1,22 @@
+      @charset "UTF-8";
+      .navbar-brand {
+         font-weight: bold;
+      }
+
+      .search-bar {
+         margin: 2rem 0;
+      }
+
+      .card-featured {
+         margin-top: 2rem;
+      }
+
+
+      .btn-success {
+        color: white !important; /* Forza el color del texto a blanco */
+      }
+
+
+      .btn-primary  {
+        color: white !important; /* Forza el color del texto a blanco */
+      }

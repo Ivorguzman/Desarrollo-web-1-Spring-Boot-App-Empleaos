@@ -1,0 +1,181 @@
+ Ver las tres partes juntas y cómo se "hablan" entre sí es la mejor manera de entenderlo.
+
+  Aquí tienes el ejemplo completo, pieza por pieza, explicando cómo se reconocen entre ellas.
+
+  ---
+
+  Pieza 1: El Modelo (La plantilla de datos)
+
+  Este es tu objeto Java. Es una clase simple que solo define la estructura de los datos. Spring la usará como un molde.
+
+  `Categoria.java` (Ubicado en src/main/java/net/itinajero/model/)
+
+    1 // Suponiendo que tu clase Categoria se ve así:
+    2 package net.itinajero.model;
+    3
+    4 public class Categoria {
+    5
+    6     private Integer id;
+    7     private String nombre; // <-- Nombre importante #1
+    8     private String descripcion; // <-- Nombre importante #2
+    9
+   10     // Getters y Setters...
+   11     // Spring usa estos métodos para leer y escribir los valores.
+   12     // ¡Son indispensables para el Data Binding!
+   13
+   14     public Integer getId() {
+   15         return id;
+   16     }
+   17
+   18     public void setId(Integer id) {
+   19         this.id = id;
+   20     }
+   21
+   22     public String getNombre() {
+   23         return nombre;
+   24     }
+   25
+   26     public void setNombre(String nombre) { // <-- Spring llamará a este método
+   27         this.nombre = nombre;
+   28     }
+   29
+   30     public String getDescripcion() {
+   31         return descripcion;
+   32     }
+   33
+   34     public void setDescripcion(String descripcion) { // <-- y a este otro
+   35         this.descripcion = descripcion;
+   36     }
+   37
+   38     @Override
+   39     public String toString() {
+   40         return "Categoria [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + "]";
+   41     }
+   42 }
+
+  ¿Cómo funciona?
+   * Los nombres de las propiedades (nombre, descripcion) son la clave. Deben coincidir con los campos que usarás en la vista.
+   * Los métodos setNombre() y setDescripcion() son la "puerta de entrada" que Spring usará para meter los datos en el objeto.
+
+  ---
+
+  Pieza 2: El Controlador (El director de orquesta)
+
+  El controlador tiene dos trabajos: 1) Preparar y mostrar el formulario vacío, y 2) Recibir y procesar los datos del formulario lleno.
+
+  `CategoriaController.java` (Ubicado en src/main/java/net/itinajero/controller/)
+
+    1 @Controller
+    2 @RequestMapping("/categorias")
+    3 public class CategoriaController {
+    4
+    5     // ... (inyección de dependencias para el servicio, etc.)
+    6
+    7     /**
+    8      * MÉTODO 1: Muestra el formulario para crear una nueva categoría.
+    9      * Se activa con una petición GET a /categorias/create
+   10      */
+   11     @GetMapping("/create")
+   12     public String crear(Categoria categoria) { // <-- Nombre importante #3
+   13         // Spring ve que el método recibe un objeto 'Categoria' y lo crea automáticamente.
+   14         // Luego, lo agrega al 'Model' de Spring con el nombre "categoria".
+   15         // Es un atajo para no tener que escribir: model.addAttribute("categoria", new Categoria());
+   16         return "categorias/formCategoria"; // Devuelve el nombre del archivo HTML de la vista
+   17     }
+   18
+   19     /**
+   20      * MÉTODO 2: Guarda la categoría después de que el usuario envía el formulario.
+   21      * Se activa con una petición POST a /categorias/save
+   22      */
+   23     @PostMapping("/save")
+   24     public String guardar(Categoria categoria) { // <-- Nombre importante #4
+   25         // DATA BINDING EN ACCIÓN:
+   26         // 1. Spring crea un objeto 'Categoria' vacío.
+   27         // 2. Busca en la petición HTTP los parámetros 'nombre' y 'descripcion'.
+   28         // 3. Llama a categoria.setNombre(...) y categoria.setDescripcion(...) con los valores encontrados.
+   29         // 4. Te entrega el objeto 'categoria' ya lleno de datos.
+   30
+   31         System.out.println("Guardando: " + categoria);
+   32         // ...Llamada al servicio para guardar en la BD...
+   33
+   34         return "redirect:/categorias/index"; // Redirige al listado de categorías
+   35     }
+   36 }
+
+  ¿Cómo se reconocen las partes?
+   * Método `crear`: Al recibir (Categoria categoria), Spring entiende que debe pasar un objeto de este tipo a la vista. Por defecto, le da el nombre de la clase en minúsculas: "categoria".
+     Este es el nombre que usará Thymeleaf en la vista.
+   * Método `guardar`: Al recibir (Categoria categoria), Spring sabe que debe instanciar un objeto Categoria y rellenarlo (hacer el binding) con los datos que vienen del formulario en la
+     petición POST.
+
+  ---
+
+  Pieza 3: La Vista (El formulario que ve el usuario)
+
+  Este es el archivo HTML que usa Thymeleaf para conectar todo.
+
+  `formCategoria.html` (Ubicado en src/main/resources/templates/categorias/)
+
+    1 <!DOCTYPE html>
+    2 <html xmlns:th="http://www.thymeleaf.org">
+    3 <body>
+    4
+    5     <h1>Formulario de Categoría</h1>
+    6
+    7     <!--
+    8       CONEXIÓN #1:
+    9       th:object="${categoria}" -> Busca en el 'Model' de Spring un atributo llamado "categoria".
+   10       (Este fue agregado por el método 'crear' del controlador).
+   11       Ahora, todo lo que esté dentro de este <form> se referirá a este objeto.
+   12     -->
+   13     <form th:action="@{/categorias/save}" method="post" th:object="${categoria}">
+   14
+   15         <label>Nombre:</label>
+   16         <!--
+   17           CONEXIÓN #2:
+   18           th:field="*{nombre}" -> Vincula este input a la propiedad 'nombre' del objeto definido en th:object.
+   19           *{...} es la sintaxis para referirse a una propiedad del objeto del formulario.
+   20           Thymeleaf genera automáticamente:
+   21           - id="nombre"
+   22           - name="nombre"  (¡Este 'name' es el que Spring usa para el binding en el POST!)
+   23           - value="..." (si el objeto 'categoria' ya tuviera un valor en la propiedad 'nombre')
+   24         -->
+   25         <input type="text" th:field="*{nombre}" />
+   26         <br/>
+   27
+   28         <label>Descripción:</label>
+   29         <!--
+   30           CONEXIÓN #3:
+   31           th:field="*{descripcion}" -> Vincula este input a la propiedad 'descripcion' del objeto.
+   32           Genera name="descripcion", que Spring usará para llamar a setDescripcion().
+   33         -->
+   34         <input type="text" th:field="*{descripcion}" />
+   35         <br/>
+   36
+   37         <button type="submit">Guardar</button>
+   38
+   39     </form>
+   40
+   41 </body>
+   42 </html>
+
+  Resumen del Flujo Completo
+
+   1. Petición Inicial: Usuario va a http://.../categorias/create.
+   2. Controlador (GET): Se ejecuta el método crear(Categoria categoria). Spring crea un new Categoria() y lo añade al modelo bajo el nombre "categoria". Se retorna la vista
+      categorias/formCategoria.
+   3. Renderizado de Vista: Thymeleaf procesa formCategoria.html.
+       * th:object="${categoria}" encuentra el objeto Categoria vacío en el modelo.
+       * th:field="*{nombre}" y th:field="*{descripcion}" preparan los campos. Como el objeto está vacío, se muestran en blanco. Generan los atributos name="nombre" y name="descripcion".
+   4. Acción del Usuario: El usuario escribe "Recursos Humanos" y "Actividades de personal" en los campos y pulsa "Guardar".
+   5. Petición de Envío: El navegador envía una petición POST a /categorias/save con los datos: nombre=Recursos+Humanos&descripcion=Actividades+de+personal.
+   6. Controlador (POST) y Data Binding:
+       * Se ejecuta el método guardar(Categoria categoria).
+       * Spring ve la petición POST y los nombres de los parámetros (nombre, descripcion).
+       * Crea un new Categoria().
+       * Encuentra categoria.setNombre(String s) y lo llama con "Recursos Humanos".
+       * Encuentra categoria.setDescripcion(String s) y lo llama con "Actividades de personal".
+       * El objeto categoria está ahora completo y relleno dentro del método.
+   7. Finalización: El controlador usa el objeto categoria para lo que necesite (ej. guardarlo) y redirige al usuario.
+
+  Así es como las tres piezas se comunican a través de nombres consistentes (categoria, nombre, descripcion) y la infraestructura de Spring que actúa como intermediario.

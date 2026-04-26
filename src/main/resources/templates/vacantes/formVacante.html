@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<!--
+    ==================== SECCIÓN 1: LA ESTRUCTURA DEL DOCUMENTO ====================
+    ¿Qué es esto? Es la declaración estándar de un documento HTML5.
+
+    ¿Cómo funciona?
+    - `<!DOCTYPE html>`: Le dice al navegador que esta página es un documento HTML moderno.
+    - `<html lang="en" xmlns:th="http://www.thymeleaf.org">`: Es la etiqueta raíz del documento.
+        - `lang="en"`: Declara que el idioma principal de la página es inglés (puede cambiarse a "es" para español).
+        - `xmlns:th="http://www.thymeleaf.org"`: Esta es la declaración MÁS IMPORTANTE. Es el "espacio de nombres" (namespace) de Thymeleaf.
+          Le dice al navegador y a las herramientas de desarrollo que todos los atributos que comiencen con el prefijo `th:` pertenecen a Thymeleaf y no son HTML estándar.
+
+    ¿Por qué se usa?
+    - Para establecer la estructura base de la página y para habilitar el motor de plantillas de Thymeleaf, permitiéndole procesar los atributos especiales `th:*`.
+-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página Principal de Empleos</title>
+
+  <!--
+      ==================== SECCIÓN 2: ENLACES A RECURSOS ESTÁTICOS (CSS) ====================
+      ¿Qué es esto? Son los enlaces a las hojas de estilo (CSS) que le dan diseño y apariencia a nuestra página.
+
+      ¿Cómo funciona? (¡La forma Thymeleaf!)
+      - `th:href="@{...}"`: En lugar de usar el `href` normal de HTML, usamos `th:href`. Esto le dice a Thymeleaf que procese el enlace.
+      - `@{/css/bootstrap.min.css}`: Esta es una "expresión de enlace" (link expression) de Thymeleaf. Le indica que cree una URL relativa a la raíz de la aplicación.
+        Thymeleaf buscará el archivo en la carpeta `src/main/resources/static/css/`.
+
+      ¿Por qué se usa?
+      - **Robustez**: A diferencia ia de un enlace estático como `href="../css/style
+      .css"`, la sintaxis `@{...}` es mucho más robusta. Funciona sin importar en qué nivel de profundidad
+        se encuentre la página o si la aplicación se despliega en un "context path" diferente (ej. `http://servidor.com/miApp/`). Thymeleaf siempre generará la ruta correcta.
+  -->
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/css/all.min.css}">
+  <link rel="stylesheet" th:href="@{/css/tabla.css}">
+
+
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<!--
+    ==================== SECCIÓN 3: REUTILIZACIÓN DE FRAGMENTOS (EL MENÚ) ====================
+    ¿Qué es esto? Es la inclusión de un fragmento de otra plantilla. En este caso, estamos insertando el menú de navegación.
+
+    ¿Cómo funciona?
+    - `<header th:insert="~{...}">`: El atributo `th:insert` le dice a Thymeleaf que reemplace esta etiqueta `<header>` completa por el contenido del fragmento que se especifica.
+    - `~{/fragments/menu :: menu-principal}`: Esta es una "expresión de fragmento".
+        - `/fragments/menu`: Le dice a Thymeleaf que busque el archivo `menu.html` dentro de la carpeta `templates/fragments/`.
+        - `::`: Es el separador que indica que vamos a seleccionar un fragmento específico dentro de ese archivo.
+        - `menu-principal`: Es el nombre del fragmento, que debe estar definido en `menu.html` con un atributo `th:fragment="menu-principal"`.
+
+    ¿Por qué se usa?
+    - **Principio DRY (Don't Repeat Yourself - No te repitas)**: Permite definir el menú una sola vez y reutilizarlo en todas las páginas del sitio. Si necesitas cambiar un enlace del menú, solo lo haces en un archivo.
+-->
+<!-- Navegación -->
+<!-- <header th:insert="fragments/menu :: menu-principal"> Antes (Obsoleto)</header> -->
+<header th:insert="~{/fragments/menu :: menu-principal}"></header>
+<!-- Fin Navegación -->
+<main class="container mt-5 " style="width: 100%;" border="1px solid blue;">
+
+  <div class="container mt-5" style="width: 80%;">
+    <div class="card ">
+      <div class="card-body p-4">
+
+
+        <div class="card-header" style="text-align:center">
+          <h2 class="text-primary">Datos de la oferta de trabajo</h2>
+        </div>
+
+
+        <!--
+           ==================== SECCIÓN 4: EL FORMULARIO DE REGISTRO ====================
+           ¿Qué es esto? Es el corazón de esta página. Aquí capturamos los datos que el usuario quiere guardar.
+
+           ¿Cómo funciona?
+           - `th:action="@{/vacantes/save}"`: Indica a qué URL se enviarán los datos cuando se pulse "Guardar".
+           - `method="post"`: El método HTTP estándar para enviar datos al servidor de forma segura.
+           - `enctype="multipart/form-data"`: ¡CRUCIAL! Este atributo es obligatorio cuando el formulario incluye subida de archivos (imágenes, PDFs, etc.). Sin esto, la imagen no llegaría al servidor.
+           - `name="..."`: Cada input tiene un atributo `name`. Este nombre DEBE coincidir exactamente con el nombre de la propiedad en la clase Java `Vacante`. Spring Boot usa estos nombres para hacer el "Data Binding" (vinculación automática) de los datos.
+
+           ¿Por qué se usa?
+           - Para permitir la interacción del usuario y la creación de nuevos registros en la base de datos.
+       -->
+        <form th:action="@{/vacantes/save}" method="post" enctype="multipart/form-data">
+
+          <!-- Ejemplo visual de cómo se vería una alerta de error (estática) -->
+          <!--
+          <div class="alert alsert-danger mt-3">
+              <h5>Error:</h5>
+              <h6>Por favor corrija los siguientes errores:</h6>
+              <ul>
+                  <li>El nombre es obligatorio</li>
+              </ul>
+          </div>
+          -->
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="nombre">Cargo</label>
+              <input type="text" class="form-control" id="nombre" name="nombre"
+                placeholder="Título de la oferta de trabajo" required>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="categoria">Categoría</label>
+              <select class="form-control" id="categoria" name="categoria">
+                <option value="1">Ventas</option>
+                <option value="2">Contabilidad</option>
+                <option value="3">Transporte</option>
+                <option value="4">Informática</option>
+                <option value="5">Construcción</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="descripcion">Descripción</label>
+              <input type="text" class="form-control" id="descripcion"
+                name="descripcion"
+                placeholder="Breve descripción de la oferta de trabajo"
+                required>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="estatus">Estatus</label>
+              <select class="form-control" id="estatus" name="estatus">
+                <option value="Creada">Creada</option>
+                <option value="Aprobada">Aprobada</option>
+                <option value="Eliminada">Eliminada</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="fecha-publicacion">Fecha de Publicación</label>
+              <input type="date" class="form-control" id="fecha-publicacion"
+                name="fecha">
+            </div>
+
+            <!--          <div class="form-row">-->
+            <!--            <div class="form-group col-md-6">-->
+            <!--              <label for="fecha-publicacion">Fecha de Publicación</label>-->
+            <!--              <input type="date" class="form-control" id="fecha-publicacion"-->
+            <!--                     name="fecha" onchange="formatearFecha()">-->
+            <!--              <label for="fecha-publicacion_modificado"></label>-->
+            <!--              <input id="fecha-publicacion_modificado" name="fechaAux">-->
+            <!--              &lt;!&ndash;              <input type="hidden" id="fecha-publicacion_modificado"&ndash;&gt;-->
+            <!--              &lt;!&ndash;                     name="fechaAux">&ndash;&gt;-->
+            <!--            </div>-->
+
+            <div class="form-group col-md-6">
+              <label for="salario">Salario Ofrecido (Aprox)</label>
+              <input type="number" class="form-control" id="salario" name="salario"
+                placeholder="Salario aproximado" step="0.01">
+            </div>
+          </div>
+
+          <div class="form-group ">
+            <label for="archivoImagen">Imagen</label>
+            <input type="file" class="form-control-file" id="archivoImagen"
+              name="archivoImagen">
+          </div>
+
+          <div class="form-group">
+            <label>Destacado</label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="destacado"
+                id="destacado1" value="1">
+              <label class="form-check-label" for="destacado1">Destacado</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="destacado"
+                id="destacado0" value="0" checked>
+              <label class="form-check-label" for="destacado0">No Destacado</label>
+            </div>
+          </div>
+
+          <div class="form-row d-flex align-items-stretch">
+            <div class="form-group col-md-9 d-flex flex-column">
+              <label for="detalles">Detalles</label>
+              <textarea class="form-control flex-grow-1" id="detalles"
+                name="detalles" rows="3"></textarea>
+            </div>
+            <div class="form-group col-md-3 d-flex flex-column align-items-center
+              justify-content-center">
+              <label>Imagen/Logo</label>
+              <div class="d-flex justify-content-center align-items-center border w-100"
+                style="height: 150px;">
+                <span>Placeholder de Imagen</span>
+              </div>
+            </div>
+
+          </div>
+          <button type="submit" class="btn btn-primary">Guardar &raquo;</button>
+        </form>
+
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<!--
+==================== SECCIÓN 5: REUTILIZACIÓN DE FRAGMENTOS (EL PIE DE PÁGINA) ====================
+¿Qué es esto? Al igual que el menú, estamos insertando un fragmento reutilizable para el pie de página.
+¿Cómo funciona? Exactamente igual que el `<header>`, pero apuntando al fragmento `pie-pagina` en el archivo `footer.html`.
+¿Por qué se usa? Por la misma razón: para no repetir código y facilitar el mantenimiento.
+-->
+<footer th:insert="~{fragments/footer :: pie-pagina}" class="mt-auto"></footer>
+
+
+<!--
+    ==================== SECCIÓN 6: ENLACES A RECURSOS ESTÁTICOS (JAVASCRIPT) ====================
+    ¿Qué es esto? Son los enlaces a los archivos de JavaScript necesarios para la interactividad de Bootstrap.
+    ¿Cómo funciona? Se usa la misma sintaxis `th:src="@{...}"` que se usó para los CSS. Thymeleaf buscará los archivos en `src/main/resources/static/js/`.
+    ¿Por qué se usa? Por la misma razón de robustez. Garantiza que los enlaces a los scripts funcionen correctamente sin importar el entorno de despliegue.
+-->
+<script th:src="@{/js/jquery-3.3.1.slim.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+<!--
+    ==================== SECCIÓN 7: SCRIPTS PERSONALIZADOS ====================
+    ¿Qué es esto? Lógica de JavaScript específica para esta página.
+
+    ¿Cómo funciona?
+    - `formatearFecha()`: Un pequeño helper para manipular el formato de la fecha antes de enviarla.
+    - `tinymce.init(...)`: Inicializa el editor de texto enriquecido (Rich Text Editor) en el campo de "Detalles". Convierte un simple `<textarea>` en un editor visual potente.
+
+    ¿Por qué se usa?
+    - Para mejorar la experiencia de usuario (UX) y permitir funcionalidades que HTML por sí solo no ofrece.
+-->
+<!-- Script para formatear la fecha -->
+<script>
+  function formatearFecha() {
+         // Obtener el valor del campo de fecha
+         var fechaInput = document.getElementById("fecha-publicacion").value;
+         console.log(fechaInput);
+
+         // Verificar si el campo de fecha tiene un valor
+         if (fechaInput) {
+             // Crear un objeto de fecha a partir del valor del campo
+             var fecha = new Date(fechaInput);
+             // Formatear la fecha en dd-MM-yyyy
+             //var dia = ("0" + (fecha.getDate() + 1 )).slice(-2);
+             var dia = ("0" + (fecha.getDate())).slice(-2);
+             var mes = ("0" + (fecha.getMonth() + 1)).slice(-2);
+             var anio = fecha.getFullYear();
+             var fechaFormateada = dia + "-" + mes + "-" + anio;
+              console.log(fechaFormateada);
+
+             // Actualizar el valor del campo de fecha con el formato deseado
+             document.getElementById("fecha-publicacion_modificado").value = fechaFormateada;
+
+             // Verifica el tipo de fechaFormateada
+          if (typeof fechaFormateada === "string") {
+             console.log("fechaFormateada SI es una cadena de texto (string).");
+             }
+              if (typeof fechaFormateada !== "string") {
+             console.log("fechaFormateada NO es una cadena de texto (string).");
+             }
+       }
+        };
+
+</script>
+<!--  Error: códigos [vacante.fecha,fecha]; argumentos [];
+mensaje predeterminado [fecha]];
+mensaje predeterminado [No se pudo convertir el valor de la propiedad del tipo
+'java.lang.String' al tipo requerido 'java.util.Date' para la propiedad 'fecha';
+No se pudo convertir del tipo [java.lang.String] al tipo [java.util.Date]
+para el valor [2026-01-07]]]-->
+
+
+<!-- Script para inicializar TinyMCE -->
+<script type="text/javascript">
+  tinymce.init({
+      selector: '#detalles',
+      height: 300,
+      plugins: ['textcolor', 'table lists code'],
+      toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | ' +
+      'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
+      'forecolor backcolor emoticons | help',
+      menu: {
+      favs: { title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons' }
+      },
+  });
+</script>
+
+</body>
+</html>
