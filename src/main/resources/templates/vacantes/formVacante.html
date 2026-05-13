@@ -84,18 +84,17 @@
            ¿Por qué se usa?
            - Para permitir la interacción del usuario y la creación de nuevos registros en la base de datos.
        -->
-        <form th:action="@{/vacantes/save}" method="post" enctype="multipart/form-data">
+        <form th:action="@{/vacantes/save}" method="post" th:object="${vacante}" enctype="multipart/form-data"
+          novalidate>
 
-          <!-- Ejemplo visual de cómo se vería una alerta de error (estática) -->
-          <!--
-          <div class="alert alsert-danger mt-3">
-              <h5>Error:</h5>
-              <h6>Por favor corrija los siguientes errores:</h6>
-              <ul>
-                  <li>El nombre es obligatorio</li>
-              </ul>
+          <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger mt-3" role="alert">
+            <h5>Error:</h5>
+            <h6>Por favor corrija los siguientes errores:</h6>
+            <ul>
+              <li th:each="errores : ${#fields.errors('*')}" th:text="${errores}"></li>
+            </ul>
           </div>
-          -->
+
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="nombre">Cargo</label>
@@ -156,6 +155,7 @@
               <label for="salario">Salario Ofrecido (Aprox)</label>
               <input type="number" class="form-control" id="salario" name="salario"
                 placeholder="Salario aproximado" step="0.01">
+
             </div>
           </div>
 

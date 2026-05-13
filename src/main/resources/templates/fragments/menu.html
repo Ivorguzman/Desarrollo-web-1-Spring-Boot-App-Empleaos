@@ -49,14 +49,15 @@
   -->
   <a class="navbar-brand" th:href="@{/}">
     <img th:src="@{/images/logo.png}" alt="Logo EmpleosApp" width="40" height="40"
-         class="d-inline-block align-top">
+      class="d-inline-block align-top">
     EmpleosApp
   </a>
 
   <div class="collapse navbar-collapse">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a th:href="@{/vacantes/crear}" class="nav-link">Vacantes</a>
+        <!--<a th:href="@{/vacantes/crear}" class="nav-link">Vacantes</a>-->
+        <a th:href="@{/tabla}" class="nav-link">Vacantes</a>
       </li>
       <li class="nav-item">
         <a th:href="@{/categorias/index}" class="nav-link">Categorías</a>
@@ -82,9 +83,9 @@
     -->
     <form class="form-inline my-2 my-lg-0">
       <a class="btn btn-primary my-2 my-sm-0" th:href="@{/login}"
-         role="button">Ingresar</a>
+        role="button">Ingresar</a>
       <a class="btn btn-secondary my-2 my-sm-0 ml-2" th:href="@{/signup}"
-         role="button">Registrarse</a>
+        role="button">Registrarse</a>
     </form>
   </div>
 </nav>

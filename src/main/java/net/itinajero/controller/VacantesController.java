@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,13 +33,13 @@ import java.util.List;
 /**
  * ============ SECCIÓN 3: LA DECLARACIÓN DE LA CLASE (EL EDIFICIO DE OFICINAS) ============ ¿Qué es esta clase?
  * Es un Controlador de Spring MVC. Su única responsabilidad es manejar las peticiones web (clics de usuario,
- * URLs) relacionadas con las "Vacantes".
- * ¿Cómo funciona? - `@Controller`: Es una anotación que le dice a Spring: "Esta clase es un componente web,
- * escanéala y úsala para manejar peticiones HTTP". - `@RequestMapping("/vacantes")`: Actúa como un prefijo para
- * todas las URLs que maneja esta clase. Cualquier método con un mapeo aquí dentro comenzará con `/vacantes`.
- * Por ejemplo, un método mapeado a `/view....` será accesible en la URL `/vacantes/view....`.
- * ¿Por qué se implementa así? - **Organización**: Agrupa toda la lógica de URLs para las vacantes en un solo
- * lugar. - **Claridad**: Hace que las URLs de la aplicación sean más consistentes y fáciles de entender.
+ * URLs) relacionadas con las "Vacantes". ¿Cómo funciona? - `@Controller`: Es una anotación que le dice a
+ * Spring: "Esta clase es un componente web, escanéala y úsala para manejar peticiones HTTP". -
+ * `@RequestMapping("/vacantes")`: Actúa como un prefijo para todas las URLs que maneja esta clase. Cualquier
+ * método con un mapeo aquí dentro comenzará con `/vacantes`. Por ejemplo, un método mapeado a `/view....` será
+ * accesible en la URL `/vacantes/view....`. ¿Por qué se implementa así? - **Organización**: Agrupa toda la
+ * lógica de URLs para las vacantes en un solo lugar. - **Claridad**: Hace que las URLs de la aplicación sean
+ * más consistentes y fáciles de entender.
  */
 @Controller
 @RequestMapping("/vacantes")
@@ -50,17 +51,17 @@ public class VacantesController {
 
 /**
  * ¿Qué es? Es una instancia de nuestra capa de servicio. Es la herramienta que usará el controlador para
- * obtener o manipular los datos de las vacantes. Este es el corazón de la INYECCIÓN DE DEPENDENCIAS.
- * ¿Cómo funciona? - `private Itf_VacanteService serviceVacantes;`: Declara una variable para contener el
- * servicio, usando la interfaz como tipo, no la clase concreta. - `@Autowired`: Esta es una anotación mágica de
- * Spring. Le dice al framework: "Busca un bean (un objeto gestionado por ti) que sea del tipo
- * `Itf_VacanteService` y asígnalo automáticamente a esta variable cuando crees el controlador". Spring
- * encontrará la clase `Impl_VacanteService` (porque tiene `@Service`) y la "inyectará" aquí.
- * ¿Por qué se usa? - **Desacoplamiento**: El controlador no sabe (ni le importa) cómo se crea el servicio. Solo
- * sabe que existe y cómo usarlo a través de su interfaz. Esto significa que podríamos cambiar la implementación
- * del servicio (por ejemplo, a una que use una base de datos real) sin tener que cambiar NI UNA LÍNEA de código
- * en este controlador. - **Facilita las Pruebas**: Al hacer pruebas unitarias, podemos "inyectar" una versión
- * falsa (un mock) del servicio para probar el controlador de forma aislada.
+ * obtener o manipular los datos de las vacantes. Este es el corazón de la INYECCIÓN DE DEPENDENCIAS. ¿Cómo
+ * funciona? - `private Itf_VacanteService serviceVacantes;`: Declara una variable para contener el servicio,
+ * usando la interfaz como tipo, no la clase concreta. - `@Autowired`: Esta es una anotación mágica de Spring.
+ * Le dice al framework: "Busca un bean (un objeto gestionado por ti) que sea del tipo `Itf_VacanteService` y
+ * asígnalo automáticamente a esta variable cuando crees el controlador". Spring encontrará la clase
+ * `Impl_VacanteService` (porque tiene `@Service`) y la "inyectará" aquí. ¿Por qué se usa? -
+ * **Desacoplamiento**: El controlador no sabe (ni le importa) cómo se crea el servicio. Solo sabe que existe y
+ * cómo usarlo a través de su interfaz. Esto significa que podríamos cambiar la implementación del servicio (por
+ * ejemplo, a una que use una base de datos real) sin tener que cambiar NI UNA LÍNEA de código en este
+ * controlador. - **Facilita las Pruebas**: Al hacer pruebas unitarias, podemos "inyectar" una versión falsa (un
+ * mock) del servicio para probar el controlador de forma aislada.
  */
 @Autowired
 private Itf_VacanteService serviceVacantes;
@@ -82,17 +83,17 @@ private static final Logger log = LoggerFactory.getLogger(VacantesController.cla
 
 /**
  * ¿Qué hace este método? Muestra los detalles de una vacante específica. Identifica la vacante a través de un
- * valor en la propia ruta de la URL (Path Variable).
- * ¿Cómo lo logra? - `@RequestMapping(value = "/view-patch/{id}", method = RequestMethod.GET)`: Mapea las
- * peticiones GET a URLs como `/vacantes/view-patch/3` o `/vacantes/view-patch/10`. La parte `{id}` es un
- * comodín o placeholder. - `@PathVariable("id") int idVacante`: Esta es la parte clave. Extrae el valor que
- * viene en el lugar de `{id}` en la URL y lo convierte en una variable `int` llamada `idVacante`. -
- * `model.addAttribute("idVacante", idVacante)`: Pasa el ID capturado a la vista. La vista podrá usar este valor
- * para mostrarlo. - `return "vacantes/detallePathVariable"`: Le dice a Spring que renderice el archivo
- * `detallePathVariable.html` que se encuentra en `templates/vacantes/`.
- * ¿Por qué se implementa así? - **URLs Limpias (RESTful)**: Este estilo de URL es considerado más limpio y
- * semántico para identificar un recurso específico. Es un pilar en el diseño de APIs REST. - **Demostración**:
- * Sirve para ilustrar una de las formas más comunes de pasar parámetros a un controlador.
+ * valor en la propia ruta de la URL (Path Variable). ¿Cómo lo logra? - `@RequestMapping(value =
+ * "/view-patch/{id}", method = RequestMethod.GET)`: Mapea las peticiones GET a URLs como
+ * `/vacantes/view-patch/3` o `/vacantes/view-patch/10`. La parte `{id}` es un comodín o placeholder. -
+ * `@PathVariable("id") int idVacante`: Esta es la parte clave. Extrae el valor que viene en el lugar de `{id}`
+ * en la URL y lo convierte en una variable `int` llamada `idVacante`. - `model.addAttribute("idVacante",
+ * idVacante)`: Pasa el ID capturado a la vista. La vista podrá usar este valor para mostrarlo. - `return
+ * "vacantes/detallePathVariable"`: Le dice a Spring que renderice el archivo `detallePathVariable.html` que se
+ * encuentra en `templates/vacantes/`. ¿Por qué se implementa así? - **URLs Limpias (RESTful)**: Este estilo de
+ * URL es considerado más limpio y semántico para identificar un recurso específico. Es un pilar en el diseño de
+ * APIs REST. - **Demostración**: Sirve para ilustrar una de las formas más comunes de pasar parámetros a un
+ * controlador.
  */
 @RequestMapping(value = "/view-path/{id}", method = RequestMethod.GET)
 public String verDetallesPathVariable(@PathVariable("id") int idVacante, Model model) {
@@ -105,19 +106,18 @@ public String verDetallesPathVariable(@PathVariable("id") int idVacante, Model m
 
 /**
  * ¿Qué hace este método? También muestra los detalles de una vacante, pero la identifica usando un parámetro de
- * consulta en la URL (Request Param).
- * ¿Cómo lo logra? - `@GetMapping("/view-request")`: Es una forma moderna y corta de `@RequestMapping(method =
- * RequestMethod.GET)`. Mapea peticiones GET a la URL `/vacantes/view-request`. La URL completa esperada sería
- * algo como `/vacantes/view-request?idVacante=2`. - `@RequestParam("idVacante") int idVacante`: Extrae el valor
- * del parámetro `idVacante` que viene después del `?` en la URL y lo asigna a la variable `int`. -
- * `List<Vacante> objeto_Vacante = serviceVacantes.buscarPorId(idVacante)`: Llama a la capa de servicio para
- * obtener los datos completos de la vacante. - `model.addAttribute("idVacante", objeto_Vacante)`: Pasa la lista
- * con el objeto `Vacante` encontrado a la vista. La vista ahora tiene acceso a todos los detalles (nombre,
- * salario, etc.). - `return "vacantes/detalleRequestParam"`: Renderiza la vista `detalleRequestParam.html`.
- * ¿Por qué se implementa así? - **Flexibilidad**: Los `@RequestParam` son ideales para filtros, paginación o
- * parámetros opcionales. Es otra forma muy común de recibir datos. - **Flujo Completo**: Este método muestra un
- * flujo más realista: recibe un ID, usa el servicio para buscar el objeto completo y pasa ese objeto a la vista
- * para su visualización.
+ * consulta en la URL (Request Param). ¿Cómo lo logra? - `@GetMapping("/view-request")`: Es una forma moderna y
+ * corta de `@RequestMapping(method = RequestMethod.GET)`. Mapea peticiones GET a la URL
+ * `/vacantes/view-request`. La URL completa esperada sería algo como `/vacantes/view-request?idVacante=2`. -
+ * `@RequestParam("idVacante") int idVacante`: Extrae el valor del parámetro `idVacante` que viene después del
+ * `?` en la URL y lo asigna a la variable `int`. - `List<Vacante> objeto_Vacante =
+ * serviceVacantes.buscarPorId(idVacante)`: Llama a la capa de servicio para obtener los datos completos de la
+ * vacante. - `model.addAttribute("idVacante", objeto_Vacante)`: Pasa la lista con el objeto `Vacante`
+ * encontrado a la vista. La vista ahora tiene acceso a todos los detalles (nombre, salario, etc.). - `return
+ * "vacantes/detalleRequestParam"`: Renderiza la vista `detalleRequestParam.html`. ¿Por qué se implementa así? -
+ * **Flexibilidad**: Los `@RequestParam` son ideales para filtros, paginación o parámetros opcionales. Es otra
+ * forma muy común de recibir datos. - **Flujo Completo**: Este método muestra un flujo más realista: recibe un
+ * ID, usa el servicio para buscar el objeto completo y pasa ese objeto a la vista para su visualización.
  */
 @GetMapping("/view-request")
 public String verDatalleRequestParam(@RequestParam("idVacante") int idVacante, Model model) {
@@ -131,17 +131,16 @@ public String verDatalleRequestParam(@RequestParam("idVacante") int idVacante, M
 
 /**
  * ¿Qué hace este método? Simula la eliminación de una vacante, recibiendo el ID a través de un parámetro de
- * consulta.
- * ¿Cómo lo logra? - `@GetMapping("/delete")`: Mapea peticiones GET a `/vacantes/delete?id=...`. -
+ * consulta. ¿Cómo lo logra? - `@GetMapping("/delete")`: Mapea peticiones GET a `/vacantes/delete?id=...`. -
  * `@RequestParam("id") int idVacante`: Captura el ID de la vacante a eliminar. - `model.addAttribute("id",
  * idVacante)`: Pasa el ID a la vista, probablemente para mostrar un mensaje de confirmación como "Se eliminó la
- * vacante con ID: X". - `return "mensaje"`: Renderiza una vista genérica llamada `mensaje.html`.
- * ¿Por qué se implementa así? (Y una nota importante) - **Demostración**: Ilustra cómo capturar un parámetro
- * para realizar una acción. - **¡ADVERTENCIA DE BUENA PRÁCTICA!**: Usar una petición GET para una operación
- * destructiva (como eliminar) es una **mala práctica de seguridad**. Las peticiones GET pueden ser cacheadas,
- * indexadas por buscadores y ejecutadas accidentalmente. Las operaciones que modifican datos (Crear,
- * Actualizar, Eliminar) SIEMPRE deben usar métodos HTTP como POST, PUT o DELETE. Este método debería ser re
- * para usar `@PostMapping` o `@DeleteMapping` en una aplicación real.
+ * vacante con ID: X". - `return "mensaje"`: Renderiza una vista genérica llamada `mensaje.html`. ¿Por qué se
+ * implementa así? (Y una nota importante) - **Demostración**: Ilustra cómo capturar un parámetro para realizar
+ * una acción. - **¡ADVERTENCIA DE BUENA PRÁCTICA!**: Usar una petición GET para una operación destructiva (como
+ * eliminar) es una **mala práctica de seguridad**. Las peticiones GET pueden ser cacheadas, indexadas por
+ * buscadores y ejecutadas accidentalmente. Las operaciones que modifican datos (Crear, Actualizar, Eliminar)
+ * SIEMPRE deben usar métodos HTTP como POST, PUT o DELETE. Este método debería ser re para usar `@PostMapping`
+ * o `@DeleteMapping` en una aplicación real.
  */
 @GetMapping("/delete")
 public String eliminar(@RequestParam("id") int idVacante, Model model) {
@@ -158,18 +157,18 @@ public String eliminar(@RequestParam("id") int idVacante, Model model) {
  */
 
 /**
- * ¿Qué hace? Prepara y muestra la página HTML que contiene el formulario para crear una nueva vacante.
- * ¿Cómo funciona? - `@GetMapping("/crear")`: Responde a peticiones GET en `/vacantes/crear`. -
+ * ¿Qué hace? Prepara y muestra la página HTML que contiene el formulario para crear una nueva vacante. ¿Cómo
+ * funciona? - `@GetMapping("/crear")`: Responde a peticiones GET en `/vacantes/crear`. -
  * `serviceVacantes.buscarTodas()`: En este caso, estás recuperando la lista de vacantes existente y pasándola a
  * la vista (quizás para mostrar una tabla debajo del formulario). - `return "vacantes/crear"`: Busca y
  * renderiza la plantilla `formVacante.html`.
  */
 /* Prueba creada por Mi Alex */
 @GetMapping("/crear")
-public String crear(Model model) {
-	List<Vacante> crear_TodasVacante = serviceVacantes.buscarTodas();
-	model.addAttribute("vacante", crear_TodasVacante);
-	log.info("Contenido del Objeto Vacante: {}", crear_TodasVacante);
+public String crear(Vacante vacante) {
+	//	List<Vacante> crear_TodasVacante = serviceVacantes.buscarTodas();
+	//	model.addAttribute("vacante", crear_TodasVacante);
+	log.info("Contenido del Objeto Vacante: {}", vacante);
 	return "vacantes/formVacante";
 }
 
@@ -183,19 +182,19 @@ public String crear(Model model) {
  */
 
 /**
- * ¿Qué hace? Recibe los datos que el usuario escribió en el formulario y presionó "Guardar".
- * ¿Cómo funciona? - `@PostMapping("/save")`: A diferencia de los anteriores, este usa `POST`. Los navegadores
- * envían los formularios usando este método para transportar datos de forma más segura y robusta. - **Nota**:
- * Actualmente este método es un "esqueleto". En el futuro, recibirás aquí un objeto `Vacante` como parámetro y
- * llamarás a `service.guardar(vacante)`.
- * ¿Por qué se usa? Para separar la acción de "ver el formulario" (GET) de la acción de "procesar el formulario"
- * (POST).
+ * ¿Qué hace? Recibe los datos que el usuario escribió en el formulario y presionó "Guardar". ¿Cómo funciona? -
+ * `@PostMapping("/save")`: A diferencia de los anteriores, este usa `POST`. Los navegadores envían los
+ * formularios usando este método para transportar datos de forma más segura y robusta. - **Nota**: Actualmente
+ * este método es un "esqueleto". Recibe  un objeto `Vacante` como parámetro y llamarás a
+ * `service.guardar(vacante)`. ¿Por qué se usa? Para separar la acción de "ver el formulario" (GET) de la acción
+ * de "procesar el formulario" (POST).
  */
 @PostMapping("/save")
-public String guardar(Vacante vacante, Model model) {
-	//		log.info("Valor de la instancia vacante : {}", vacante);
-
-	//List<Vacante> save_TodasVacantes = serviceVacantes.buscarTodas();
+public String guardar(Vacante vacante, BindingResult resultado, Model model) {
+	if (resultado.hasErrors()){
+		log.error("Error en el formulario: {}", resultado.getAllErrors());
+		return "vacantes/formVacante";
+	}
 	model.addAttribute("TodasVacantes", vacante);
 	log.info("Vacantes : {}", vacante);
 
