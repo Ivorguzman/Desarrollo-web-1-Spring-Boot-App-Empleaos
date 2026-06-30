@@ -58,7 +58,7 @@
           <h1 class="text-primary">Listado de ofertas de trabajo</h1>
         </div>
         <div class="p-4">
-          <a href="#" class=" btn btn-primary"> Nueva &raquo; </a>
+          <a th:href="@{/vacantes/crear}" class=" btn btn-primary"> Nueva &raquo; </a>
         </div>
         <table class="table table-striped  table-bordered table-hover">
           <thead>
@@ -75,16 +75,17 @@
           </thead>
           <tbody>
           <!--     <tr th:each="_vacante : ${_vacantes}">-->
-          <tr th:each="item_vacante : ${TodasVacantes}">
+          <!--<tr th:each="item_vacante : ${TodasVacantes}">-->
+          <tr th:each="vacante : ${vacantes}">
             <!--        <td >No Implementado</td>-->
-            <td th:text="${item_vacante.categoria}"></td>
-            <td th:text="${item_vacante.nombre}"></td>
-            <td th:text="${item_vacante.fecha}"></td>
-            <td th:text="${item_vacante.estatus}"></td><!--   Pruebas-->
+            <td th:text="${vacante.categoria}"></td>
+            <td th:text="${vacante.nombre}"></td>
+            <td th:text="${vacante.fecha}"></td>
+            <td th:text="${vacante.estatus}"></td><!--   Pruebas-->
             <!--            <td th:text="${item_vacante.estatus}"></td>-->
-            <td th:text="${item_vacante.salario}"></td>
+            <td th:text="${vacante.salario}"></td>
 
-            <td th:text="${item_vacante.destacado}"></td>
+            <td th:text="${vacante.destacado}"></td>
             <td>
               <!-- Botón Editar-->
               <button class="btn btn-warning">

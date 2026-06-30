@@ -4,7 +4,7 @@
  * ¿Cómo funciona? `package net.itinajero.controller;` ubica esta clase dentro del paquete `controller`.
  * ¿Por qué se usa? Para organizar el código, evitar conflictos de nombres y controlar el acceso a las clases.
  */
-package net.itinajero.controller;
+//package net.itinajero.controller;
 
 /*
  * === SECCIÓN 2: LAS IMPORTACIONES (LA CAJA DE HERRAMIENTAS) ===
@@ -14,6 +14,9 @@ package net.itinajero.controller;
  */
 
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import net.itinajero.model.Vacante;
 import net.itinajero.service.Itf_VacanteService;
 import org.slf4j.Logger;
@@ -23,12 +26,9 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 /**
  * ============ SECCIÓN 3: LA DECLARACIÓN DE LA CLASE (EL EDIFICIO DE OFICINAS) ============ ¿Qué es esta clase?
@@ -80,6 +80,21 @@ private static final Logger log = LoggerFactory.getLogger(VacantesController.cla
  * SECCIÓN 5: MÉTODOS DEL CONTROLADOR (LAS OFICINAS Y SUS FUNCIONES)
  * =======================================================================================
  */
+
+/**
+ * Muestra todas las vacantes en una tabla.
+ */
+@GetMapping("/index")
+public String mostrarIndexVacante(Model modelo) {
+	List<Vacante> listaDeVacantes = serviceVacantes.buscarTodas();
+	modelo.addAttribute("vacantes", listaDeVacantes);
+	log.info("Enviando {} vacantes a la vista 'tabla'.", listaDeVacantes.size());
+	return "vacantes/listVacante";
+}
+
+
+
+
 
 /**
  * ¿Qué hace este método? Muestra los detalles de una vacante específica. Identifica la vacante a través de un
@@ -192,16 +207,20 @@ public String crear(Vacante vacante) {
 @PostMapping("/save")
 public String guardar(Vacante vacante, BindingResult resultado, Model model) {
 	if (resultado.hasErrors()){
-		log.error("Error en el formulario: {}", resultado.getAllErrors());
+		for (ObjectError error : resultado.getAllErrors()){
+			log.error("Error en el formulario: {}", error.getDefaultMessage());
+		}
+
 		return "vacantes/formVacante";
 	}
 	model.addAttribute("TodasVacantes", vacante);
 	log.info("Vacantes : {}", vacante);
 
-	return "/vacantes/listVacante";
+	return "/vacantes/index";
+//	return "redirect:/vacantes/index";
 }
 
-
+//log.error("Error en el formulario: {}", resultado.getAllErrors());
 
 @InitBinder
 public void miInitBinder(WebDataBinder miWebDataBinder) {
